@@ -1,0 +1,96 @@
+/*
+Copyright (c) 2006 - 2007, Paragent, LLC
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+- Neither the name of Paragent, LLC nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+/* Sheet full of hacks to make IE 7 work */
+
+div.expanded-detail-pane {
+	overflow: visible;
+	width: 100%;
+	height: auto;
+}
+
+div.comp-prop-table table {
+	width: 95%;
+	overflow: auto;
+}
+
+#comppick div.computer-property,
+#comppick div.comp-prop-table {
+	overflow: auto;
+	float: none;
+	clear: none;
+}
+
+#comppick div.computer-property {
+	margin-top: 10px;
+}
+
+fieldset,
+div#navbar,
+dl.item-list-content div {
+	overflow: auto;
+}
+
+div#workspace {
+	overflow: visible;
+}
+
+div#inventory-report {
+	overflow: auto;
+}
+
+div#alerts fieldset div.computer-selector,
+div#alerts fieldset div.computer-selector div,
+fieldset.search {
+	overflow: visible;
+}
+
+
+
+fieldset.computer-settings,
+fieldset.action-bar {
+	overflow: auto;
+	float: none;
+	clear: none;
+	margin-top: 10px;
+}
+
+fieldset.action-bar p {
+	padding: 0 0 4px 0;
+}
+
+div.item-list fieldset.action-bar img.disabled {
+	margin: 4px;
+}
+
+div#comppick h2 a.checkbox {
+	margin-top: 3px;
+}
+
+#comppick span.empty-spacer,
+#alerts span.empty-spacer
+{
+  display: block;
+  clear: both;
+  height: 10px;
+  float: none;
+}
+
+div#comppick div.computer {
+	overflow: visible;
+}
+
+.flash-message {
+	font-size: x-large; /* bigger just got it cut off */
+}

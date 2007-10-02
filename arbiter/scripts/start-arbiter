@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/usr/local/bin/detachtty --dribble-file /var/log/arbiter-dribble --log-file \
+  /var/log/detachtty.log --pid-file /var/run/arbiter.pid \
+  /var/run/arbiter-socket \
+  /usr/local/bin/sbcl --load "/lisp/repos/arbiter/scripts/start.lisp"
+

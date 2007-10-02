@@ -1,0 +1,2939 @@
+/*
+Copyright (c) 2006 - 2007, Paragent, LLC
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+- Neither the name of Paragent, LLC nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+/*
+light green: rgb(228, 241, 220)
+green: 	color:#267d00;
+dark green: rgb(36, 98, 7);
+orange:	color:#e0490e;
+light orange: f4f3d5;
+medium orange: #f5d9a9; 
+light blue: #ddf1fe;
+dark blue: rgb(1, 44, 95);
+
+dark gray: rgb(78, 70, 63);
+
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-width: 872px;
+  background: #fff;
+  color: rgb(78, 70, 63);
+  font: small/18px "Lucida Grande", "Trebuchet MS", "Bitstream Vera Sans", Verdana, Helvetica, sans-serif;
+  margin: 12px;
+}
+
+a 
+{
+  text-decoration: none;
+  color: #267D00;
+}
+
+a:hover 
+{
+  color: rgb(1, 44, 95);
+  text-decoration: underline;
+  background: #e2f2d8;
+}
+
+ul 
+{
+  list-style: none;
+}
+
+img 
+{
+  border: 0px;
+}
+
+form h3 
+{
+  font-size: small;
+  color: rgb(1, 44, 95);
+}
+
+
+/********************
+    overall layout
+********************/
+
+div#content 
+{ 
+  background: transparent url(../images/fauxcolbg.gif) repeat-y top left;
+  float: left;
+}
+
+div#sidebar 
+{
+  float: left;
+  width: 194px;
+  border-right: 1px solid #ccc;
+  padding-right: 6px;
+  background: transparent url(../images/sidebg.gif) repeat-y top right;
+}
+
+div#sidebar div#signup
+{
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+  padding: 6px;
+  color: #fff;
+  background: transparent url(../images/demogrd.gif) repeat-x top right;
+  border: 2px solid #ddf1fe;
+}	
+
+
+div#sidebar div#signup p
+{
+  margin-bottom: 6px;
+}
+
+div#main
+{
+  margin: 0 5px 0 201px;
+}
+
+div#workspace 
+{
+  float: left;
+  margin: 0;
+  padding: 0 0 0 5px;
+  background: #f4f4f4;
+  width: 100%;
+}
+
+
+div#footer
+{
+  clear: both;
+  width: 99%;
+  text-align: center;
+  padding-top: 12px;
+}
+
+div#footer p	
+{
+  font-size: 11px;
+  line-height: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+
+/***************
+  header layout
+****************/
+
+#header 
+{
+  float: left;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+}
+
+
+#header #masthead 
+{
+  float: left;
+  width: 200px;
+  height: 60px;
+  text-align: center;
+  border-right: 1px solid #ccc;
+}
+
+
+#header div#info 
+{
+  margin: 0;
+  padding: 0;
+  float: right;
+}
+
+#header div#info ul 
+{
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+}
+
+#header div#info li 
+{
+  float: left;
+  padding: 0 6px;
+  display: block;
+  border-right: 1px solid #ccc;
+}
+
+#header div#info li.search 
+{
+  padding-right: 0;
+  border-right: none;
+}
+
+#header div#info li#search 
+{
+  padding-right: 6px;
+  border-right: none;
+  margin-top: 0px;  
+  border: none;
+}
+
+#header div#info li#search div#advanced
+{
+  text-align: right;
+  font-size: xx-small;
+}
+
+li#search input
+{
+  border: 1px solid #ccc;
+  padding-left: 4px;
+  padding-bottom: 2px;
+  color: #444;
+  vertical-align: baseline;
+}
+
+li#search input.ievahack
+{
+  vertical-align: bottom;
+}
+
+
+
+/***********************
+   Top navigation bar
+************************/
+
+#navbar 
+{
+  float: left;
+  width: 100%;
+  height: 36px;
+  border-bottom: 1px #ccc solid;
+  padding-left: 5px;
+}
+
+#navbar ul 
+{
+  float: left;
+  padding: 3px 4px;
+}
+
+#navbar li 
+{
+  margin: 4px 3px 0px 0px;
+  padding: 0;
+  float: left;
+  height: 27px;
+  display: block;
+}
+
+#navbar a 
+{
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+#navbar a span 
+{
+  display: none;
+}
+
+#navbar a#dashnav 
+{
+  background: transparent url(../images/dashnav.gif);
+  width: 94px;
+  height: 27px;
+}
+
+#navbar a#dashnav:hover 
+{
+  background: transparent url(../images/dashnavhov.gif);
+  width: 94px;
+  height: 27px;
+}
+
+#navbar a#compnav 
+{
+  background: transparent url(../images/compnav.gif);
+  width: 96px;
+  height: 27px;
+}
+
+#navbar a#compnav:hover 
+{
+  background: transparent url(../images/compnavhov.gif);
+  width: 96px;
+  height: 27px;
+}
+
+#navbar a#alertnav 
+{
+  background: transparent url(../images/alertnav.gif);
+  width: 58px;
+  height: 27px;
+}
+
+#navbar a#alertnav:hover 
+{
+  background: transparent url(../images/alertnavhov.gif);
+  width: 58px;
+  height: 27px;
+}
+
+#navbar a#ticketsnav 
+{
+  background: transparent url(../images/ticketsnav.gif);
+  width: 70px;
+  height: 27px;
+}
+
+#navbar a#ticketsnav:hover 
+{
+  background-position: 0 -27px;
+}
+
+body#tickets #navbar a#ticketsnav
+{
+  background-position: 0 -54px;
+}
+
+#navbar a#softnav 
+{
+  background: transparent url(../images/softnav.gif);
+  width: 79px;
+  height: 27px;
+}
+
+#navbar a#softnav:hover 
+{
+  background: transparent url(../images/softnavhov.gif);
+  width: 79px;
+  height: 27px;
+}
+
+#navbar a#reportnav 
+{
+  background: transparent url(../images/reportnav.gif);
+  width: 72px;
+  height: 27px;
+}
+
+#navbar a#reportnav:hover 
+{
+  background: transparent url(../images/reportnavhov.gif);
+  width: 72px;
+  height: 27px;
+}
+
+body#dashboard #navbar a#dashnav 
+{
+  background: transparent url(../images/dashnavsel.gif);
+  width: 94px;
+  height: 27px;
+}
+
+body#computers #navbar a#compnav 
+{
+  background: transparent url(../images/compnavsel.gif);
+  width: 96px;
+  height: 27px;
+}
+
+body#alerts #navbar a#alertnav 
+{
+  background: transparent url(../images/alertnavsel.gif);
+  width: 58px;
+  height: 27px;
+}
+
+
+body#software #navbar a#softnav 
+{
+  background: transparent url(../images/softnavsel.gif);
+  width: 79px;
+  height: 27px;
+}
+
+body#reports #navbar a#reportnav 
+{
+  background: transparent url(../images/reportnavsel.gif);
+  width: 72px;
+  height: 27px;
+}
+
+
+
+/*****************
+    Status box
+******************/
+
+
+div#status 
+{
+  background: transparent url(../images/statbg.gif) no-repeat top right;
+  border-bottom: 1px solid #ccc;
+  padding: 4px;
+}
+
+div#status ul 
+{
+  list-style: none;
+  width: 180px;
+  margin: 0 0 0 4px;
+  padding: 0;
+}
+
+div#status li 
+{
+  margin-bottom: 6px;
+}
+
+div#status li#online 
+{
+  float: left;
+  background: transparent;
+  width: 78px;
+  height: 20px;
+  border: 1px solid #aaa;
+  color:#267d00;
+  padding-top: 5px;
+  padding-left: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+div#status li#offline 
+{
+  float: right;
+  background: transparent;
+  width: 80px;
+  height: 20px;
+  border: 1px solid #aaa;
+  color: #f5d9a9;
+  padding-top: 5px;
+  padding-left: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+div#status li#online a 
+{
+  color: #267d00;
+}
+
+div#status li#offline a 
+{
+  color: #e0490e;
+}
+
+div#status li#offline a:hover 
+{
+  background: #f4f3d5;
+}
+
+
+div#status li a strong
+{
+  font-weight: normal;
+  color: #555;
+}
+
+
+div#status li#softaudit_ok 
+{
+  clear: both;
+  background: transparent;
+  height: 20px;
+  border: 1px solid #aaa;
+  padding-top: 5px;
+  padding-left: 6px;
+  color:#267d00;
+  font-weight: bold;
+}
+
+div#status li#softaudit_failed 
+{
+  clear: both;
+  background: transparent;
+  height: 20px;
+  border: 1px solid #aaa;
+  padding-top: 5px;
+  padding-left: 6px;
+  color:#e0490e;
+  font-weight: bold;
+}
+
+div#status li#softaudit_ok a 
+{
+  color: #267d00;
+}
+
+div#status li#softaudit_failed a 
+{
+  color: #e0490e;
+}
+
+div#status li#softaudit_failed a:hover 
+{
+  background: #f4f3d5;
+}
+
+
+div#status li#alerts 
+{
+  clear: both;
+  background: transparent;
+  height: 20px;
+  border: 1px solid #aaa;
+  padding-top: 5px;
+  padding-left: 6px;
+  color:#267d00;
+  font-weight: bold;
+}
+
+div#status li#open-tickets 
+{
+  clear: both;
+  background: transparent;
+  height: 20px;
+  border: 1px solid #aaa;
+  padding-top: 5px;
+  padding-left: 6px;
+  color:#267d00;
+  font-weight: bold;
+}
+
+div#status emphasis 
+{
+  color: #666;
+  font-weight: normal;
+}
+
+
+/****************
+     Side-bar
+*****************/
+
+div.sidesect 
+{
+  margin: 12px;
+  padding-bottom: 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px #ccc dashed;
+}
+
+div.sidesect h1 
+{
+  font-size: 14px;
+  color:rgb(1, 44, 95);
+}
+
+div.sidesect p 
+{
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+div.sidesect ul 
+{
+  list-style: url(../images/obullet.gif);
+  line-height: 1;
+  margin-bottom: 0;
+  margin-left: 6px;
+}
+
+div.sidesect li 
+{
+  margin: 6px;
+  margin-left: 16px;
+}
+
+div.sidesect a 
+{
+  font-size: 11px;
+  line-height: 1.1;
+}
+
+#sbfooter 
+{
+  text-align:center;
+  padding-right: 8px;
+}
+
+
+
+/************************
+  General form stylings
+*************************/
+
+input
+{ 
+  border: 1px solid #ccc;
+  padding: 2px 4px;
+  color: #444;
+}
+
+input.button {
+	border: none;
+	width: auto;
+}
+
+input.save {
+	border: none;
+}
+
+input.tags,
+input.emails,
+input.note,
+span.service input,
+span.process input,
+p#ticket-category-e input
+p#ticket-description-e textarea
+{ 
+  font-size: 12px;
+  width: 437px;
+}
+
+span.threshold input
+{ 
+  font-size: 12px;
+  width: 100px;
+}
+
+textarea.note,
+p#ticket-description-e textarea 
+{ 
+  border: 1px solid #ccc;
+  padding: 2px 3px;
+  font-size: 12px;
+  color: #444;
+}
+
+span.calendar input
+{ 
+  font-size: 12px;
+}
+
+span.calendar img
+{ 
+  padding: 0 2px;
+  vertical-align: bottom;
+}
+
+fieldset.search
+{ 
+  margin: 10px 0 0 10px;
+  width: 488px;
+}
+
+fieldset.search input
+{ 
+  margin: 6px;
+  width: 400px;
+}
+
+fieldset.search input.button
+{ 
+  padding: 0;
+  margin: 6px 0 0 0;
+  width: auto;
+}
+
+fieldset.adv-search
+{ 
+  width: 90%;
+  margin: 10px 0 0 10px;
+  clear: both;
+}
+
+fieldset.adv-search p label
+{ 
+  display: inline;
+  padding: 4px 0 0 0;
+  line-height: 20px;
+  vertical-align: bottom;
+}
+
+
+fieldset.adv-search select
+{ 
+  margin: 4px 4px 0 4px;
+}
+
+fieldset.adv-search input
+{ 
+  margin: 3px 4px 1px 4px;
+}
+
+fieldset.adv-search input.clause
+{ 
+  width: 300px;
+}
+
+fieldset.adv-search input.button
+{ 
+  padding: 0;
+  margin: 6px 0;
+  width: auto;
+}
+
+
+h3.search {
+	margin: 24px 0 0 10px;
+	color: rgb(1, 44, 95);
+}
+
+
+dl.std-form
+{ 
+  margin: 12px;
+}
+
+dl.std-form dt 
+{
+  clear: none;
+  float: left;
+  padding: 7px 0 0 0;
+  padding-right: 10px;
+  width: 130px;
+  font-size: 14px;
+  font-weight: normal;
+  color:#267d00;
+  text-align: right;
+}
+
+dl.std-form dd 
+{
+  clear: none;
+  padding: 3px 0;
+  font-size: 11px;
+  color: #666;
+  
+}
+
+dl.std-form input 
+{
+  font-size: 14px;
+  padding: 2px;
+  border: 1px solid #ccc;
+  color: #444;
+}
+
+dl.std-form select 
+{
+  border: 1px solid #ccc;
+  color: #444;
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+
+/*************************
+  The computer-selector
+**************************/
+table.item-list div.computer-selector,
+div.computer-selector
+{
+  float: none;
+  position: relative;
+  width: 440px;
+  height: 220px;
+  overflow: visible;
+}
+
+div.computer-selector h3
+{ 
+  color: rgb(1, 44, 95);
+  font-size: 12px;
+}
+
+div.computer-selector select 
+{
+  width: 200px;
+  font-size: 14px;
+  border: 1px solid #ccc; 
+}
+
+div.computer-selector select option 
+{
+  font-size: 14px; 
+  padding: 0 0 0 4px;
+}
+
+div.computer-selector div.available
+{ 
+  position: absolute;
+  overflow: visible;
+}
+
+div.available select.tag-filter 
+{ 
+  display: block;
+  width: 200px;
+  height: 20px;
+  float: left;
+  clear: both;
+  margin: 0 0 4px 0;
+}
+
+div.available select.available 
+{ 
+  position: absolute;
+  left: 0;
+  top: 28px;
+}
+
+div.computer-selector ul.controls 
+{
+  position: absolute;
+  top: 85px;
+  left: 208px;
+  display: block;
+  margin: 0px;
+}
+
+div.computer-selector ul.controls li 
+{ 
+  width: 20px;
+  height: 20px;
+  margin: 4px;
+}
+
+div.computer-selector ul.controls li a img
+{ 
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+div.computer-selector div.selected 
+{ 
+  position: absolute;
+  display: block;
+  overflow: visible;
+  top: 20px;
+  left: 246px;
+}
+
+div.selected h3
+{ 
+  width: 196px;
+  height: 19px;
+  margin: 0 0 4px 0;
+  padding: 2px 0 0 4px;
+  border-bottom: 1px solid #ccc;
+  color: #999;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
+
+/***************
+    Reports
+****************/
+
+
+div.graph {
+	margin: auto;
+	text-align: center;
+}
+
+
+h1.report 
+{ 
+  margin: 10px;
+  color: #e0490e;
+  font-size: 16px;
+}
+
+h2.report 
+{ 
+  margin: 10px;
+  color: #267d00;
+  font-size: 14px;
+}
+
+h2.report-warning
+{ 
+  margin: 10px;
+  color: #e0490e;
+  font-size: 14px;
+}
+
+ul.reports
+{ 
+  float: left;
+  margin: 15px;
+}
+
+div.report
+{ 
+  margin: 20px 10px 10px 10px;
+}
+
+
+div.report h2
+{ 
+  margin: 10px;
+  color: #267d00;
+  font-size: 14px;
+}
+
+div.report table 
+{ 
+  border: 0;
+}
+
+div.report table th
+{ 
+  color: rgb(1, 44, 95);
+}
+
+div.report table td
+{ 
+  padding: 2px 8px 2px 8px;
+  border-top: 1px solid #ccc;
+  vertical-align: top;
+}
+
+div.report table td.shaded,
+div.report table th.shaded
+{ 
+  background: #f7fbfe;
+}
+
+div.report table td.clear,
+div.report table th.clear
+{ 
+  background: #fff;
+}
+
+table.warranty-table {
+	width: 100%;
+}
+
+/***************
+  Event report
+****************/
+
+div.event-report
+{ 
+  margin: 20px 10px 10px 10px;
+}
+
+div.event-report h2
+{ 
+  margin: 10px;
+  color: #267d00;
+  font-size: 14px;
+}
+
+div.event-report table 
+{ 
+  border: 0;
+  width: 95%;
+}
+
+div.event-report table th
+{ 
+  color: rgb(1, 44, 95);
+}
+
+div.event-report table td
+{ 
+  padding: 2px 8px 2px 8px;
+  vertical-align: top;
+}
+
+
+/********************
+  License Key Report
+ *******************/
+
+div#license-report {
+	float: left;
+}
+
+div#license-report h2.report {
+	margin: 10px;
+  	color: #e0490e;
+	font-size: 14px;
+}
+
+table#license-key-table,
+table#overdue-tickets-report
+{ 
+  border: 0;
+  width: 95%;
+}
+
+table#license-key-table th,
+table#overdue-tickets-report th
+{ 
+  color: rgb(1, 44, 95);
+}
+
+table#license-key-table td,
+table#overdue-tickets-report td
+{ 
+  padding: 2px 8px 2px 8px;
+  border-top: 1px solid #ccc;
+  vertical-align: top;
+}
+
+
+
+/********************
+   Inventory Report
+*********************/
+
+div.report-form 
+{ 
+  margin: 10px;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+/*
+div#inventory-report-form {
+	float: left;
+}
+
+div#inventory-report-form input.ok {
+	float: left;
+}
+
+div#inventory-report  {
+	float: left;
+	clear: both;
+}
+
+a#inventory-csv {
+	float: left;
+	clear: both;
+}*/
+
+hr.inventory-line {
+	border: 1px dashed #ccc;
+}
+
+div.report-form select
+{ 
+  border: 1px solid #ccc;
+  display: block;
+  width: 100px;
+  font-size: 14px;
+  margin: 4px;
+}
+
+div.report-form label
+{ 
+  font-size: 14px;
+}
+
+div.report-form input
+{ 
+  border: 1px solid #ccc;
+  margin: 4px;
+}
+
+div.report-form input.ok
+{ 
+  border: none;
+  clear: both;
+  margin-top: 20px;
+}
+
+div.report-form option
+{ 
+  display: block;
+  width: auto;
+  font-size: 14px;
+}
+
+div.report-error 
+{
+  margin: 12px;
+  padding: 8px;
+  background: #ddf1fe;
+  width: 500px;
+  border: 1px solid #ccc;
+}
+
+div.report-error h1 
+{
+  font-size: 14px;
+  font-weight: bold;
+  color: #e0490e;
+}
+
+div.report-error p 
+{
+  font-size: 12px;
+  font-weight: normal;
+}
+
+
+
+
+/**************
+  Item-list
+**************/
+
+table.item-list
+{ 
+  cell-spacing: 5px;
+}
+
+tr.odd-row 
+{
+  background: #f7fbfe;
+}
+table.item-list td
+{ 
+  vertical-align: top;
+}
+
+table.item-list tr.odd-row td,
+table.item-list tr.even-row td
+{
+  padding: 2px;
+}
+
+table.condensed tr.odd-row td,
+table.condensed tr.even-row td
+{ 
+  padding: 4px;
+}
+
+table.item-list td.badge
+{ 
+  width: 45px;
+  height: 55px;
+  padding: 5px 10px 10px 5px;
+}
+
+table.condensed td.badge,
+table#tickets.condensed td.badge
+{ 
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  margin: 0;
+  background: none;
+}
+
+table#tickets.condensed td.name
+{ 
+  font-weight: normal;
+}
+
+table#tickets.condensed td.summary
+{ 
+  font-size: 12px;
+  color: #666;
+  padding-bottom: 8px;
+}
+
+table#tickets.condensed td.summary span
+{ 
+  font-weight: normal;
+  color: #444;
+}
+
+
+table#tickets td.Closed
+{ 
+  background: transparent url(../images/badge-closed.gif) no-repeat top left;
+}
+
+table#tickets td.Critical
+{ 
+  background: transparent url(../images/badge-critical.gif) no-repeat top left;
+}
+
+table#logged-errors {
+	width: 100%;
+}
+
+table#logged-errors td.badge {
+	background: transparent url(../images/badge-critical.gif) no-repeat top left;
+}
+
+
+table#latest {
+	width: 100%;
+}
+
+table#latest td.High,
+table#tickets td.High
+{ 
+  background: transparent url(../images/badge-high.gif) no-repeat top left;
+}
+
+table#latest td.Medium,
+table#tickets td.Medium
+{ 
+  background: transparent url(../images/badge-medium.gif) no-repeat top left;
+}
+
+table#latest td.Low,
+table#tickets td.Low
+{ 
+  background: transparent url(../images/badge-low.gif) no-repeat top left;
+}
+
+table#latest td.Note,
+table#tickets td.Note
+{ 
+  color: rgb(1, 44, 95);
+  background: transparent url(../images/badge-note.gif) no-repeat top left;
+}
+
+table#latest td.Medium,
+table#latest td.Low,
+table#latest td.High,
+table#tickets td.Critical,
+table#tickets td.High,
+table#tickets td.Medium,
+table#tickets td.Low
+{ 
+  color: #e0490e;
+}
+
+table.item-list td.badge span.time
+{ 
+  font-size: 16px;
+  font-weight: bold;
+}
+
+table.item-list td.badge span.date
+{ 
+  font-size: 9px;
+}
+
+table.item-list td.Medium span.severity
+{ 
+  font-size: 11px;
+}
+
+table.item-list td.summary
+{ 
+  white-space: nowrap;
+  font-size: 14px;
+  padding-right: 5px;
+  color: rgb(1, 44, 95);
+}
+
+table.item-list td.description
+{ 
+  font-size: 12px;
+  padding-right: 5px;
+}
+
+table.condensed tr,
+table#tickets.condensed tr
+{ 
+  line-height: 12px;
+}
+
+table.condensed td.summary,
+table#tickets.condensed td.name
+{ 
+  font-size: 14px;
+}
+
+table.condensed td.summary span,
+table#tickets.condensed td.name span,
+table#tickets.item-list td.name span a span
+{ 
+  font-size: 11px;
+  font-weight: bold;
+  color: rgb(78, 70, 63);
+}
+
+table.condensed td.description,
+table#tickets.condensed td.description
+{ 
+  font-size: 12px;
+  padding-bottom: 8px;
+}
+
+table#tickets.condensed td.description p
+{ 
+  padding: 2px 0;
+}
+
+table.item-list td.computer
+{ 
+  height: 30px;
+}
+
+/* item-list filter-list */
+
+div.severity-filter
+{ 
+  display: block;
+  margin-bottom: 10px;
+}
+
+div.severity-filter ul
+{ 
+  display: inline;
+  overflow: hidden;
+  width: 100%;
+}
+
+div.severity-filter ul li
+{ 
+  display: inline;
+  padding: 0 5px;
+  line-height: 16px;
+  color: rgb(1, 44, 95);
+  border-left: 1px solid #ccc;
+}
+
+div.severity-filter ul li.first-item
+{ 
+  padding-left: 0;
+  border-left: none;
+}
+
+ul.filter-list,
+ul.action-list
+{ 
+  overflow: hidden;
+  width: 100%;
+}
+
+tr.action-bar ul.filter-list,
+tr.action-bar ul.action-list
+{ 
+  display: inline;
+}
+
+ul.filter-list li,
+ul.nav-list li.num-results,
+ul.filter-list li.select-all,
+ul.action-list li,
+ul.action-list li.select-all,
+ul.filter-list li.export
+{ 
+  float: left;
+  padding: 0 5px;
+  line-height: 16px;
+  color: rgb(1, 44, 95);
+  border-left: 1px solid #ccc;
+}
+
+ul.nav-list li.num-results
+{ 
+  float: right;
+  margin-top: 3px;
+}
+
+ul.filter-list li.select-all,
+ul.action-list li.select-all,
+ul.filter-list li.export,
+ul.filter-list li.category-filter
+{ 
+  float: right;
+}
+
+ul.filter-list li.export img
+{ 
+  vertical-align: top;
+}
+
+ul.nav-list li.page-count
+{ 
+  padding-top: 1px;
+  margin-left: 5px;
+}
+
+ul.filter-list li a,
+ul.num-results li a,
+ul.action-list li a
+{ 
+  font-weight: normal;
+}
+
+ul.filter-list li.first-item,
+ul.filter-list li.filter,
+ul.nav-list li.first-item,
+ul.action-list li.first-item
+{ 
+  border-left: none;
+  padding-left: 0;
+}
+
+ul.filter-list li.selected,
+ul.nav-list li.selected,
+ul.action-list li.selected
+{ 
+  font-weight: bold;
+}
+
+ul.filter-list li.disabled,
+ul.action-list li.disabled
+{  
+  font-weight: normal;
+  color: #999;
+}
+
+/***********************
+         Tabs
+ ***********************/
+
+div.tabs
+{ 
+  display: block;
+  width: 100%;
+  background: transparent url(../images/greyline.gif) repeat-x bottom left;
+  height: 25px;
+  min-width: 100%; /* for ie7 */
+  margin-top: 20px;
+}
+
+div.tabs ul
+{ 
+  width: 100%;
+}
+
+div.tabs ul li
+{ 
+  float: left;
+  line-height: 24px;
+  height: 24px;
+  padding: 0 5px;
+  color: rgb(1, 44, 95);
+  border-left: none;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background: transparent url(../images/tab-back.gif) 0 -100px no-repeat;
+}
+
+div.tabs ul li.first-item
+{ 
+  margin-left: 6px;
+}
+
+div.tabs ul li:hover
+{ 
+  background-position: 0 -200px;
+}
+
+div.tabs ul li.selected,
+div.tabs ul li.selected:hover
+{ 
+  border-bottom: 1px solid #fff;
+  background-position: 0 0;
+}
+
+div.tabs ul li a,
+div.tabs ul li span
+{ 
+  line-height: 24px;
+  height: 24px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+div.tabs ul li a:hover
+{ 
+  background: none;
+}
+
+div.vertical-tab-box-title
+{ 
+  float: left;
+  width: 250px;
+}
+
+div.vertical-tab-box-title h2
+{ 
+  margin-bottom: 0;
+  margin-right: 18px;
+  padding-left: 10px;
+}
+
+div.vertical-tab-box
+{ 
+  margin-left: 262px;
+  padding-top: 25px;
+}
+
+div.vertical-tabs ul li
+{ 
+  line-height: 34px;
+  height: 35px;
+  padding: 0 5px 0 10px;
+  color: rgb(1, 44, 95);
+  border: none;
+  background: transparent url(../images/vertical-tab-back.gif) right -35px no-repeat;
+}
+
+div.vertical-tabs ul li:hover
+{ 
+  background-position: right -70px;
+}
+
+div.vertical-tabs ul li.selected,
+div.vertical-tabs ul li.selected:hover
+{ 
+  color: #fff;
+  font-weight: bold;
+  background-position: right 0px;
+}
+
+div.vertical-tabs ul li a:hover
+{ 
+  background-color: transparent;
+}
+
+div.user-info ul.action-list
+{ 
+  margin-bottom: 10px;
+}
+
+/* batch action toolbar */
+
+div#batch-action-bar
+{ 
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 5px;
+  height: 26px;
+}
+
+div#batch-action-bar ul
+{ 
+  height: 24px;
+}
+
+div#batch-action-bar form
+{ 
+  height: 20px;
+}
+
+div#batch-action-bar li
+{ 
+  height: 20px;
+  line-height: 20px;
+}
+
+div#batch-action-bar li input
+{ 
+  padding: 0;
+}
+
+div#batch-action-bar li input.button
+{ 
+  vertical-align: middle;
+  border: none;
+  height: 15px;
+}
+
+div#batch-action-bar li input.tag-field
+{ 
+  border: 1px solid #ccc;
+  margin-right: 4px;
+  color: rgb(1, 44, 95);
+  line-height: 18px;
+  height: 18px;
+}
+
+div#batch-action-bar li span.calendar
+{ 
+  line-height: 20px;
+  height: 20px;
+}
+
+div#batch-action-bar li span.calendar input
+{ 
+  border: 1px solid #ccc;
+  line-height: 18px;
+  height: 18px;
+}
+
+div#batch-action-bar li span.calendar a:hover
+{ 
+  background: #fff;
+}
+
+div#batch-action-bar li a
+{ 
+  height: 18px;
+  line-height: 18px;
+  vertical-align: top;
+}
+
+div#batch-action-bar li span.calendar a img
+{ 
+  vertical-align: bottom;
+  width: 20px;
+  height: 20px;
+  margin: 0 4px;
+}
+
+
+/* Item-list navigation */
+
+ul.nav-list
+{ 
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 10px;
+}
+
+ul.nav-list li
+{ 
+  float: left;
+  display: block;
+  height: 17px;
+  margin-bottom: 3px;
+}
+
+ul.nav-list li.page-count
+{ 
+  margin-top: 1px;
+}
+
+.nav-list input 
+{
+  border: 1px solid #ccc;
+  padding: 0 2px;
+  color: #444;
+}
+
+.nav-list a:hover
+{ 
+  background: none;
+}
+
+/* spin-button */
+
+.spin-button 
+{
+  float: none;
+  display: inline;
+  margin: 0 5px 0 3px;
+}
+
+.spin-button input 
+{
+  float: left;
+  width: 50px;
+  height: 15px;
+  display: inline;
+  margin-top: 3px;
+}
+
+.spin-button div.up
+{ 
+  margin: 4px 0 0 2px;
+}
+
+.spin-button div.down
+{ 
+  margin: 0 0 0 2px;
+}
+
+/***********************
+ Specialized item-lists
+************************/
+
+
+/*****************
+      Alerts
+******************/
+
+div.sidesect ul.new-alerts {
+	list-style: none;
+}
+
+div.sidesect ul.new-alerts li {
+	margin-left: 3px;
+}
+
+div.alert {
+	padding-left: 10px;
+	padding-bottom: 10px;
+	margin-bottom: 50px;
+}
+
+div.alert li {
+	margin-left: 15px;
+}
+
+div.sidesect ul.new-alerts
+{ 
+  margin-left: 0;
+}
+
+ul.new-alerts li img
+{ 
+  vertical-align: middle;
+}
+
+table#alerts {
+	width: 100%;
+}
+
+table#alerts td.badge span.events
+{ 
+  width: 45px;
+}
+
+
+table#alerts td.software
+{ 
+  background: transparent url(../images/badge-software.gif) no-repeat top left;
+}
+
+table#alerts td.hardware
+{ 
+  background: transparent url(../images/badge-hardware.gif) no-repeat top left;
+}
+
+table#alerts td.service
+{ 
+  background: transparent url(../images/badge-service.gif) no-repeat top left;
+}
+
+table#alerts td.user
+{ 
+  background: transparent url(../images/badge-user.gif) no-repeat top left;
+}
+
+table#alerts td.computer
+{ 
+  background: transparent url(../images/badge-computer.gif) no-repeat top left;
+}
+
+table#alerts td.badge
+{ 
+  color: rgb(1,44,95);
+}
+
+/*****************
+      Tickets
+******************/
+
+table#tickets td.summary p
+{ 
+  color: #666;
+}
+
+table#tickets td.summary p span
+{ 
+  color: #444;
+}
+
+
+table#tickets 
+{
+  border: none;
+  width: 100%;
+}
+
+#ticket-title form,
+ul.filter-list form 
+{
+  display: inline;
+}
+
+.ticket table.aligner 
+{
+  width: 100%;
+}
+
+.ticket div.ticket-computers
+{
+  margin-top: 15px;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+.ticket textarea,
+.ticket input.subject,
+.ticket input.emails {
+	margin-left: 5px;
+	width: 95%;
+}
+
+.ticket input,
+.ticket select {
+	margin-left: 5px;
+}
+
+.ticket label {
+  color: #014495;
+  font-weight: bold;
+  padding-bottom: 2px;
+  display: block;
+}
+
+/* Ticket history */
+
+.ticket div.history {
+	margin-top: 20px;
+}
+
+.ticket div.history h3 p{
+	border-bottom: 1px solid #ccc;
+	width: 90%;
+	padding-left: 20px;
+}
+
+.ticket div.history-item {
+	padding-left: 20px;
+	border-bottom: 1px solid #ccc;
+	width: 90%;
+}
+
+.ticket div.history-item h3 {
+	background: #f9f9f9;
+}
+
+.ticket div.history-item span.timestamp {
+	color: #aaa;
+	font-size: 12px;
+}
+
+.ticket div.history-item h3 {
+	margin-bottom: 3px;
+}
+
+
+
+
+div#submit-ticket h3 
+{
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: rgb(1, 44, 95);
+  float: none;
+}
+
+div#submit-ticket fieldset.ticket-form 
+{
+  margin: 10px auto;
+  width: 470px;
+  float: none;
+}
+
+.ticket-content td 
+{
+  background: transparent;
+}
+
+#tickets td.badge p
+{ 
+  width: 45px;
+  margin: 0 auto;
+}
+
+#tickets td.badge span.state
+{ 
+  padding: 0 0px 0 0;
+  font-size: 10px;
+}
+
+div#ticket-email-list div.ticket-email 
+{
+  width: 100%;
+}
+
+div#ticket-email-list div.ticket-email form 
+{
+  padding-left: 20px;
+}
+
+
+/*****************
+      Alerts
+******************/
+
+table#alerts td.summary p
+{ 
+  color: #666;
+}
+
+table#alerts td.summary p span
+{ 
+  color: #444;
+}
+
+/*****************
+  Computer List
+******************/
+table#comppick,
+table#tickets,
+table#alerts
+{ 
+/* cell-spacing: 5px; */
+}
+
+table#comppick td,
+table#tickets td,
+table#alerts td
+{
+  vertical-align: top;
+  
+}
+
+table#latest-large td.badge,
+table#comppick td.badge,
+table#tickets td.badge,
+table#alerts td.badge,
+table#logged-errors td.badge
+{ 
+  width: 45px;
+  height: 55px;
+  padding: 5px 10px 10px 5px;
+}
+
+table#comppick td.online
+{ 
+  color: rgb(1, 44, 95);
+  background: transparent url(../images/badge-on-win.gif) no-repeat top left;
+}
+
+table#comppick td.offline
+{ 
+  background: transparent url(../images/badge-off-win.gif) no-repeat top left;
+}
+
+table#comppick td.offline
+{ 
+  color: #e0490e;
+}
+
+table#comppick td.badge span.status,
+table#comppick td.badge span.tickets,
+table#alerts td.badge span.events
+{ 
+  width: 45px;
+  display: block;
+}
+
+table#comppick td.badge span.os,
+table#alerts td.badge span.label
+{ 
+  display: block;
+  font-size: 9px;
+}
+
+table#comppick td.badge span.tickets,
+table#alerts td.badge span.events
+{ 
+  font-size: 16px;
+  font-weight: bold;
+}
+
+table#comppick td.name,
+table#tickets td.name,
+table#alerts td.name
+{ 
+  white-space: nowrap;
+  font-weight: bold;
+  font-size: 14px;
+  padding-right: 5px;
+  color: rgb(1, 44, 95);
+}
+
+table#comppick td.name a,
+table#tickets td.name a,
+table#alerts td.name a
+{ 
+  color: rgb(1, 44, 95);
+}
+
+table#comppick td.name span
+{ 
+  margin-left: 6px;
+}
+
+table#comppick td.title,
+table#tickets td.title,
+table#alerts td.title
+{ 
+  text-align: right;
+  width: auto;
+  color: #444;
+  white-space: nowrap;
+}
+
+table#comppick td.desc,
+table#comppick td.status,
+table#tickets td.desc,
+table#alerts td.desc
+{ 
+  width: 100%;
+  padding-right: 5px;
+  color: #666;
+}
+
+div. td.icon
+{ 
+  vertical-align: top;
+}
+
+table#comppick td.desc span,
+table#tickets td.desc span
+{ 
+  color: #333;
+}
+
+table#comppick td.status span
+{ 
+  padding-right: 5px;
+}
+
+table#comppick tr.action-bar,
+table#tickets tr.action-bar,
+table#alerts tr.action-bar
+{ 
+  height: 30px;
+}
+
+ul.filter 
+{
+  margin-left: 3px;
+}
+
+#filter-plus, 
+#filter-minus 
+{
+  margin-left: 3px;
+  vertical-align: bottom;
+}
+
+/* batch action toolbar */
+
+
+/* extra pretty checkboxes */
+
+table.item-list img.checked-arrow 
+{
+  padding-left: 0px;
+  margin: 4px;
+}
+
+
+
+a.checkbox 
+{
+  width: 12px;
+  height: 12px;
+  display: inline;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  background: transparent url(../images/checkbox.gif) 0 0 no-repeat;
+  cursor: pointer;
+}
+
+a.checkbox:hover 
+{
+  background-position: -12px 0;
+  text-decoration: none;
+}
+
+a.selected 
+{
+  background-position: -24px 0;
+}
+
+a.selected:hover
+{
+  background-position: -24px 0;
+}
+
+
+div#comp-form-submit input 
+{
+  border: 1px solid #ccc;
+  padding: 0;
+  margin: 5px;
+  color: #444;
+}
+
+
+.trash  
+{
+  float: right;
+  margin-right: 20px;	
+}
+
+
+.detail-pane div.loading, 
+.detail-pane div.loaded 
+{
+  text-align: center;
+  font-size: x-large;
+}
+
+div.computer-property 
+{
+  padding-top: 10px;
+  margin-right: 4px;
+}
+
+
+div.computer-property h3 
+{
+  color: rgb(1, 44, 95);
+  font-size: small;
+}
+
+div.computer-property h3 img 
+{
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+div.comp-prop-none 
+{
+  color: #aaa;
+}
+
+div.comp-prop-table 
+{
+  padding: 0px;
+  color: #444;
+  width: 95%;
+  overflow: visible;
+}
+
+div.comp-prop-table th,
+div.comp-prop-table td
+{
+  margin: 0px;
+  padding: 0px 8px;
+  color: #444;
+  border: none;
+}
+
+
+div.comp-prop-table th.search,
+div.comp-prop-table td.search
+{
+  margin: 0px;
+  padding: 0px;
+  width: 50px;
+}
+
+
+
+/******************
+   Software list
+*******************/
+#all-software 
+{
+  width: 100%;
+}
+
+#all-software tr
+{ 
+  height: 30px;
+  padding-top: 10px;
+}
+
+#all-software tr.odd-row 
+{
+  background: #f7fbfe;
+}
+
+#all-software .count 
+{ 
+  font-size: 12px;
+  margin-right: 6px;
+  color: #444;
+  float: none;
+}
+
+#all-software .count input
+{ 
+  font-size: 12px;
+}
+
+#all-software .savebtn input
+{ 
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+
+#all-software .software-computer-list 
+{
+  margin: 5px 10px 20px 20px;
+}
+
+
+/******************
+   Users list
+*******************/
+
+#users 
+{
+  width: 100%;
+}
+
+label.software-pref 
+{
+  clear: none;
+  color: #666;
+  font-weight: normal;
+}
+
+/*******************
+     Groups List
+ *******************/
+
+#groups {
+	width: 100%;
+}
+
+/**************
+  Signup Page
+**************/
+
+
+h2.signup
+{ 
+  font-size: 18px;
+  color: rgb(1, 44, 95);
+  margin: 24px auto;
+  width: 450px;
+}
+
+
+
+
+ul.signup
+{ 
+  margin: 24px auto;
+  width: 588px;
+}
+
+ul.signup li
+{ 
+  display: block;
+  float: left;
+  width: 164px;
+  height: 250px;
+  background: #014495;
+  padding: 12px;
+  margin: 4px;
+}
+
+ul.signup li img
+{ 
+  display: block;
+  margin: 0 auto;
+}
+
+ul.signup p
+{ 
+  margin-top: 6px;
+  height: 154px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+fieldset.signup {
+	background: #f9f9f9;
+	border: 1px solid #ccc;
+	margin-left: auto;
+	margin-right: auto;
+	width: 250px;
+	padding: 12px;
+	clear: both;
+}
+
+
+fieldset.signup input.text
+{ 
+  width: 85%;
+  margin: auto auto;
+}
+
+
+fieldset.signup p {
+	margin: 4px 12px;
+	padding: 0;
+	width: 100%;
+}
+
+fieldset.signup label {
+	color: #267d00;
+	font-weight: bold;
+	display: block;
+}
+
+fieldset.signup input
+{ 
+  width: 85%;
+  margin: auto auto;
+}
+
+fieldset.signup input#free-account-signup {
+	border: none;
+	width: auto;
+}
+
+
+
+/*******************
+      Calendar
+ *******************/
+ 
+div.calendar
+{
+  font-size: large;
+}
+
+.calendar {
+	z-index: 100;
+}
+
+/**************
+      Misc
+**************/
+
+div.tab-page-section
+{ 
+  padding: 15px 0;
+}
+
+div.tab-page-section p
+{ 
+  padding-bottom: 15px;
+}
+
+div.clear 
+{
+  clear:both;
+}
+
+.error 
+{
+  color: #dd0000;
+  font-weight: bold;
+}
+
+input.ucw-form-field-invalid 
+{
+  border: solid 1px #dd0000;
+}
+
+.rightward 
+{
+  float: right;
+}
+
+.leftward 
+{
+  float: left;
+}
+
+div.box-title
+{ 
+  margin: 10px 10px 0 5px;
+  padding: 10px 10px 10px 19px;
+  background: #fff url(../images/box-corner.gif) no-repeat top left;
+  border-right: 1px solid #ccc;
+}
+
+td.badge 
+{ 
+  width: 60px;
+  background: url(../images/badge-note.gif) no-repeat top left;
+}
+
+.box 
+{
+  background: #fff;
+  margin: 0 10px 10px 5px;
+  padding: 0 10px 10px 10px;
+  border-left: 9px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 9px solid #ccc;
+}
+
+.box table.dashboard
+{ 
+  background: transparent;
+  width: 100%
+}
+
+.box table.dashboard td
+{ 
+  vertical-align: top;
+}
+
+.box table.dashboard td table.top-ten td,
+.box table.dashboard td table.top-ten td a
+{ 
+  line-height: 24px;
+  vertical-align: top;
+}
+
+
+.box h1 
+{
+  color: rgb(1, 44, 95);
+  background: #eee;
+  margin-left: -10px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+div.box-title h2,
+.box h2
+{
+  font-size: 16px;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  color: rgb(1, 44, 95);
+  border-bottom: 1px solid #ccc;
+}
+
+div.box-title h3 {
+  border-bottom: 1px solid #ccc;
+}
+
+table.dashboard
+{ 
+  border-collapse: separate;
+}
+
+table.dashboard td.left
+{ 
+  width: 50%;
+  border-right: 10px solid #fff; 
+  border-bottom: 20px solid #fff; 
+}
+
+table.dashboard td.right
+{ 
+  width: 50%;
+  border-left: 10px solid #fff; 
+  border-bottom: 20px solid #fff; 
+}
+
+table.dashboard td.both
+{ 
+  border-bottom: 20px solid #fff; 
+  border-top: none;
+}
+
+table.dashboard td.last
+{ 
+  border-bottom: none;
+}
+
+table.dashboard td.chart img
+{ 
+  margin-top: 5px;
+}
+
+.box table h2
+{ 
+  margin-bottom: 5px;
+}
+
+.box h2
+{ 
+  font-size: 14px;
+}
+
+.box ul.filter-list
+{ 
+  margin-bottom: 10px;
+}
+
+.flash-message 
+{
+  position: absolute;
+  margin: auto;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  text-align: center;
+  font-size: xx-large;
+  min-width: 200px;
+}
+
+
+div#system-note 
+{
+  clear: both;
+  margin: 10px;
+  margin-bottom: 8px;
+  width: 90%;
+  background: #f4f3d5;
+  border-top: 2px solid #f5d9a9;
+  border-bottom: 2px solid #f5d9a9;
+}
+
+tr.search-row,
+tr.search-row td 
+{
+  background: #f1f1f1;
+}
+
+tr.search-row a:hover
+{ 
+  text-decoration: inherit;
+  background: transparent;
+}
+
+
+div#system-note p 
+{
+  clear: both;
+  padding: 8px;
+}
+
+a.tip-raiser 
+{
+  border-bottom: 1px dashed;
+}
+
+div.tip 
+{
+  font-weight: bold;
+  clear: both;
+  margin: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 6px;
+  width: 95%;
+  color: #666;
+  background: #f4f3d5;
+  border: 2px solid #f5d9a9;
+  text-align: center;
+}
+
+
+fieldset#message 
+{ 
+  margin: 100px auto;
+  width: 250px;
+  padding: 20px;
+  float: none;
+  text-align: center;
+  color: rgb(1, 44, 95);
+}
+
+
+#search-control 
+{
+  width: 310px;
+}
+
+#search-control div.title-bar 
+{
+  width: 310px;
+  background: #f5d9a9;
+}
+
+#search-control #search-contents 
+{
+  margin: 5px;
+}
+
+.floating-tooltip 
+{
+  background: #f9f8e0;
+  border: 2px solid #f5d9a9;
+  /*position: absolute;*/
+  /*visibility:hidden;*/
+  z-index:1000;
+}
+
+div.floating-tooltip-border 
+{
+  background: transparent;
+  padding: 20px;
+  position: absolute;
+}
+
+
+.close-button 
+{
+  float: right;
+  clear: both;
+}
+
+
+div.tip h3 
+{
+  margin-bottom: 10px;
+  color: #444;
+}
+
+div.tip p 
+{
+  margin-bottom: 6px;
+}
+
+div.tip .close-button 
+{
+  float: right;
+}
+
+div#status-tip 
+{
+  position:absolute;
+  top: 10px;
+  left: 225px;
+  display: block;
+  width: 275px;
+}
+
+
+/**************
+      Menu
+ **************/
+
+table.menu,
+ul.menu
+{
+  background: rgb(228, 241, 220);
+  overflow: hidden;
+  padding-bottom: 4px;
+  z-index: 300;
+}
+
+table.menu td,
+ul.menu li
+{ 
+  background: rgb(228, 241, 220);
+  color: rgb(36, 98, 7); 
+  float: none;
+  border: none;
+  padding: 2px 10px 2px 10px;
+}
+
+table.menu td.menu-header,
+ul.menu li.menu-header
+{ 
+  font-weight: bold;
+  margin-top: 4px;
+  color: rgb(1, 44, 95);
+  padding-left: 6px;
+}
+
+table.menu .menu-header:hover,
+ul.menu li.menu-header:hover
+{
+  background: rgb(228, 241, 220);
+  color: rgb(1, 44, 95);
+  cursor: default;
+}
+
+table.menu td:hover,
+ul.menu li:hover
+{
+  color: rgb(1, 44, 95);
+  background: rgb(228, 241, 220) url(../images/greengrad.gif) repeat-x top left;
+  cursor: pointer;
+}
+
+table.menu td a,
+ul.menu li a
+{ 
+  color: inherit;
+}
+
+table.menu td a:hover,
+ul.menu li a:hover 
+{
+  text-decoration: none;
+  background: transparent;
+}
+
+.menu-container 
+{
+  position: absolute;
+  overflow: auto;
+}
+
+.drop-down 
+{
+  padding: 1px;
+  padding-left: 2px;
+  padding-right: 2px;
+  vertical-align: center;
+  text-decoration: none;
+}
+
+
+
+/**************
+  Credit card
+ **************/
+
+div#credit-card-signup-container 
+{
+  float: left;
+  width: 90%;
+  margin: 10px;
+}
+
+div#credit-card-signup
+{
+  margin: auto;
+  width: 200px;
+  text-align: center;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background: #ddf1fe url(../images/demogrd.gif) repeat-x top right;
+  border: 2px solid #ddf1fe;
+}
+
+
+fieldset.credit-card 
+{ 
+  margin: 20px auto;
+  width: 600px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+}
+
+fieldset.credit-card legend 
+{
+  font-size: 14px;
+  font-weight: bold;
+  color: rgb(1, 44, 95);
+  background: transparent;
+}
+
+fieldset#legalese textarea 
+{
+  width: 100%;
+}
+
+div#credit-card-info 
+{
+  float: left;
+  clear: none;
+  border-right: 1px solid #ccc;
+  width: 50%;
+}
+
+div#credit-card-address 
+{
+  float: right;
+  clear: none;
+  margin-right: 20px;
+}
+
+fieldset#legalese ul
+{
+  margin: 0 20px;
+  list-style: url(../images/obullet.gif) outside none;
+  
+}
+
+fieldset#legalese ul p
+{
+  margin: 4px 0;
+}
+
+fieldset#legalese p.contact
+{ 
+  line-height: 14px;
+  color: #e0490e;
+}
+
+fieldset.credit-card label {
+	color: #267d00;
+	display: block;
+	font-weight: bold;
+}
+
+fieldset.credit-card input
+{ 
+  width: 200px;
+}
+
+fieldset.credit-card p.exp input,
+fieldset.credit-card p.cid input
+{ 
+  width: 40px;
+}
+
+fieldset.credit-card input.city
+{ 
+  width: 150px;
+}
+
+fieldset.credit-card p.zip input
+{ 
+  width: 80px;
+}
+
+fieldset.credit-card input.button
+{ 
+  float: right;
+  clear: both;
+  width: auto;
+  margin: 20px 10px 6px 0;
+}
+
+fieldset.credit-card strong {
+	color: #267d00;
+	font-weight: bold;
+}
+
+
+/***********************
+        pricing
+ ***********************/
+
+#signup-page input.signup {
+	border: 0px;
+}
+
+body#signup-page {
+	background: #f4f4f4;
+}
+
+#signup-page form#signup {
+	width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#signup-page #pricing
+{
+	background: rgb(217,241,253);
+	padding: 4px;
+	margin-top: 0px;
+}
+
+#computer-count
+{
+	border: 1px solid #ccc;
+	background: rgb(237,248,254);
+	font-size: 14px;
+	color: rgb(102,102,102);
+	width: 50px;
+	text-align: right;
+	margin: 4px;
+}
+
+#pricing tr.even
+{
+	background: rgb(237,248,254);
+}
+
+#pricing td,
+#pricing th
+{
+	padding: 0 8px;
+	text-align: center;
+	height: 40px;
+}
+
+#pricing .feature
+{
+	text-align: right;
+	color: rgb(1,44,95);
+	padding-left: 16px;
+}
+
+#pricing .computer-count
+{
+	text-align: left;
+	font-size: 14px;
+	padding-left: 16px;
+	color: rgb(1,44,95);
+}
+
+#pricing td.best,
+#pricing th.best
+{
+	background: rgb(197,207,151);
+}
+
+#pricing th
+{
+	color: rgb(36,98,7);
+}
+
+#pricing th.best
+{
+	color: rgb(227,96,42);
+}
+
+#pricing tr.even td.best
+{
+	background: rgb(226,242,216);
+}
+
+#pricing span.note
+{
+	font-size: 8px;
+	font-color: rgb(102,102,102);
+}
+
+#pricing td.total
+{
+	color: rgb(1,44,95);
+	font-weight: bold;
+	text-align: right;
+}
+
+#pricing span.super
+{
+	font-size: 10px;
+	vertical-align: super;
+}
+
+#pricing td.footnote
+{
+	text-align: left;
+}

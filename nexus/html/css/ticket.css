@@ -1,0 +1,515 @@
+/*
+Copyright (c) 2006 - 2007, Paragent, LLC
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+- Neither the name of Paragent, LLC nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+* {
+  margin: 0;
+  padding: 0;
+  font: small/18px "Lucida Grande", "Trebuchet MS", "Bitstream Vera Sans", Verdana, Helvetica, sans-serif
+}
+
+body 
+{
+  background: rgb(244,244,244);
+  color: rgb(78, 70, 63);
+  font: small/18px "Lucida Grande", "Trebuchet MS", "Bitstream Vera Sans", Verdana, Helvetica, sans-serif;
+  padding: 0 10px 10px 10px;
+  margin: 0;
+}
+
+div.box-title
+{ 
+  margin: 10px 10px 0 5px;
+  padding: 10px 10px 10px 19px;
+  background: #fff url(../images/box-corner.gif) no-repeat top left;
+  border-right: 1px solid #ccc;
+}
+
+fieldset.box,
+div.box
+{
+  background: #fff;
+  margin: 0;
+  padding: 0 10px 10px 10px;
+  border-left: 9px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 9px solid #ccc;
+  border-top: none;
+}
+
+fieldset#ticket-reply.box,
+fieldset#ticket-comment.box
+{ 
+  width: 480px;
+  height: 250px;
+}
+
+fieldset#add-remove-computer.box
+{ 
+  width: 470px;
+  height: 300px;
+}
+
+fieldset#new-alert-form.box
+{ 
+  width: 470px;
+  height: 440px;
+}
+
+div#login fieldset,
+div#login div.box
+{ 
+  width: 240px; 
+  margin: auto;
+  padding-left: 20px;
+}
+
+div.box h1 
+{
+  color: rgb(1, 44, 95);
+  background: #eee;
+  margin-left: -10px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+div.box-title h2,
+div.box h2
+{
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  color: rgb(1, 44, 95);
+  border-bottom: 1px solid #ccc;
+}
+
+div.box h2
+{ 
+  font-size: 14px;
+}
+
+fieldset 
+{
+  border: none;
+  width: 400px;
+}
+
+
+a 
+{
+  text-decoration: none;
+  color: #267D00;
+}
+
+img {
+	border: none;
+}
+
+h3 
+{ 
+  font-size: 12px;
+  font-weight: normal;
+  color: rgb(1,44,95)
+}
+
+h3 i 
+{ 
+  font-style: italic;
+}
+
+ul 
+{
+  list-style: none;
+}
+
+div.clear
+{ 
+  clear: both;
+}
+
+dl 
+{
+  margin: 0;
+  padding: 12px 0 0 30px;
+}
+
+dt 
+{
+  float: left;
+  clear: right;
+  width: 150px;
+  font-size: 14px;
+  font-weight: normal;
+  color:#267d00;
+  text-align: right;
+  padding: 2px;
+}
+
+div.dialog dt.error 
+{ 
+  text-align: center;
+  width: 400px;
+  color:#e0490e;
+  font-weight: bold;
+  margin: 0;
+  line-height: 14px;
+}
+
+
+dd {
+  padding: 0 0 5px 0px;
+  font-size: 11px;
+  color: #666;
+  margin-left: 160px;
+}
+
+div.computer-selector 
+{
+  float: none;
+  position: relative;
+  width: 440px;
+  height: 230px;
+  margin: 6px 0;
+}
+
+div.computer-selector h3
+{ 
+  color: rgb(1,44,95);
+  font-size: 12px;
+}
+
+div.computer-selector select 
+{
+  width: 200px;
+  font-size: 14px;
+  border: 1px solid #ccc; 
+}
+
+div.computer-selector select option 
+{
+  font-size: 14px; 
+  padding: 0 0 0 4px;
+}
+
+div.computer-selector div.available
+{ 
+  position: absolute;
+}
+
+div.available select.tag-filter 
+{ 
+  display: block;
+  width: 200px;
+  height: 20px;
+  float: left;
+  clear: both;
+  margin: 0 0 4px 0;
+}
+
+div.available select.available 
+{ 
+  position: absolute;
+  left: 0;
+  top: 28px;
+}
+
+div.computer-selector ul.controls 
+{
+  position: absolute;
+  top: 85px;
+  left: 208px;
+  display: block;
+  margin: 0px;
+}
+
+div.computer-selector ul.controls li 
+{ 
+  width: 20px;
+  height: 20px;
+  margin: 4px;
+}
+
+div.computer-selector ul.controls li a img
+{ 
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+div.computer-selector div.selected 
+{ 
+  position: absolute;
+  display: block;
+  top: 20px;
+  left: 246px;
+}
+
+div.selected h3
+{ 
+  width: 196px;
+  height: 19px;
+  margin: 0 0 4px 0;
+  padding: 2px 0 0 4px;
+  border-bottom: 1px solid #ccc;
+  color: rgb(1,44,95);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input.ucw-form-field-invalid 
+{
+  border: solid 2px #dd0000;
+  margin: 0px;
+}
+
+fieldset label
+{ 
+  display: block;
+  color: rgb(1,44,95);
+  font-size: 14px;
+}
+
+fieldset input,
+select
+{ 
+  border: 1px solid #ccc;
+  padding: 2px;
+  margin: 4px 0 12px 0;
+  color: rgb(102,102,102);
+}
+
+fieldset input.save 
+{
+  border: none;
+}
+
+.error
+{ 
+  color: #e0490e;
+  padding-bottom: 8px;
+}
+
+h2.error
+{ 
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/**********************
+   Specific dialogs
+ **********************/
+
+fieldset.user-form
+{
+}
+
+fieldset.user-form legend
+{ 
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 12px;
+  color: #666;
+}
+
+fieldset.user-form form,
+div.group-form form
+{ 
+  margin: 0 12px;
+}
+
+fieldset.user-form input.save
+{ 
+  padding: 6px 0;
+  width: auto;
+}
+
+fieldset.user-form input
+{ 
+  width: 300px;
+}
+
+fieldset.ticket-form textarea,
+fieldset.ticket-form input.subject,
+fieldset.ticket-form input.emails
+{
+  width: 440px;
+}
+
+
+fieldset.ticket-email-form 
+{
+  width: 90%;
+}
+
+div#dialog
+{ 
+  width: 100%; 
+  padding-top: 100px;
+}
+
+div#dialog div.box-title
+{ 
+  width: 250px; 
+  margin: auto;
+}
+
+div#dialog div.box
+{ 
+  width: 250px; 
+  margin: auto;
+  border-left: 9px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 9px solid #ccc;
+  border-top: none;
+  padding: 0 10px 10px 10px;
+}
+
+div#dialog div.box p
+{ 
+  margin-bottom: 10px;
+}
+
+/**************
+  Login page
+**************/
+
+div#login
+{ 
+  width: 100%; 
+  padding-top: 100px;
+}
+
+div#login div.box-title
+{ 
+  width: 250px; 
+  margin: auto;
+}
+
+fieldset input.full-name,
+fieldset input.passwd
+{ 
+  width: 223px;
+}
+
+fieldset input.login
+{
+  border: none;
+  display: inline;
+  float: left;
+}
+
+fieldset a.reset-password 
+{
+  float: right;
+  line-height: 18px;
+  margin-right: 10px;
+  margin-top: 19px;
+  font-size: 10px;
+}
+
+/*********************
+   New Ticket Form
+ *********************/
+
+div.submit-ticket
+{ 
+  width: 100%; 
+  padding-top: 100px;
+}
+
+div.submit-ticket div.box-title,
+div.submit-ticket fieldset.box
+{ 
+  width: 500px; 
+  margin: auto;
+}
+
+div.submit-ticket fieldset#new-ticket.box
+{ 
+  height: 240px;
+}
+
+fieldset#new-ticket.box
+{ 
+  width: 500px;
+  height: 420px;
+}
+
+#new-ticket form p label
+{
+  float: left;
+  width: 110px;
+  text-align: right;
+  padding-right: 12px;
+  padding-top: 6px;
+  font-size: 13px;
+}
+
+
+#new-ticket textarea,
+#new-ticket select
+{ 
+  margin: 4px 0 12px 0;
+  border: 1px solid #ccc;
+}
+
+#new-ticket textarea
+{ 
+  padding: 2px;
+  color: rgb(102,102,102);
+
+}
+
+
+#new-ticket form p.basic-input input
+{ 
+  width: 350px;
+}
+
+#new-ticket form p.due-date
+{ 
+  margin-bottom: 6px;
+}
+
+#new-ticket p input.save
+{ 
+  margin-top: 2px;
+  padding-top: 0;
+  margin-left: 120px;
+}
+
+#new-ticket span.calendar input
+{ 
+  margin-bottom: 0;
+}
+
+#new-ticket span.calendar a:hover
+{ 
+  background: #fff;
+}
+
+#new-ticket span.calendar a img
+{ 
+  vertical-align: top;
+  width: 20px;
+  height: 20px;
+  margin: 5px 4px;
+}
+

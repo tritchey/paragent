@@ -1,0 +1,359 @@
+/*
+Copyright (c) 2006 - 2007, Paragent, LLC
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+- Neither the name of Paragent, LLC nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+html { 
+	min-width: 800px;
+}
+
+/* Helpers and base rules */
+
+img	{
+	border: 0;
+}
+
+a {
+	color: rgb(38,125,0);
+}
+
+body {
+	text-align: center;
+	margin: 10px 0 0 0;
+	padding: 0;
+	border: 0;	
+	background: #fff;
+	color: #666;
+	font: small/18px "Lucida Grande", "Trebuchet MS", "Bitstream Vera Sans", Verdana, Helvetica, sans-serif;
+}
+
+.clear {
+	clear: both;
+}
+
+div#wrapper	{
+	color: #666;
+	width: 800px;
+	margin: 0 auto;
+	padding: 0;
+	border: 0;
+	text-align: left;
+}
+
+.menu ul {
+	list-style: none;
+	margin: 0 auto;
+	width: 600px;
+}
+
+.menu li {
+	display: inline;
+	padding: 0 12px;
+	line-height: 35px;
+}
+
+.menu li a {
+	vertical-align: top;
+}
+
+.main h2.pick 
+{
+  background: transparent url(../images/pick.gif) no-repeat top left;
+  width: 436px;
+  height: 43px;
+  margin: 20px auto;
+}
+
+.main h2.create 
+{
+  background: transparent url(../images/create.gif) no-repeat top left;
+  width: 622px;
+  height: 43px;
+  margin: 20px auto;
+}
+
+.main h2.ready
+{
+  background: transparent url(../images/ready.gif) no-repeat top left;
+  width: 365px;
+  height: 43px;
+  margin: 20px auto;
+}
+
+.main h2 span 
+{
+  display: none;
+}
+
+.main h3 
+{
+  width: 640px;
+  margin: 20px auto;
+}
+
+.main h3 strong
+{ 
+  color: rgb(48,24,24);
+}
+
+.action {
+	width: 800px;
+	margin: 20px auto;
+	background: transparent url(../i/downgrd.gif) repeat-x bottom left;
+	border: 1px solid rgb(236,181,103);
+}
+
+.action p {
+	width: 700px;
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 30px;
+	color: rgb(48,24,24);
+	margin: 20px auto;
+}
+
+.action p a {
+	color: rgb(227,96,42);
+}
+
+div.features img {
+	margin: 10px 75px;
+	display: block;
+}
+
+div.features p {
+	float: left;
+	width: 240px;
+	margin: 10px;
+	color: rgb(1,44,95);
+}
+
+div#foot
+{
+	clear: both;
+	width: 630px;
+	margin: 20px auto;
+	padding-top: 20px;
+}
+
+
+
+/*******************************
+         Pricing Table
+ *******************************/
+#pricing
+{
+  background: rgb(217,241,253);
+  padding: 4px;
+  width: 700px;
+  margin: 20px auto;
+  color: rgb(1,44,95);
+}
+
+#computer-count
+{
+  border: 1px solid #ccc;
+  background: rgb(237,248,254);
+  font-size: 14px;
+  color: rgb(102,102,102);
+  width: 50px;
+  text-align: right;
+  margin: 4px;
+}
+
+#pricing tr.even
+{
+	background: rgb(237,248,254);
+}
+
+#pricing td,
+#pricing th
+{
+	padding: 0 8px;
+	text-align: center;
+	height: 40px;
+}
+
+#pricing .feature
+{
+	text-align: right;
+	color: rgb(1,44,95);
+	padding-left: 16px;
+}
+
+#pricing .computer-count
+{
+  text-align: left;
+  font-size: 14px;
+  padding-left: 0;
+  color: rgb(1,44,95);
+}
+
+#pricing td.best,
+#pricing th.best
+{
+	background: rgb(197,207,151);
+}
+
+#pricing th.best
+{
+	color: rgb(227,96,42);
+}
+
+#pricing #premium-price
+{
+	background:#c5cf97;
+}
+
+#pricing tr.even td.best
+{
+	background: rgb(226,242,216);
+}
+
+#pricing span.note
+{
+	font-size: 8px;
+	font-color: rgb(102,102,102);
+}
+
+#pricing td.total
+{
+	color: rgb(1,44,95);
+	font-weight: bold;
+	text-align: right;
+}
+
+#pricing span.super
+{
+	font-size: 10px;
+	vertical-align: super;
+}
+
+#pricing td.footnote
+{
+	text-align: left;
+}
+
+
+/***************************
+      acct and CC page
+ ***************************/
+
+fieldset.signup,
+fieldset.credit-card
+{
+  border: 1px solid #ccc;
+  margin: 20px;
+  padding: 24px;
+  clear: both;
+}
+
+fieldset legend
+{ 
+  color: rgb(1,44,95);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+fieldset.signup input.text
+{ 
+  width: 250px;
+  margin: auto auto;
+}
+
+fieldset.signup p 
+{
+  margin: 4px 0;
+  padding: 0;
+  width: 100%;
+}
+
+fieldset.signup label, 
+fieldset.credit-card label 
+{
+  color: rgb(48,24,24);
+  font-weight: bold;
+  display: block;
+  padding: 4px 0;
+}
+
+fieldset.signup input
+{ 
+  width: 250px;
+  margin: auto auto;
+}
+
+fieldset.signup input#free-account-signup 
+{
+  border: none;
+  width: auto;
+}
+fieldset.credit-card input
+{ 
+  width: 200px;
+}
+
+fieldset.credit-card p.exp input,
+fieldset.credit-card p.cid input
+{ 
+  width: 40px;
+}
+
+fieldset.credit-card input.city
+{ 
+  width: 150px;
+}
+
+fieldset.credit-card p.zip input
+{ 
+  width: 80px;
+}
+
+fieldset.credit-card input.button
+{ 
+  float: right;
+  clear: both;
+  width: auto;
+  margin: 20px 10px 6px 0;
+}
+
+fieldset.credit-card strong 
+{
+  color: #267d00;
+  font-weight: bold;
+}
+
+input.ucw-form-field-invalid 
+{
+  border: solid 1px rgb(227,96,42);
+}
+
+input
+{
+  font-size: 13px;
+  padding: 2px;
+  border: solid 1px rgb(48,24,24);
+}
+
+.button,
+table#pricing input.signup
+{ 
+  border: none;
+}
+
+p.error
+{ 
+  color: rgb(227,96,42);
+  font-size: 14px;
+  font-weight: bold;
+}

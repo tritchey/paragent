@@ -1,0 +1,230 @@
+Archon Installation Guide
+------------------------
+
+OS
+--
+
+We are using Fedora Core 6 for the appliance installs. After getting the initial system up and running, be sure to get the latest updates by running:
+
+# yum -y install emacs
+# yum -y upgrade
+
+This will download and install any updates since the ISO images were created.
+
+make sure that the firewall is set up correctly
+
+# system-config-securitylevel-tui
+
+choose ssh, http, https, and add port 6103
+
+make sure that SELinux is disabled. You can do this by going to /etc/selinux/config and setting
+
+SELINUX=disabled
+
+
+Dependencies
+------------
+
+Create a /lisp directory and unzip deps.tar.gz to it
+
+
+SBCL
+____
+
+Next, you need to get sbcl installed. we typically use the latest version of sbcl from cvs. However, in order to build sbcl, you will need an initial copy that we can use to bootstrap the build process.
+
+# yum -y install sbcl
+
+# mkdir /lisp
+# cd /lisp
+# cvs -d:pserver:anonymous@sbcl.cvs.sourceforge.net:/cvsroot/sbcl login
+CVS password: [return]
+# cvs -z3 -d:pserver:anonymous@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -P sbcl
+# cd sbcl
+# emacs -nw customize-target-features.lisp
+
+
+Get and apply the epoll patch
+# wget http://paragent.com/downloads/lisp/serve-event-epoll.patch
+
+
+create a file called customize-target-features.lisp with the following code:
+
+;; add threading support
+(lambda (list) (cons :sb-thread list))
+
+
+Now, build sbcl:
+
+# sh make.sh
+
+and install it:
+
+# sh install.sh
+
+now that we have a local version, get rid of our bootstrap one
+
+# yum remove sbcl
+# hash -r
+
+ASDF-BINARY-LOCATIONS
+---------------------
+you need to make sure that sbcl stuff doesn't get recompiled, so create a ~/.sbclrc file and put the following into it:
+
+;;; -*- Lisp -*-
+(require :asdf)
+(require :asdf-binary-locations)
+(defvar asdf::*source-to-target-mappings*
+        '(("/usr/local/lib/sbcl/" nil)))
+
+
+SLIME
+_____
+
+setup emacs to use slime:
+
+; .emacs setup for slime
+(setq inferior-lisp-program "/usr/local/bin/sbcl")
+(add-to-list 'load-path "/lisp/slime")
+(require 'slime)
+(slime-setup)
+
+
+MySQL
+-----
+
+# yum install mysql
+# yum install mysql-server
+# yum install mysql-devel
+# /etc/init.d/mysqld start
+
+to get mysqld to restart on reboot properly, issue a 
+
+# chkconfig mysqld on
+
+
+Repository
+__________
+
+# cd /lisp
+# svn checkout http://paragent.googlecode.com/svn/trunk/ paragent
+
+
+
+Link asd files
+--------------
+
+# cd /usr/local/lib/sbcl/site-systems
+# ln -s `find -P /lisp -name "*.asd" -maxdepth 2` .
+# ln -s `find -P /lisp/repos -name "*.asd"` .
+
+
+
+Create MySQL Database
+---------------------
+
+edit /etc/my.cnf. Add the following two lines to [mysqld] config
+
+lower_case_table_names=1
+set-variable=max_connections=500
+
+# sudo mysql
+mysql> create database khala;
+mysql> grant select,update,delete,insert on khala.* to username@localhost identified by "password";
+
+need to create the table structure
+# mysql khala </lisp/repos/db/schema.sql
+
+
+Ready cl-sql
+____________
+
+# cd /lisp/clsql-3.8.3/db-mysql/
+# make clean
+# make
+
+
+mod_lisp
+--------
+
+# cd /lisp/mod_lisp
+
+# yum install httpd-devel
+# /usr/sbin/apxs -ica mod_lisp2.c
+
+
+Add the following in /etc/httpd/conf/httpd.conf
+
+#
+# mod_lisp2 configuration
+#
+
+<LocationMatch "/.*\.ucw">
+    LispServer 127.0.0.1 3001 ucw
+    SetHandler lisp-handler
+</LocationMatch>
+
+<LocationMatch "/.*\.csv">
+    LispServer 127.0.0.1 3001 ucw
+    SetHandler lisp-handler
+</LocationMatch>
+
+Now, restart the apache server
+
+# /usr/sbin/apachectl restart
+# /sbin/chkconfig httpd on
+
+# cd /var/www
+# rm -rf html
+# ln -s /lisp/repos/nexus/html html
+
+# cd /lisp/ucw-boxset/dependencies/detachtty
+# make
+# make install
+
+
+Configure Archon
+----------------
+Edit config.lisp appropriately.
+
+# cd /lisp/repos/db/
+# cp config-sample.lisp config.lisp
+# emacs config.lisp
+
+
+
+
+
+Scarab
+------
+
+# cd /lisp/repos/scarab
+# sbcl
+* (load "/lisp/repos/scarab/scarab.asd")
+* (asdf:operate 'asdf:load-op 'scarab)
+* (save-lisp-and-die "scarab.core")
+# crontab -e
+
+00 4 * * 0 /usr/local/bin/sbcl --core /lisp/repos/scarab/scarab.core --load /lisp/repos/scarab/run.lisp
+
+Startup
+_____
+
+edit /etc/rc.d/rc.local to include the following lines:
+/lisp/repos/arbiter/scripts/start-arbiter
+/lisp/repos/archon/scripts/start-archon
+/lisp/repos/nexus/scripts/start-nexus
+
+
+
+
+
+
+
+
+
+
+
+
+
+

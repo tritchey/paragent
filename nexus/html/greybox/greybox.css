@@ -1,0 +1,149 @@
+/* Last-Modified: 28/06/06 00:08:22 */
+
+/**
+ * Current style
+ */
+.GB_t_frame 
+{
+  color: #444;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.GB_content 
+{
+  background-color: transparent;
+  border: none;
+}
+
+.GB_loader 
+{
+  color: #616161;
+  background-color: #fff;
+}
+
+.GB_caption 
+{
+  font-weight: bold;
+}
+
+/**
+ * Base stuff
+ */
+#GB_overlay 
+{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color:#000;
+  filter:alpha(opacity=10);
+  moz-opacity: 0.5;
+  opacity: 0.5;
+}
+
+#GB_window {
+  font-family: helvetica, verdana, sans-serif;
+  left: 0;
+  top: 0;
+  font-size: 1px;
+  position: absolute;
+  overflow: visible;
+  z-index: 150;
+}
+
+#GB_frame {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+
+/**
+ * Content
+ */
+.GB_t_frame {
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+}
+
+.GB_content {
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  margin-bottom: 25px;
+  z-index: 155;
+  background: transparent url(../images/box-corner-t.gif) no-repeat top left;
+
+}
+
+.GB_loader {
+  z-index: 500;
+  left: 6px;
+  font-size: 16px;
+  text-align: center;
+}
+
+
+/**
+ * Header
+ */
+.GB_caption 
+{
+  float: left;
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  color: rgb(1, 44, 95);
+}
+
+.GB_header 
+{
+  margin: 0 0 0 9px;
+  padding: 10px 10px 10px 10px;
+  background: #fff;
+  border-right: 1px solid #ccc;
+  width: 100%;
+}
+
+.GB_header td
+{ 
+  border-bottom: 1px solid #ccc;
+}
+
+.GB_close 
+{
+  display: block;
+  float: right;
+  color #d7efff;
+  z-index: 200;
+  cursor: pointer;
+  cursor: hand;
+  padding-right: 5px;
+  margin: 0 0 6px 0;
+  text-align: right;
+}
+
+.GB_close img 
+{
+  width: 11px;
+  height: 11px;
+  padding: 0;             
+  margin-bottom: -2px;
+  margin-left: 4px;
+}
+
+.GB_container 
+{
+  border-left: 9px solid #ccc;
+  border-bottom: 9px solid #ccc;
+  border-right: 1px solid #ccc;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/usr/local/bin/detachtty --dribble-file /var/log/archon-dribble --log-file \
+  /var/log/detachtty.log --pid-file /var/run/archon.pid \
+  /var/run/archon-socket \
+  /usr/local/bin/sbcl --load "/lisp/repos/archon/scripts/start.lisp"
+

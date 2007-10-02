@@ -1,0 +1,3 @@
+*.fasl
+sbcl-*-darwin-x86
+sbcl-*-linux-x86

@@ -1,0 +1,132 @@
+/* - - - - - - CSS Document - - - - - - - - -
+
+Title : Global style sheet for client-side web development standards
+Author : Cody Lindley 
+
+- - - - - - - - - - - - - - - - - - - - - */
+
+/* ---------->>> CSS Hacks <<<---------------------------------------------------------------*/
+
+*{padding: 0; margin: 0;}
+
+/* ----- global default/initial styles ----- */
+body {background-color:#fff;}
+
+html, body {
+min-height: 100%;
+height: auto !important;
+height: 100%;
+}
+
+/* ----- base default font size, type, and line height ----- */
+html body{font: 62.5%/1.4em Arial, Helvetica, sans-serif;color:#333333}
+html>body{font: 62.5%/1.4em Arial, Helvetica, sans-serif;color:#333333}
+
+/* ----- add selectors here for font sizing ----- */
+p, table, ul, dl, #TB_window  {font-size: 1.2em}
+
+
+/* ----- base links ----- */
+a:link {color: #CC6633;}
+a:visited {color: #CC6633;}
+a:hover {color: #999966;}
+a:active {color: #CC6633;}
+a:focus{color: #CC6633;}
+
+p {line-height:1.4em;margin:10px 0;}
+hr{margin:10px 0;color:#999999;}
+
+ul{
+	list-style: none;
+}
+
+ul li{
+padding-top:6px;
+}
+
+#contentPad{
+margin:20px;
+}
+
+#TB_overlay {
+	position: absolute;
+	z-index:100;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	min-height:100%;
+	background-color:#000;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+}
+
+#TB_load{
+display:none;
+}
+
+#TB_window {
+	position: absolute;
+	background: #fff;
+	z-index: 102;
+	color:#000000;
+	display:none;
+	border: 4px solid #525252;
+}
+
+#TB_window img {
+	display:block;
+	margin: 15px 0 0 15px;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #666;
+	border-left: 1px solid #666;
+}
+
+#TB_caption{
+	height:25px;
+	padding:10px 30px 10px 25px;
+	float:left;
+}
+
+#TB_closeWindow{
+	height:25px;
+	padding:10px 25px 10px 0;
+	float:right;
+}
+
+#TB_closeAjaxWindow{
+	padding:5px 10px 7px 0;
+	margin-bottom:1px;
+	text-align:right;
+	background-color:#e8e8e8;
+}
+
+#TB_ajaxContent{
+	padding:2px 15px 15px 15px;
+	overflow:auto;
+}
+
+#TB_load{
+	position: absolute;
+	display:none;
+	height:100px;
+	width:100px;
+	z-index:101;
+}
+
+#TB_HideSelect{
+z-index:99;
+position:absolute;
+top: 0;
+left: 0;
+width:100%;
+height:100%;
+background-color:#fff;
+border:none;
+filter:alpha(opacity=0);
+-moz-opacity: 0;
+opacity: 0;
+display:none;
+}

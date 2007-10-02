@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/usr/local/bin/detachtty --dribble-file /var/log/nexus-dribble --log-file \
+  /var/log/detachtty.log --pid-file /var/run/nexus.pid \
+  /var/run/nexus-socket \
+  /usr/local/bin/sbcl --load "/lisp/repos/nexus/scripts/start.lisp"
+

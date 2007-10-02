@@ -1,0 +1,1 @@
+ErrorDocument 500 http://paragent.com/e/internal_server_error.php

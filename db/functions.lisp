@@ -61,24 +61,6 @@ how the mysql docs say to handle such things."
                ())))))
 
 
-(defvar *record-preamble* "")
-
-(defun record (string &rest format-args)
-  (multiple-value-bind
-	(second minute hour date month year day-of-week dst-p tz)
-      (get-decoded-time)
-    (declare (ignore day-of-week dst-p tz))
-    (format t 
-	    "~A[~2,'0d:~2,'0d:~2,'0d ~d/~2,'0d/~d] ~A~%" 
-	    *record-preamble*
-	    hour
-	    minute
-	    second
-	    month
-	    date
-	    year 
-	    (apply #'format nil string format-args))))
-
 (defun table-for-object (object-symbol)
   "Returns the table name for the given class"
   (clsql:view-table  (find-class object-symbol)))

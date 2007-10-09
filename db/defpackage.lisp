@@ -104,7 +104,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     :*db-database* :*db-username* :*db-password* :*email-from-address* :*email-server*
     :*email-smtp-authentication* :*email-account-name* :*email-account-password*
     :send-email :send-ticketing-email :*server-url* :*administrator-notification-email* 
-    :record :*record-preamble*
     :*credit-card-login* :*credit-card-password*
     :*templar-ssl-cert* :*templar-ssl-key*
     :*default-arbiter-templar-port* :*default-arbiter-nexus-port*

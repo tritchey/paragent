@@ -26,6 +26,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   :components ((:file "defpackage")
 	       (:file "queue" :depends-on ("defpackage"))
 	       (:file "while" :depends-on ("defpackage"))
+	       (:file "record" :depends-on ("defpackage"))
 	       (:file "guid" :depends-on ("defpackage"))
 	       (:file "socket" :depends-on ("defpackage"))
 	       (:file "unix-error" :depends-on ("defpackage"))

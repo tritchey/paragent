@@ -13,76 +13,22 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 |#
 
+(in-package :psi)
 
-(in-package :common-lisp-user)
+(defvar *record-preamble* "")
 
-(defpackage :com.paragent.psi
-  (:nicknames :psi)
-  (:use :cl 
-	:sb-alien
-	:sb-thread 
-	:sb-bsd-sockets
-	:sb-ext)
-  (:export 
-   ;; basic symbols
-   :while
-   :with-socket
-   :make-queue
-   :enqueue
-   :dequeue
-   :make-guid
-   :record
-   :*record-preamble*
-   
-   ;; epoll symbols
-   :epoll-create 
-   :epoll-control 
-   :epoll-wait
-   :open-controller 
-   :close-controller 
-   :control
-   :add-watch 
-   :delete-watch 
-   :modify-watch
-   :flags 
-   :data1 
-   :data2
-   :file-descriptor
-   :epollable
-   :pending-events
-   :set-rlimit-nofile 
-   :get-rlimit-nofile
-
-   ;; connection symbols
-   :socket
-   :address
-   :epoll-id
-   :incoming-message
-   :outgoing-message
-   :message-lock
-   :outgoing-messages
-   :event-handler
-   :connectedp
-   :disconnect-event
-   :read-message
-   :read-event
-   :modify-write-flag
-   :write-message
-   :write-event
-   :handle-connection-event
-   :add-connection
-   :connection
-   :server-connection
-   :client-connection
-   :ssl-connection
-   :ssl-server-connection
-   :client-connect
-
-   ;; ssl symbols
-   :ssl-initialize
-
-   ;; run-loop
-   :start-psi-run-loop
-   :stop-psi-run-loop
-   :close-connections
-   ))
+(defun record (string &rest format-args)
+  (multiple-value-bind
+	(second minute hour date month year day-of-week dst-p tz)
+      (get-decoded-time)
+    (declare (ignore day-of-week dst-p tz))
+    (format t 
+	    "~A[~2,'0d:~2,'0d:~2,'0d ~d/~2,'0d/~d] ~A~%" 
+	    *record-preamble*
+	    hour
+	    minute
+	    second
+	    month
+	    date
+	    year 
+	    (apply #'format nil string format-args))))

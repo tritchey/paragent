@@ -98,7 +98,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     (handler-case
 	(setf *arbiter-connection* 
 	      (make-instance 'arbiter-connection
-			     :address *arbiter-address*
+			     :address *default-arbiter-address*
 			     :port arbiter-port
 			     :connect t))
       (t (e)

@@ -26,7 +26,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    (server :accessor server
            :initarg :server
            :type string
-           :initform "10.0.0.241"))
+           :initform *default-dark-archon-server*))
   (:documentation "Displays our vnc page, allowing you to remote into a computer."))
 
 (defmethod render ((page observer-page))

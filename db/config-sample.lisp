@@ -45,3 +45,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defparameter *default-arbiter-address* #(127 0 0 1)
   "the address that your arbiter is running")
 
+(defparameter *default-dark-archon-server* "your.reflector.com"
+  "The server name for the remote desktop reflector")
+

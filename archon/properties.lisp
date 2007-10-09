@@ -575,7 +575,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     (query-network-card client)
     (query-bios client)
     (query-motherboard client)
-    (query-user-accounts client)
     (query-services client)
     (query-sound-device client)
     (query-hardware-errors client)

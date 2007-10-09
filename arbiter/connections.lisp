@@ -54,7 +54,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       (record "PARSE-MESSAGE: TYPE-ERROR in message: ~A" message)
       (values nil nil nil))
     (t (e)
-      (record "PARSE-MESSAGE: ~a in message: ~a" e message))))
+      (record "PARSE-MESSAGE: ~a in message: ~a" e message)
+      (values nil nil nil))))
 
 (defmethod read-message ((connection message-bus-connection) message)
   ;; do a read-message from string here, pull the guid

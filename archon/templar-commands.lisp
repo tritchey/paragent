@@ -47,7 +47,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	(if (and client key)
 	    (progn
 	      (send-message client 
-			    `(activate-dark-templar ,key))
+			    `(activate-dark-templar ,key *default-dark-archon-server*))
 	      t)
 	    (progn
 	      (record "no client (~A) and/or key (~A)" client key)

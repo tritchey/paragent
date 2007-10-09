@@ -39,7 +39,7 @@
     (setf *arbiter-connection*
 	  (make-instance 'arbiter-connection
 			 :address *default-arbiter-address*
-			 :port *default-nexus-arbiter-port*
+			 :port *default-arbiter-nexus-port*
 			 :connect t))))
 
 (defmethod send-archon ((guid number) command)

@@ -31,4 +31,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       (:file "scarab")
 	       (:file "db-init")
 	       (:file "email"))
-  :depends-on (:clsql :cl-smtp :sb-posix :ironclad :split-sequence))
+  :depends-on (:clsql :cl-smtp :sb-posix :ironclad :split-sequence :psi))

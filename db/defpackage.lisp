@@ -22,7 +22,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defpackage :com.paragent.db
   (:nicknames :db)
-  (:use :cl :sb-thread :clsql)
+  (:use :cl :sb-thread :clsql :psi)
   (:export 
     :with-db :db-connect :equiv :strict-equiv :table-for-object :severity-name
     :with-restarting-transaction :sql-equal

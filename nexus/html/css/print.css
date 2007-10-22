@@ -1,0 +1,97 @@
+/*
+Copyright (c) 2006 - 2007, Paragent, LLC
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+- Neither the name of Paragent, LLC nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+/*
+light green: rgb(228, 241, 220)
+green: 	color:#267d00;
+dark green: rgb(36, 98, 7);
+orange:	color:#e0490e;
+light orange: f4f3d5;
+medium orange: #f5d9a9; 
+light blue: #ddf1fe;
+dark blue: rgb(1, 44, 95);
+
+dark gray: rgb(78, 70, 63);
+
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-width: 872px;
+  background: #fff;
+  color: rgb(78, 70, 63);
+  font: small/18px "Lucida Grande", "Trebuchet MS", "Bitstream Vera Sans", Verdana, Helvetica, sans-serif;
+  margin: 12px;
+}
+
+a 
+{
+  text-decoration: none;
+  color: #267D00;
+}
+
+a:hover 
+{
+  color: rgb(1, 44, 95);
+  text-decoration: underline;
+  background: #e2f2d8;
+}
+
+
+ul 
+{
+  list-style: none;
+}
+
+img 
+{
+  border: 0px;
+}
+
+/********************
+    overall layout
+********************/
+
+div#main
+{
+  margin: 0;
+}
+
+#header,
+#navbar, 
+#status,
+#sidebar,
+#inventory-report-form,
+a#inventory-csv
+{
+	display: none;
+}
+
+div#content
+{
+	background: none;
+	float: none;
+}
+
+div#workspace
+{
+	float: none;
+	background: none;
+}
+
+

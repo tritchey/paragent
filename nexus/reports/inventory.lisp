@@ -68,6 +68,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defrender ((page inventory-report-page))
   (<:script :src "sorttable.js" :type "text/javascript")
+  (<:link :rel "stylesheet" :type "text/css" :href "css/print.css" :media "print")
   (let* ((user (user page))
          (inventory-selector (inventory-selector page))
          (selected-props (selected-props inventory-selector)))

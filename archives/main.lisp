@@ -29,17 +29,18 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       (format t "Company: ~a~%" (name company))
       (dolist (email-account (select 'ticket-email :flatp t :where [= [company-id] (id company)]))
         (format t " Account: ~a~%" (username email-account))
-	(let ((server (make-server email-account)))
-	  (handler-case
-	      (mel:map-messages
-	       (lambda (m)
-		 (process-email m company))
-	       server)
-	    (SB-BSD-SOCKETS:OPERATION-TIMEOUT-ERROR (e)
-	      (format t "RUN: ETIMEDOUT on account ~a~%" e))
-	    (t (e)
-	      (format t "~a~%" e)))
-	  (mel:close-folder server))))))
+	(handler-case
+	    (let ((server (make-server email-account)))
+	      (unwind-protect
+		   (mel:map-messages
+		    (lambda (m)
+		      (process-email m company))
+		    server)
+		(mel:close-folder server)))
+	  (SB-BSD-SOCKETS:OPERATION-TIMEOUT-ERROR (e)
+	    (format t "RUN: ETIMEDOUT on account ~a~%" e))
+	  (t (e)
+	    (format t "~a~%" e)))))))
 
 (defun make-server (ticket-email)
   (declare (ticket-email ticket-email))

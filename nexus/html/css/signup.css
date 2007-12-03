@@ -52,7 +52,7 @@ div#wrapper	{
 .menu ul {
 	list-style: none;
 	margin: 0 auto;
-	width: 600px;
+	width: 525px;
 }
 
 .menu li {
@@ -140,7 +140,7 @@ div.features p {
 div#foot
 {
 	clear: both;
-	width: 630px;
+	width: 525px;
 	margin: 20px auto;
 	padding-top: 20px;
 }

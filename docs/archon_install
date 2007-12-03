@@ -193,8 +193,6 @@ Edit config.lisp appropriately.
 
 
 
-
-
 Scarab
 ------
 
@@ -207,8 +205,10 @@ Scarab
 
 00 4 * * 0 /usr/local/bin/sbcl --core /lisp/repos/scarab/scarab.core --load /lisp/repos/scarab/run.lisp
 
+
+
 Startup
-_____
+_______
 
 edit /etc/rc.d/rc.local to include the following lines:
 /lisp/repos/arbiter/scripts/start-arbiter
@@ -217,11 +217,13 @@ edit /etc/rc.d/rc.local to include the following lines:
 
 
 
+Company Creation
+----------------
 
-
-
-
-
+Load Slime (M-x slime)
+CL-USER> (asdf:oos 'asdf:load-op 'db)
+CL-USER> (in-package :db)
+DB> (with-db (add-company "company name" "Adminstrator email" "administrator password" "Administrator email"))
 
 
 

@@ -159,7 +159,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
               (<:li :id "admin"
                     (<:a :href "/admin.ucw" "Administration")))
             (<:li :id "help"
-                  (<:a :href "http://www.paragent.com/support/overview.php" "Help"))
+                  (<:a :href "http://code.google.com/p/paragent/wiki/UserGuide" "Help"))
             (<:li :class "search"
                   (link-to-advanced-search "Search:"))
             (<:li :id "search"
@@ -181,13 +181,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                 (<:div
                  :id "signup"
                  :style "display:none;"
-                 (<:p "Get your own free trial account!")
+		 (<:p "Sign up for a 30-day trial account on our hosted service")
                  (<:a :href "freesignup.ucw" (<:img :src "images/signup.gif"
                                                     :width 86 :height 24
                                                     :alt "Sign up" :title "Sign up")))
                 (<:script
                  (<:as-is
-                  "Effect.Appear($('signup'), {duration:5});")))
+                  "Effect.Appear($('signup'), {duration:3});")))
               (when (and (>=admin user) (=account-free company))
                 (<:div 
                  :id "signup"

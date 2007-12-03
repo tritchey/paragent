@@ -26,6 +26,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			      to-list
 			      subject
 			      message
+			      :port *email-smtp-port*
 			      :authentication (if *email-smtp-authentication*
 						  (list :login *email-account-name* *email-account-password*)
 						  nil)
@@ -44,6 +45,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			      to-list
 			      subject
 			      message
+			      :port *email-smtp-port*
 			      :authentication (if *email-smtp-authentication*
 						  (list :login *email-account-name* *email-account-password*)
 						  nil)

@@ -20,7 +20,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defun loop-endlessly ()
   (do () (nil)
-    (run)
+    (handler-case
+	(run)
+      (t (e)
+	(format t "~a~%" e)))
     (sleep 30)))
 
 (defun run ()
@@ -32,10 +35,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	(handler-case
 	    (let ((server (make-server email-account)))
 	      (unwind-protect
-		   (mel:map-messages
-		    (lambda (m)
-		      (process-email m company))
-		    server)
+		   (handler-case 
+		       (mel:map-messages
+			(lambda (m)
+			  (process-email m company))
+			server)
+		     (t (e)
+		       (format t "~a~%" e)))
 		(mel:close-folder server)))
 	  (SB-BSD-SOCKETS:OPERATION-TIMEOUT-ERROR (e)
 	    (format t "RUN: ETIMEDOUT on account ~a~%" e))

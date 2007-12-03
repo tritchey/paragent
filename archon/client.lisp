@@ -183,7 +183,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	      (send-message client (format nil "(update ~S)" update) 
 			    #'(lambda (client &rest args)
 				(declare (ignore client))
-				(record "templar update: ~A~%" args)))))
+				(record "templar update for ~A.~A: ~A~%" (name client) (company client) args)))))
 	(progn
 	  (setf (gethash key *updating-clients*) nil)
 	  (client-online client)))))
@@ -221,7 +221,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 		  (setf (validp client) t)
 		  (send-message client '(version) #'client-version)))
 	    (progn
-	      (record "unable to find matching company/secret")
+	      (record "unable to find matching company/secret ~A.~A/~a" name company secret)
 	      (disconnect-client client))))
       (progn
 	(record "incorrect arg count returned from client")
@@ -320,8 +320,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    (client-for-name name) 
    '(update (() 
 	     ("Templar.exe" 
-	      "http://archon.paragent.com/updates/0.3.2772/Templar.exe") 
+	      "http://archon.paragent.com/updates/2.8.1788/Templar.exe") 
 	     ("version.dat" 
-	      "http://archon.paragent.com/updates/0.3.2772/version.dat")))))
+	      "http://archon.paragent.com/updates/2.8.1788/version.dat")))))
 
 #.(clsql:restore-sql-reader-syntax-state)

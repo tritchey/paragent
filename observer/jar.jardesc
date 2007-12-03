@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jardesc>
 <jar path="/lisp/repos/nexus/html/observer.jar"/>
-<options buildIfNeeded="true" compress="true" descriptionLocation="/Observer2/jar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+<options buildIfNeeded="true" compress="true" descriptionLocation="/Observer/jar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
 <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
 <selectedProjects/>
-<manifest generateManifest="true" mainClassHandleIdentifier="=Observer2/src&lt;com.paragent.observer{VncViewer.java[VncViewer" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+<manifest generateManifest="true" mainClassHandleIdentifier="=Observer/src&lt;com.paragent.observer{VncViewer.java[VncViewer" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
 <sealing sealJar="false">
 <packagesToSeal/>
 <packagesToUnSeal/>
 </sealing>
 </manifest>
 <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{RecordingFrame.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{VncViewer.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{SessionRecorder.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{ParagentSocket.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{ButtonPanel.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{ClipboardFrame.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{OptionsFrame.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{Base64.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{DesCipher.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{RfbProto.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{VncCanvas.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{AuthPanel.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{DH.java"/>
-<javaElement handleIdentifier="=Observer2/src&lt;com.paragent.observer{DisconnectException.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{SessionRecorder.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{ButtonPanel.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{DisconnectException.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{ClipboardFrame.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{VncViewer.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{VncCanvas.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{RfbProto.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{DH.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{AuthPanel.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{RecordingFrame.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{OptionsFrame.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{DesCipher.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{ParagentSocket.java"/>
+<javaElement handleIdentifier="=Observer/src&lt;com.paragent.observer{Base64.java"/>
 </selectedElements>
 </jardesc>

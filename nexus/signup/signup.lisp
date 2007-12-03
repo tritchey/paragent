@@ -113,15 +113,14 @@ function updatePrices() {
     (<:div 
      :class "menu"
 	(<:ul
-	 (<:li (<:a :href "http://paragent.com/index.php"
+	 (<:li (<:a :href "http://paragent.com/index.html"
 		    (<:img :src "images/plogo_small.gif" 
 			   :width "175px" 
 			   :height "35px")))
-	 (<:li (<:a :href "http://paragent.com/index.php" "Home"))
-	 (<:li (<:a :href "http://paragent.com/company/overview.php" "Company"))
-	 (<:li (<:a :href "http://paragent.com/product/overview.php" "Product"))
-	 (<:li (<:a :href "http://paragent.com/support/overview.php" "Support"))
-	 (<:li (<:a :href "http://paragent.com/purchase/purchase.php" "Pricing"))))
+	 (<:li (<:a :href "http://paragent.com/index.html" "Home"))
+	 (<:li (<:a :href "http://paragent.com/blog/" "Blog"))
+	 (<:li (<:a :href "http://paragent.com/community.html" "Community"))
+	 (<:li (<:a :href "http://paragent.com/support.html" "Support"))))
     (<:div 
      :class "main"
      (<:h2 :class "pick" (<:span "Pick Your Plan"))
@@ -209,9 +208,8 @@ function updatePrices() {
     (<:div :id "foot"
 	   (<:p :class "legalese"
 		"Copyright 2004-2007 Paragent, LLC. All rights reserved. | "
-		(<:a :href "http://paragent.com/support/terms.php" "Legal") " | " 
-		(<:a :href "http://paragent.com/support/privacy.php" "Privacy Statement") " | "
-		(<:a :href "http://paragent.com/company/contact.php" "Contact Us"))))))
+		(<:a :href "http://paragent.com/legal.html" "Legal") " | " 
+		(<:a :href "http://paragent.com/support.html" "Contact Us"))))))
 
    
 
@@ -296,15 +294,14 @@ function updatePrices() {
     (<:div 
      :class "menu"
 	(<:ul
-	 (<:li (<:a :href "http://paragent.com/index.php"
+	 (<:li (<:a :href "http://paragent.com/index.html"
 		    (<:img :src "images/plogo_small.gif" 
 			   :width "175px" 
 			   :height "35px")))
-	 (<:li (<:a :href "http://paragent.com/index.php" "Home"))
-	 (<:li (<:a :href "http://paragent.com/company/overview.php" "Company"))
-	 (<:li (<:a :href "http://paragent.com/product/overview.php" "Product"))
-	 (<:li (<:a :href "http://paragent.com/support/overview.php" "Support"))
-	 (<:li (<:a :href "http://paragent.com/purchase/purchase.php" "Pricing"))))
+	 (<:li (<:a :href "http://paragent.com/index.html" "Home"))
+	 (<:li (<:a :href "http://paragent.com/blog/" "Blog"))
+	 (<:li (<:a :href "http://paragent.com/community.html" "Community"))
+	 (<:li (<:a :href "http://paragent.com/support.html" "Support"))))
     (<:div 
      :class "main"
      (<:h2 :class "create" (<:span "Create Your Account"))
@@ -359,9 +356,8 @@ function updatePrices() {
     (<:div :id "foot"
 	   (<:p :class "legalese"
 		"Copyright 2004-2007 Paragent, LLC. All rights reserved. | "
-		(<:a :href "http://paragent.com/support/terms.php" "Legal") " | " 
-		(<:a :href "http://paragent.com/support/privacy.php" "Privacy Statement") " | "
-		(<:a :href "http://paragent.com/company/contact.php" "Contact Us")))))))
+		(<:a :href "http://paragent.com/legal.html" "Legal") " | " 
+		(<:a :href "http://paragent.com/support.html" "Contact Us")))))))
 
 
 
@@ -434,15 +430,14 @@ function updatePrices() {
     (<:div 
      :class "menu"
 	(<:ul
-	 (<:li (<:a :href "http://paragent.com/index.php"
+	 (<:li (<:a :href "http://paragent.com/index.html"
 		    (<:img :src "images/plogo_small.gif" 
 			   :width "175px" 
 			   :height "35px")))
-	 (<:li (<:a :href "http://paragent.com/index.php" "Home"))
-	 (<:li (<:a :href "http://paragent.com/company/overview.php" "Company"))
-	 (<:li (<:a :href "http://paragent.com/product/overview.php" "Product"))
-	 (<:li (<:a :href "http://paragent.com/support/overview.php" "Support"))
-	 (<:li (<:a :href "http://paragent.com/purchase/purchase.php" "Pricing"))))
+	 (<:li (<:a :href "http://paragent.com/index.html" "Home"))
+	 (<:li (<:a :href "http://paragent.com/blog/" "Blog"))
+	 (<:li (<:a :href "http://paragent.com/community.html" "Community"))
+	 (<:li (<:a :href "http://paragent.com/support.html" "Support"))))
     (<:div 
      :class "main"
      (<:h2 :class "ready" (<:span "We're Ready!"))
@@ -471,9 +466,8 @@ function updatePrices() {
     (<:div :id "foot"
 	   (<:p :class "legalese"
 		"Copyright 2004-2007 Paragent, LLC. All rights reserved. | "
-		(<:a :href "http://paragent.com/support/terms.php" "Legal") " | " 
-		(<:a :href "http://paragent.com/support/privacy.php" "Privacy Statement") " | "
-		(<:a :href "http://paragent.com/company/contact.php" "Contact Us")))))
+		(<:a :href "http://paragent.com/legal.html" "Legal") " | " 
+		(<:a :href "http://paragent.com/support.html" "Contact Us")))))
 
 
 (defaction confirm-signup ((page credit-card-page) cc-fields signup-fields)
@@ -492,7 +486,7 @@ function updatePrices() {
 (defaction redirect-after-signup ((page signup-fields))
   (let* ((username (value (username page)))
          (password (value (password1 page))))
-    (call 'login-redirector :username username :password password)))
+    (call-component nil (make-instance 'login-redirector :username username :password password))))
 
 (defaction redirect-after-signup ((page finished-signup-fields))
   (call 'front-page :user (user page)))

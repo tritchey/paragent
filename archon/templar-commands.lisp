@@ -20,7 +20,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (if (= (length args) 1)
       (let* ((id (car args))
 	     (client (gethash id *clients-by-computer-id*)))
-	(if client
+	(if (and client (availablep client))
 	    (progn
 	      (send-message client '(shutdown))
 	      t)
@@ -32,7 +32,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (if (= (length args) 1)
       (let* ((id (car args))
 	     (client (gethash id *clients-by-computer-id*)))
-	(if client
+	(if (and client (availablep client))
 	    (progn
 	      (send-message client '(restart))
 	      t)
@@ -43,13 +43,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (if (= (length args) 2)
       (let* ((id (first args))
 	     (key (second args))
-	     (client (gethash id *clients-by-computer-id*)))
-	(if (and client key)
+	     (client (gethash id *clients-by-computer-id*))
+	     (availablep (availablep client)))
+	(if (and client key availablep)
 	    (progn
 	      (send-message client 
 			    `(activate-dark-templar ,key *default-dark-archon-server*))
 	      t)
 	    (progn
-	      (record "no client (~A) and/or key (~A)" client key)
+	      (record "no client (~A), key (~A) availablep (~A)" client key availablep)
 	      nil)))
       nil))

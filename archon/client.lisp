@@ -66,7 +66,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    (heartbeat :accessor heartbeatp
 	      :initform t)
    (validp :accessor validp
-	  :initform nil))
+	  :initform nil)
+   (availablep :accessor availablep
+	       :initform nil))
   (:documentation "a remote computer connecting to us"))
 
 (defgeneric client-online (client)

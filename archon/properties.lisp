@@ -551,6 +551,19 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 					    :name addr)))
 			  (remove-duplicates result :test #'equal))))
 		   result))))
+
+(defgeneric query-time (client)
+  (:method ((client client))
+    (send-message client 
+		  "(query \"Win32_OperatingSystem\" \"LocalDateTime\")"
+		  (lambda (client &rest args)
+		    (declare (ignore args))
+		    ;; this is the last item we will ask for. once we get it
+		    ;; back, this computer should be okay to receive commands
+		    ;; once we want to start dealing with TZ issues in the agent
+		    ;; this info will help us determine the TZ offset of any alerts
+		    ;; we get from the agent
+		    (setf (availablep client) t)))))
   
 (defgeneric query-all-props (client)
   (:method ((client client))
@@ -579,6 +592,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     (query-services client)
     (query-sound-device client)
     (query-hardware-errors client)
+    (query-time client) 
+    ;; do not add any queries here!!! query-time should be the last one
 ))
 
 #.(clsql:restore-sql-reader-syntax-state)

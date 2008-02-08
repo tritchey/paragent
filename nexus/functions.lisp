@@ -233,6 +233,7 @@ allowing us to avoid heap exhaustion"
 				[slot-value 'user 'username]
                                 [slot-value 'user 'password] 
 				[slot-value 'user 'last-login]
+				[slot-value 'user 'timezone-preference]
                                 [slot-value 'user 'weekly-software-report] 
 				[slot-value 'user 'recent-computers]
                                 
@@ -252,17 +253,17 @@ allowing us to avoid heap exhaustion"
       (when result
 	(let* ((company (make-instance 'company  
 				       :disabled (clsql-sys:read-sql-value 
-						  (nth 10 result) 
+						  (nth 11 result) 
 						  'boolean 
 						  *default-database* 
 						  (database-type *default-database*))
-				       :id (nth 11 result) 
-				       :name (nth 12 result)
-				       :secret (nth 13 result) 
-				       :msi (nth 14 result)
-				       :level (nth 15 result)
+				       :id (nth 12 result) 
+				       :name (nth 13 result)
+				       :secret (nth 14 result) 
+				       :msi (nth 15 result)
+				       :level (nth 16 result)
 				       :created (clsql-sys:read-sql-value 
-						 (nth 16 result) 
+						 (nth 17 result) 
 						 'date 
 						 *default-database* 
 						 (database-type *default-database*))
@@ -280,21 +281,22 @@ allowing us to avoid heap exhaustion"
 						 'wall-time 
 						 *default-database* 
 						 (database-type *default-database*))
+				    :timezone-preference (ninth result)
 				    :weekly-software-report (clsql-sys:read-sql-value 
-							     (ninth result) 
+							     (tenth result) 
 							     'boolean 
 							     *default-database* 
 							     (database-type *default-database*))
 				    :recent-computers (when (tenth result)
 							(clsql-sys:read-sql-value 
-							 (tenth result) 
+							 (nth 10 result) 
 							 T 
 							 *default-database* 
 							 (database-type *default-database*)))
 				    :company company
 				    :view-database *default-database*))
 	       (expiration (clsql-sys:read-sql-value 
-	                    (nth 17 result)
+	                    (nth 18 result)
 	                    'wall-time
 	                    *default-database*
 	                    (database-type *default-database*))))

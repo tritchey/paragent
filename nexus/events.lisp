@@ -238,6 +238,9 @@ tab when navigating through it"
   (call-component nil (make-instance 'event-timeline-graph :user user :height height :width width)))
 
 
+(defvar *event-timeline-data* (make-hash-table :test #'equal))
+(defvar *event-timeline-last* (make-hash-table :test #'equal))
+
 (defmacro <event-timeline-graph (page user &key (height 100) (width 250))
   `(<:img :src (make-link (show-event-timeline-graph ,page ,user :height ,height :width ,width))))
 
@@ -255,34 +258,41 @@ tab when navigating through it"
           (loop for i from duration downto 1 collecting
                 (print-dow (clsql-sys::date->time
                              (date- today (make-duration :day i))) :short)))
-    (setf (data img)
-          (with-db
-            (start-sql-recording)
-            (mapcar
-              (lambda (id.color)
-                (list
-                  (cdr id.color)
-                  (loop for i from duration downto 0 collecting
-                        (car
-                          (select
-                            [count [slot-value 'event 'id]]
-                            :from [events]
-                            :refresh t :flatp t
-                            :where [and
-                            [= [slot-value 'event 'company-id] (company-id (user img))]
-                            [<= [slot-value 'event 'severity-id] (car id.color)]
-                            [> [timestamp] (date- today (make-duration :day i))]
-                            [<= [timestamp]
-                            (if (<= i 1)
-                                (date+
-                                  today
-                                  (make-duration :day 1))
-                                (date-
-                                  today
-                                  (make-duration :day (- i 1))))]])))))
-              `((0 . ,(chart::get-color :note))
-                (6 . ,(chart::get-color :low))
-                (8 . ,(chart::get-color :medium))
-                (10 . ,(chart::get-color :high))))))))
+    (let* ((company-id (company-id (user img)))
+           (cached-date (gethash company-id *event-timeline-last*))
+           (cached-data (if (and cached-date (date= cached-date today))
+                            (gethash company-id *event-timeline-data*)
+                            (with-db
+                             (start-sql-recording)
+                             (mapcar
+                              (lambda (id.color)
+                                (list
+                                 (cdr id.color)
+                                 (loop for i from duration downto 0 collecting
+                                       (car
+                                        (select
+                                         [count [slot-value 'event 'id]]
+                                         :from [events]
+                                         :refresh t :flatp t
+                                         :where [and
+                                         [= [slot-value 'event 'company-id] (company-id (user img))]
+                                         [<= [slot-value 'event 'severity-id] (car id.color)]
+                                         [> [timestamp] (date- today (make-duration :day i))]
+                                         [<= [timestamp]
+                                         (if (<= i 1)
+                                             (date+
+                                              today
+                                              (make-duration :day 1))
+                                             (date-
+                                              today
+                                              (make-duration :day (- i 1))))]])))))
+                              `((0 . ,(chart::get-color :note))
+                                (6 . ,(chart::get-color :low))
+                                (8 . ,(chart::get-color :medium))
+                                (10 . ,(chart::get-color :high))))))))
+      (when (not (and cached-date (date= cached-date today)))
+        (setf (gethash company-id *event-timeline-data*) cached-data)
+        (setf (gethash company-id *event-timeline-last*) today))
+      (setf (data img) cached-data))))
 
 #.(clsql:restore-sql-reader-syntax-state)

@@ -455,7 +455,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (let ((class (if (equal (state ticket) +ticket-status-closed+)
 		   "Closed"
 		   (db::priority-name ticket)))
-        (odd-row (if (odd-row page) "odd-row" "even-row")))
+        (odd-row (if (odd-row page) "odd-row" "even-row"))
+	(user (user page)))
     (if (not (condensed page))
 	(progn
 	  (<:tr
@@ -470,7 +471,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			      (when (timestamp ticket)
 				(<:span
 				 (<:as-is " at ")
-				 (<:ah (timestamp ticket))))))))
+				 (<:ah (db::adjusted-timestamp ticket user))))))))
 	  (<:tr
 	   :class odd-row
 	   (<:td :class "summary" (<:p

@@ -33,7 +33,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    :make-guid
    :record
    :*record-preamble*
-   
+
    ;; epoll symbols
    :epoll-create 
    :epoll-control 

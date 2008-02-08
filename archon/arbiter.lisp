@@ -71,7 +71,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     (end-of-file ()
       (record "end-of-file on message: ~A" message))
     (t (e)
-      (record "arbiter.lisp: (read-message) had an unhandled case ~a~%~a" e message)
+      (record "arbiter.lisp: (read-message) had an unhandled case ~a~%~a" e message) 
       (when *enable-email-alerts*
 	(send-email *administrator-notification-email*
 		    "ARCHON: arbiter.lisp (read-message) caught an unhandled exception"
@@ -102,4 +102,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			     :port arbiter-port
 			     :connect t))
       (t (e)
-	(record "unable to contact arbiter")))))
+	(record "unable to contact arbiter ~A" e)))))

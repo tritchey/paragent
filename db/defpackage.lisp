@@ -108,5 +108,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     :*templar-ssl-cert* :*templar-ssl-key*
     :*default-arbiter-templar-port* :*default-arbiter-nexus-port*
     :*default-arbiter-archon-port* :*default-arbiter-address* :*default-dark-archon-server*
+    :=account-paid
+    :timezone-preference
+    :adjusted-timestamp
 ))
 

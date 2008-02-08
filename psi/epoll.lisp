@@ -314,7 +314,6 @@
 (defmethod modify-watch (controller fd &key read write)
   (%modify-watch controller fd :read read :write write))
 
-
 (defmethod delete-watch (controller fd)
   (%delete-watch controller fd))
 

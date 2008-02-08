@@ -215,7 +215,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defgeneric format-alert-message (computer alert))
 
-(defgeneric alert-offline (computer event-id))
+(defgeneric alert-offline (computer))
 
 (defmethod format-alert-message ((computer computer) (alert alert-event))
   (format nil "Computer: ~a~%Timestamp: ~a~%Severity: ~a~%Summary: ~a~%Description: ~a~%Note:~%~a~%"
@@ -236,18 +236,27 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	  (description alert)
 	  (note alert)))
 
-(defmethod alert-offline ((computer computer) event-id)
+(defmethod alert-offline ((computer computer))
   (when computer
     (db:with-db
-	(dolist (alert (db:type-alerts computer +alert-computer-offline+))
-	  (let ((aevent (create-alert-event alert nil computer)))
-	    (clsql:update-records-from-instance
-	     (make-instance 'alert-event-link 
-			    :event-id event-id
-			    :alert-id (id alert)))
-	    (send-email (email-to aevent)
-			(description aevent)
-			(format-alert-message computer aevent)))))))
+	(let ((recorded nil)
+	      (event-id nil))
+	  (dolist (alert (db:type-alerts computer +alert-computer-offline+))
+	    (unless recorded
+	      (setf recorded t)
+	      (let ((name (name computer)))
+		(setf event-id (record-event computer
+					     :summary (format nil "~A offline" name)
+					     :description (format nil "The computer ~A went offline" name)
+					     :severity :low))))
+	    (let ((aevent (create-alert-event alert nil computer)))
+	      (clsql:update-records-from-instance
+	       (make-instance 'alert-event-link 
+			      :event-id event-id
+			      :alert-id (id alert)))
+	      (send-email (email-to aevent)
+			  (description aevent)
+			  (format-alert-message computer aevent))))))))
 
 #.(clsql:restore-sql-reader-syntax-state)
 

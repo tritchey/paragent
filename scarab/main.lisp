@@ -86,7 +86,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	   [= [slot-value 'computer 'id] 
 	   [slot-value 'software-event 'computer-id]]
 	   [= [slot-value 'computer 'company-id] (company-id user)]
-	   [not [= [slot-value 'software-event 'installed] 1]]]))
+	   [= [slot-value 'software-event 'installed] 1]]))
 	 (uninstalled 
 	  (select 
 	   'software-event 

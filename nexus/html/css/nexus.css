@@ -1147,6 +1147,7 @@ table#tickets.condensed td.badge
 
 table#tickets.condensed td.name
 { 
+
   font-weight: normal;
 }
 
@@ -1759,7 +1760,7 @@ table#tickets td.summary p span
 table#tickets 
 {
   border: none;
-  width: 100%;
+  width: 650px;
 }
 
 #ticket-title form,
@@ -1916,7 +1917,7 @@ table#tickets td.badge,
 table#alerts td.badge,
 table#logged-errors td.badge
 { 
-  width: 45px;
+  width: 55px;
   height: 55px;
   padding: 5px 10px 10px 5px;
 }
@@ -1963,7 +1964,7 @@ table#comppick td.name,
 table#tickets td.name,
 table#alerts td.name
 { 
-  white-space: nowrap;
+  width: 600px;
   font-weight: bold;
   font-size: 14px;
   padding-right: 5px;

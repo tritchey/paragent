@@ -188,7 +188,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                 (<:script
                  (<:as-is
                   "Effect.Appear($('signup'), {duration:3});")))
-              (when (and (>=admin user) (=account-free company))
+              (when (and (>=admin user) (not (=account-paid company)))
                 (<:div 
                  :id "signup"
                  (<:p "Upgrade to a paid account")

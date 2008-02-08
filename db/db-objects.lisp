@@ -221,6 +221,10 @@ Compares all slots. Exists to determine if we need to update the object in the d
   (:documentation "Base class for objects that are linked to a company"))
 
 
+;;;; WARNING!!!!!!
+;;;; YOU ARE NOT DONE ONCE YOU ADD YOUR SLOT HERE!!!!!
+;;;; There is a cache in nexus that grabs user information. You need to add
+;;;; the slot information to that function. it is in nexus/functions.lisp.
 
 (def-view-class user (company-property)
   ((level :accessor level
@@ -256,6 +260,10 @@ Compares all slots. Exists to determine if we need to update the object in the d
    (weekly-software-report :accessor weekly-software-report
                            :type boolean
                            :initarg :weekly-software-report)
+   (timezone-preference :accessor timezone-preference
+			:type integer
+			:initarg :timezone-preference
+				 :initform 0)
    (recent-computers :accessor recent-computers
 		     :type list
 		     :initarg :recent-computers
@@ -1270,6 +1278,13 @@ So we implement our own autoincrement here.")
                [= [slot-value 'ticket 'state] +ticket-status-open+ ]
                [= [slot-value 'ticket-computer 'ticket-id] [slot-value 'ticket 'id]]])))
 
+(defgeneric adjusted-timestamp (obj user)
+  (:method (obj (user user))
+    (let ((timestamp (timestamp obj))
+	  (offset (timezone-preference user)))
+      (when (and timestamp offset)
+	(clsql:time+ timestamp (clsql:make-duration :hour offset))))))
+
 
 (def-view-class ticket-property (db-obj)
   ((ticket-id :accessor ticket-id
@@ -1511,6 +1526,8 @@ So we implement our own autoincrement here.")
                  :type (string 20)))
   (:base-table subscriptions))
 
+(defun =account-paid (company)
+  (select 'subscription :flatp t :where [= [company-id] (id company)]))
 
 
 (defparameter *db-classes*

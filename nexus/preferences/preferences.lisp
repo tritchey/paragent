@@ -78,6 +78,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defmethod render-user-info ((page paragent-component))
   (let* ((user (user page))
+	 (tz (timezone-preference user))
          (password1 "")
          (password2 password1)
          (admin (>= (level user) 10))
@@ -111,6 +112,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
               (<:ah "Confirm Password"))
         (<:td :class "desc"
               (<ucw:password :class "passwd" :accessor password2)))
+       (<:tr
+        (<:td :class "title"
+              (<:ah "Timezone Preference"))
+        (<:td :class "desc"
+	      (<ucw:select :accessor (timezone-preference user)
+			   (<ucw:option :selected (= tz 0) :value 0 "Eastern")
+			   (<ucw:option :selected (= tz -1) :value -1 "Central")
+			   (<ucw:option :selected (= tz -2) :value -2 "Mountain")
+			   (<ucw:option :selected (= tz -3) :value -3 "Pacific"))))
        (<:tr
         (<:td :class "title"
               (<:ah "Weekly Reports"))
@@ -188,7 +198,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (when (>= (level (user page)) 10)
     (<:h1 "Tasks")
     (<:ul
-     (<:li (grey-box "New User..." "Add new user..." (new-user page) 380 450))
+     (<:li (grey-box "New User..." "Add new user..." (new-user page) 410 450))
      (<:li (grey-box "New Group..." "Add new group..." (new-group page) 450 500))
      (<:li (grey-box "Watch this email address..." "Add email account for tickets..."
                      (goto-ticket-email-dialog page) 240 360)))))

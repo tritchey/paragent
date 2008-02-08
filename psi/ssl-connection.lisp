@@ -64,8 +64,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defmethod free-ssl-buffers ((connection ssl-connection))
   (sb-alien:free-alien (read-buffer connection))
   (sb-alien:free-alien (write-buffer connection))
-  (ssl-free (ssl connection))
-  )
+  (ssl-free (ssl connection)))
   
 
 (defmethod continue-accept ((connection ssl-connection) event)

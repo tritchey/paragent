@@ -23,6 +23,17 @@ div.event-report table {
 	width: 100%;
 }
 
+table#tickets 
+{
+  border: none;
+  width: 100%;
+}
+
+div#workspace {
+	overflow: visible;
+}
+
+
 dt.comp-header a.checkbox,
 div#comppick h2 a.checkbox {
 	width: 12px;

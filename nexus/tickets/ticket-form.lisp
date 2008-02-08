@@ -202,7 +202,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           (update-diff state (status-change-description old new))
           (update-diff priority (format nil "Priority changed from ~a to ~a." (priority-string old) (priority-string new)))
           (update-diff due-date (format nil "Due date changed from ~a to ~a."
-                                        (or old "None") (or new "None"))
+                                        (or (and old (print-date old :long-day)) "None") (or new (and (print-date new :long-day)) "None"))
                        (lambda (a b) (or (and (equal a nil) (equal b nil)) (and a b (time= a b)))))
           (update-diff subject (format nil "Subject changed from '~a' to '~a.'" old new))
           (update-diff body (format nil "Description changed from '~a' to '~a.'" old new))

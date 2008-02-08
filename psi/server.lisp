@@ -41,8 +41,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       (connection-error (e)
 	 (record "accept-connection failed: ~a" e))
       (t (e)
-	 (record "accept-connection error: ~a" e))
-      )))
+	 (record "accept-connection error: ~a" e)))))
 
 
 (defmethod initialize-instance :after ((connection server-connection) 

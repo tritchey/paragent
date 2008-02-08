@@ -162,7 +162,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	     (<:p "Created"))
        (<:td :class "desc"
 	     (<:ah (if (timestamp ticket) 
-		       (timestamp ticket) 
+		       (adjusted-timestamp ticket user) 
 		       (<:i "(Missing Timestamp)")))))
       (<:tr
        (<:td :class "title"
@@ -205,7 +205,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	     (<:p "Due Date"))
        (<:td :class "desc"
 	     (<:p :id "ticket-due"
-		  (<:ah (or (due-date ticket) (<:i "(None)"))))
+		  (<:ah (if (due-date ticket)
+			    (print-date (due-date ticket) :long-day) 
+			    (<:i "(None)"))))
 	     (<:p :id "ticket-due-e" :style "display:none;"
 		  (render (due-date-field ticket-form)))))
       (<:tr
@@ -319,41 +321,39 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	   (<:p (<:b "Comment: ") (<:as-html comment))))))
 
 
-(defgeneric render-history-item (item ticket))
-
-(defmethod render-history-item ((response db::ticket-response) ticket)
-  (render-history-item-row (if (db::user-id response) "Respond" "Submit")
-			   (sender response) 
-			   (timestamp response) 
-			   (body response)
-			   :newline t))
-
-(defmethod render-history-item ((comment db::ticket-comment) ticket)
-  (let ((user (user comment)))
-    (render-history-item-row "Note" 
-			     (if (and (name user) 
-				      (not (equal (name user) ""))) 
-				 (name user) 
-				 (username user)) 
-			     (timestamp comment) 
-			     (body comment))))
-
-(defmethod render-history-item ((change db::ticket-change) ticket)
-  (let ((user (user change))
-	(note (note change)))
-    (render-history-item-row "Change" 
-			     (if (and (name user) 
-				      (not (equal (name user) ""))) 
-				 (name user) 
-				 (username user)) 
-			     (timestamp change) 
-			     (description change)
-			     :comment (if (and note (not (equal note ""))) 
-					  note
-					  nil))))
+(defgeneric render-history-item (item ticket user)
+  (:method ((response db::ticket-response) ticket user)
+    (render-history-item-row (if (db::user-id response) "Respond" "Submit")
+			     (sender response) 
+			     (adjusted-timestamp response user) 
+			     (body response)
+			     :newline t))
+  (:method ((comment db::ticket-comment) ticket user)
+    (let ((poster (user comment)))
+      (render-history-item-row "Note" 
+			       (if (and (name poster) 
+					(not (equal (name poster) ""))) 
+				   (name poster) 
+				   (username poster)) 
+			       (adjusted-timestamp comment user)
+			       (body comment))))
+  (:method ((change db::ticket-change) ticket user)
+    (let ((changer (user change))
+	  (note (note change)))
+      (render-history-item-row "Change" 
+			       (if (and (name changer) 
+					(not (equal (name changer) ""))) 
+				   (name changer) 
+				   (username changer)) 
+			       (adjusted-timestamp change user)
+			       (description change)
+			       :comment (if (and note (not (equal note ""))) 
+					    note
+					    nil)))))
 
 (defmethod render-ticket-history-list ((page ticket-tabbed-view))
-  (let ((ticket (ticket page)))
+  (let ((ticket (ticket page))
+	(user (user page)))
     (<:h2 "History")
     (<:table :cellspacing 3
      :class "item-list condensed" :id "tickets"
@@ -364,7 +364,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
        (if (zerop (length sorted-list))
 	   (<:as-html "No history for this ticket")
 	   (dolist (history-item sorted-list)
-	     (render-history-item history-item ticket)))))))
+	     (render-history-item history-item ticket user)))))))
 
 (defmethod render-ticket-computer-list ((page ticket-tabbed-view))
   (let ((ticket (ticket page))

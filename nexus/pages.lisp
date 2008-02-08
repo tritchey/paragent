@@ -78,14 +78,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defentry-point "alerts.ucw" (:application *my-app*) 
     ()
   (multiple-value-bind (user company) (get-user)
-    (when (>=account-plus company)
-      (if (and user (not (disabled user)))
-          (progn
-            (save-login-time user)
-            (call 'alerts-page :user user))
-          (PROGN
-            (LET ((USER (CALL 'REDIRECTING-LOGIN-PAGE)))
-              (CALL 'ALERTS-PAGE :USER USER)))))))
+    (if user
+	(when (>=account-plus company)
+	  (if (and user (not (disabled user)))
+	      (progn
+		(save-login-time user)
+		(call 'alerts-page :user user))
+	      (PROGN
+		(LET ((USER (CALL 'REDIRECTING-LOGIN-PAGE)))
+		  (CALL 'ALERTS-PAGE :USER USER)))))
+	(call 'redirect-component :target "login.ucw"))))
 
 
 ;;; Tickets
@@ -336,15 +338,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defmacro link-to-tickets-new-report (&rest body)
   `(<:a :href "tickets-new.ucw"
         ,@body))
-
-
-;; Signup page
-
-
-(defentry-point "signup.ucw" (:application *my-app*)
-  ()
-  (call 'signup-page))
-
 
 
 #.(clsql:restore-sql-reader-syntax-state)

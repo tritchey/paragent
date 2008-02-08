@@ -104,7 +104,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defun add-random-events ()
   (let ((raynor (caar (select 'computer :where [= [name] "FakeRaynor"])))
-        (aldaris (caar (select 'computer :where [= [name] "Artanis"])))
+        (aldaris (caar (select 'computer :where [= [name] "Fluffles"])))
         (note (make-instance 'event-type :id 0 :name "Note"))
         (low (make-instance 'event-type :id 6 :name "Low"))
         (medium (make-instance 'event-type :id 8 :name "Medium"))

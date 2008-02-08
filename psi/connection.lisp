@@ -22,6 +22,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defvar *connections* (make-hash-table))
 
+(defvar *connection-graveyard* (make-hash-table))
+
 (defclass connection ()
     ((socket :initarg :socket
            :accessor socket
@@ -54,6 +56,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defgeneric disconnect-event (connection))
 
+(defgeneric reap (connection))
+
 (defgeneric read-message (connection message))
 
 (defgeneric read-event (connection))
@@ -69,6 +73,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defgeneric add-connection (connection &key read write))
 
 (defmethod disconnect-event ((connection connection))
+  ;; move the connection to the graveyard
+  ;; and we will reap it at the end of the loop
+  (setf (gethash (poll-id connection) *connection-graveyard*) connection))
+
+(defmethod reap ((connection connection))
   (let ((sock (socket connection))
 	(fd (poll-id connection)))
     (remhash fd *connections*)

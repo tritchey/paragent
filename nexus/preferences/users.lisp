@@ -177,8 +177,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
               (<:label "Password:")
               (<ucw:password :accessor password1))
             (<:p
-              (<:label "Confirm Password:")
+	      (<:label "Confirm Password:")
               (<ucw:password :accessor password2))
+	    (<:p
+	      (<:label "Timezone Preference")
+	      (<ucw:select :accessor (timezone-preference user)
+			   (<ucw:option :value 0 "Eastern")
+			   (<ucw:option :value -1 "Central")
+			   (<ucw:option :value -2 "Mountain")
+			   (<ucw:option :value -3 "Pacific")))
             (<:p
               (<ucw:input :action (save-new-user page user password1 password2)
                           :class "save"

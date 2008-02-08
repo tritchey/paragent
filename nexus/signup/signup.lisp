@@ -101,8 +101,8 @@ function updatePrices() {
   document.getElementById('plus-total').innerHTML = (plusPrice * num).toFixed(2);
   document.getElementById('basic-price').innerHTML = basicPrice;
   document.getElementById('basic-total').innerHTML = (basicPrice * num).toFixed(2);
-};"))
-    ))
+};"))))
+
 
 
 (defmethod render ((page pricing-page))
@@ -209,7 +209,7 @@ function updatePrices() {
 	   (<:p :class "legalese"
 		"Copyright 2004-2007 Paragent, LLC. All rights reserved. | "
 		(<:a :href "http://paragent.com/legal.html" "Legal") " | " 
-		(<:a :href "http://paragent.com/support.html" "Contact Us"))))))
+		(<:a :href "http://paragent.com/contact.html" "Contact Us"))))))
 
    
 
@@ -357,7 +357,7 @@ function updatePrices() {
 	   (<:p :class "legalese"
 		"Copyright 2004-2007 Paragent, LLC. All rights reserved. | "
 		(<:a :href "http://paragent.com/legal.html" "Legal") " | " 
-		(<:a :href "http://paragent.com/support.html" "Contact Us")))))))
+		(<:a :href "http://paragent.com/contact.html" "Contact Us")))))))
 
 
 
@@ -467,7 +467,7 @@ function updatePrices() {
 	   (<:p :class "legalese"
 		"Copyright 2004-2007 Paragent, LLC. All rights reserved. | "
 		(<:a :href "http://paragent.com/legal.html" "Legal") " | " 
-		(<:a :href "http://paragent.com/support.html" "Contact Us")))))
+		(<:a :href "http://paragent.com/contact.html" "Contact Us")))))
 
 
 (defaction confirm-signup ((page credit-card-page) cc-fields signup-fields)
@@ -489,7 +489,7 @@ function updatePrices() {
     (call-component nil (make-instance 'login-redirector :username username :password password))))
 
 (defaction redirect-after-signup ((page finished-signup-fields))
-  (call 'front-page :user (user page)))
+  (call-component nil (make-instance 'front-page :user (user page))))
 
 (defmethod finalize-signup% ((page credit-card-page2))
   (let* ((num-computers (num-computers page))
@@ -550,20 +550,28 @@ function updatePrices() {
   (company (user page)))
 
 (defentry-point "freesignup.ucw" (:application *my-app*)
-    ()
-  (call 'free-account-page))
+    (email company)
+  (call 'free-account-page :email email :company company))
 
 
 (defcomponent free-account-page (simple-window-component)
   ((signup-fields :accessor signup-fields
                   :initarg :signup-fields
-                  :initform (make-instance 'signup-fields)))
+                  :initform (make-instance 'signup-fields))
+   (email :accessor email
+	  :initarg :email
+	  :initform "")
+   (company :accessor company
+	    :initarg :company
+	    :initform ""))
   (:default-initargs
-    :title "Free account"
+    :title "Trial Account Signup"
     :stylesheet "css/nexus.css"))
 
 (defmethod render ((page free-account-page))
-  (let ((signup-fields (signup-fields page)))
+  (let ((signup-fields (signup-fields page))
+	(email (email page))
+	(company (company page)))
     (<:h2 :class "signup" "Getting Your Own Paragent.com Account is Easy")
     (<:ul
       :class "signup"
@@ -581,6 +589,10 @@ function updatePrices() {
       :action (do-signup page signup-fields ) :id "signup"
       (setf (value (password1 signup-fields)) "")
       (setf (value (password2 signup-fields)) "")
+      (if email
+	  (setf (value (username signup-fields)) email))
+      (if company
+	  (setf (value (company signup-fields)) company))
       (when (message signup-fields)
         (<:p :class "error"
              (<:as-html (message signup-fields))))

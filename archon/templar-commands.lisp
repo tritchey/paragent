@@ -44,13 +44,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       (let* ((id (first args))
 	     (key (second args))
 	     (client (gethash id *clients-by-computer-id*))
-	     (availablep (availablep client)))
-	(if (and client key availablep)
+	     (avail (availablep client)))
+	(if (and client key avail)
 	    (progn
 	      (send-message client 
 			    `(activate-dark-templar ,key *default-dark-archon-server*))
 	      t)
 	    (progn
-	      (record "no client (~A), key (~A) availablep (~A)" client key availablep)
+	      (record "no client (~A), key (~A) availablep (~A)" client key avail)
 	      nil)))
       nil))

@@ -165,7 +165,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 		(clsql:update-records-from-instance computer))))))
       
     ;; always remove from the guid hash
-    (remhash guid *clients-by-guid*)))
+    (remhash guid *clients-by-guid*)
+    (send-message (arbiter-connection client) `(disconnect-client ,guid))))
 
 (defmethod duplicate-client ((client client))
   (send-message client '(duplicate-client))
@@ -184,7 +185,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	      (setf (gethash key *updating-clients*) t)
 	      (send-message client (format nil "(update ~S)" update) 
 			    #'(lambda (client &rest args)
-				(declare (ignore client))
 				(record "templar update for ~A.~A: ~A~%" (name client) (company client) args)))))
 	(progn
 	  (setf (gethash key *updating-clients*) nil)

@@ -29,4 +29,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       (:file "nexus-connection" :depends-on ("connections"))
 	       (:file "templar-connection" :depends-on ("archon-connection"))
 	       (:file "kernel" :depends-on ("templar-connection" "nexus-connection")))
-  :depends-on (:asdf-binary-locations :sb-posix :sb-bsd-sockets :psi :db))
+  :depends-on (:asdf-binary-locations :sb-posix :sb-bsd-sockets :db))

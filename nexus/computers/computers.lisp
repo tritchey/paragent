@@ -682,7 +682,7 @@
     (if (send-archon computer 
 		     (format nil "(activate-dark-templar ~A ~S)" (id computer) password))
 	(call-component nil (make-instance 'observer-page 
-					   :computer (name computer) 
+					   :computer (unaliased-name computer) 
 					   :password password 
 					   :user (user page)))
 	(goto-computers-page 

@@ -52,95 +52,93 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defmethod record-online-event ((computer computer))
   (unless (online computer)
     (setf (online computer) t)
-    (db:with-db (clsql:update-records-from-instance computer))
-    (let ((name (name computer)))
-      (record-event computer
-		    :summary (format nil "~A online" name)
-		    :description (format nil "The computer ~A came online" name)
-		    :severity :low))))
+    (db:with-db (clsql:update-records-from-instance computer))))
 
 (defmethod record-offline-event ((computer computer))
   (when (online computer)
     (setf (online computer) nil)
     (db:with-db (clsql:update-records-from-instance computer))
-    (let* ((name (name computer))
-	   (event-id (record-event computer
-				   :summary (format nil "~A offline" name)
-				   :description (format nil "The computer ~A went offline" name)
-				   :severity :low)))
-      (alert-offline computer event-id))))
+    (alert-offline computer)))
 
 
 (defmethod check-hard-drive ((alert alert) (client client) (computer computer) data)
-  (let* ((threshold (car (args alert)))
-	 (info (query-logical-drives client))
-	 (timestamp (clsql:time+ (clsql:utime->time (cadr data))
-				   (clsql:make-duration :year 70)))
-	 (drives (first info))
-	 (sizes (second info))
-	 (frees (third info)))
-    (mapcar 
-     #'(lambda (drive size free)
-	 (when (< free (* size (/ threshold 100))) 
-	   (db:with-db
-	       (let* ((aevent (make-instance 'alert-event
-					     :summary (format nil "~A drive ~A is below ~A" 
-							      (name computer) drive threshold)
-					     :description (note alert)
-					     :severity (severity alert)
-					     :email-to (email-to alert)
-					     :note (note alert)
-					     :timestamp timestamp))
-		      (event-id (record-event computer
-					      :summary (summary aevent)
-					      :description (description aevent)
-					      :severity (severity aevent)
-					      :timestamp (timestamp aevent))))
-		 (clsql:update-records-from-instance
-		  (make-instance 'alert-event-link 
-				 :event-id event-id
-				 :alert-id (id alert)))
-		 (send-email (email-to aevent)
-			     (description aevent)
-			     (format-alert-message computer aevent))))))
-     drives sizes frees)))
+  (query-let ((drives (wmi-query client "Win32_LogicalDisk WHERE DriveType=3" "Caption"))
+	      (sizes (wmi-query client "Win32_LogicalDisk WHERE DriveType=3" "Size"))
+	      (frees (wmi-query client "Win32_LogicalDisk WHERE DriveType=3" "FreeSpace")))
+      client
+    (let* ((threshold (car (args alert)))
+	   (timestamp (clsql:time+ (clsql:utime->time (cadr data))
+				   (clsql:make-duration :year 70))))
+      (handler-case 
+	  (mapcar 
+	 #'(lambda (drive size free)
+	     (when (< free (* size (/ threshold 100))) 
+	       (db:with-db
+		   (let* ((aevent (make-instance 'alert-event
+						 :summary "Low Space on Hard Drive"
+						 :description (format nil 
+								      "~A drive ~A is below ~A" 
+								      (name computer) drive threshold)
+						 :severity (severity alert)
+						 :email-to (email-to alert)
+						 :note (note alert)
+						 :timestamp timestamp))
+			  (event-id (record-event computer
+						  :summary (summary aevent)
+						  :description (description aevent)
+						  :severity (severity aevent)
+						  :timestamp (timestamp aevent))))
+		     (clsql:update-records-from-instance
+		      (make-instance 'alert-event-link 
+				     :event-id event-id
+				     :alert-id (id alert)))
+		     (send-email (email-to aevent)
+				 (description aevent)
+				 (format-alert-message computer aevent))))))
+	 (car drives) (car sizes) (car frees))
+      (t (e)
+	(record "~A~%" e))))))
 
 (defmethod event-triggered ((client client) &rest args)
   (when (validp client)
+
     (let* ((id (car args))
 	   (data (cdr args))
 	   (alert (caar (db:with-db (clsql:select 'alert :where [= [id] id]))))
 	   (computer (computer client))
 	   (alert-link (db:with-db (clsql:select 'alert-computer-link 
 						 :where [and [= [alert-id] id]
-							     [= [computer-id] (id computer)]]))))
-      (when (and alert alert-link)
-	(if (equal (type-id alert) db:+alert-hard-drive+)
-	    (check-hard-drive alert client computer data)
-	    (db:with-db
-		(let* ((aevent (create-alert-event alert data computer))
-		       (desc (description aevent)))
-		  (unless (or (not desc)
-			      (equal desc "")
-			      (search "Microsoft DirectMusic" desc)
-			      (search "Microsoft Streaming" desc)
-			      (search "BDA Slip De-Framer" desc)
-			      (search "Codec" desc)
-			      (search "Microsoft Kernel" desc)
-			      (search "RAS Async Adapter" desc)
-			      (search "Generic volume" desc)
-			      (search "Microsoft WINMM WDM Audio Compatibility Driver" desc))
-		    (let ((event-id (record-event computer
-						  :summary (summary aevent)
-						  :description (description aevent)
-						  :severity (severity aevent)
-						  :timestamp (timestamp aevent))))
-		      (clsql:update-records-from-instance
-		       (make-instance 'alert-event-link 
-				      :event-id event-id
-				      :alert-id (id alert)))
-		      (send-email (email-to aevent)
-				  (description aevent)
-				  (format-alert-message computer aevent)))))))))))
+						 [= [computer-id] (id computer)]]))))
+      (handler-case 
+	  (when (and alert alert-link)
+	    (if (equal (type-id alert) db:+alert-hard-drive+)
+		(check-hard-drive alert client computer data)
+		(db:with-db
+		    (let* ((aevent (create-alert-event alert data computer))
+			   (desc (description aevent)))
+		      (unless (or (not desc)
+				  (equal desc "")
+				  (search "Microsoft DirectMusic" desc)
+				  (search "Microsoft Streaming" desc)
+				  (search "BDA Slip De-Framer" desc)
+				  (search "Codec" desc)
+				  (search "Microsoft Kernel" desc)
+				  (search "RAS Async Adapter" desc)
+				  (search "Generic volume" desc)
+				  (search "Microsoft WINMM WDM Audio Compatibility Driver" desc))
+			(let ((event-id (record-event computer
+						      :summary (summary aevent)
+						      :description (description aevent)
+						      :severity (severity aevent)
+						      :timestamp (timestamp aevent))))
+			  (clsql:update-records-from-instance
+			   (make-instance 'alert-event-link 
+					  :event-id event-id
+					  :alert-id (id alert)))
+			  (send-email (email-to aevent)
+				      (description aevent)
+				      (format-alert-message computer aevent))))))))
+	(t (e)
+	  (record "~A: ~A ~A ~A ~A ~A~%" e id data alert computer alert-link))))))
   
 #.(clsql:restore-sql-reader-syntax-state)

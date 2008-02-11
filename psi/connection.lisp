@@ -78,6 +78,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (setf (gethash (poll-id connection) *connection-graveyard*) connection))
 
 (defmethod reap ((connection connection))
+  (record "REAP connection")
   (let ((sock (socket connection))
 	(fd (poll-id connection)))
     (remhash fd *connections*)

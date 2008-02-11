@@ -68,7 +68,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	    (write-message client (format nil "~S~%" command))
 	    (if (and id (zerop id))
 		(apply (car command) connection (cdr command))
-		(record "READ-MESSAGE (MESSAGE-BUS-CONNECTION): no applicable client for message ~A" message))))
+		(when (plusp *debug-level*)
+		  (record "READ-MESSAGE (MESSAGE-BUS-CONNECTION): no applicable client for message ~A" message)))))
     (unix-error:ebadf ()
       (record "READ-MESSAGE: EBADF on WRITE-MESSAGE to client: ~A" message))))
 

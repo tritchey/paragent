@@ -78,7 +78,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 		  (equal err +ssl-error-want-write+))))
        (disconnect-event connection)))))
 
-(defmethod disconnect-event :after ((connection ssl-connection))
+(defmethod reap :after ((connection ssl-connection))
   (free-ssl-buffers connection))
 
 (defmethod read-event ((connection ssl-connection))
@@ -106,8 +106,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 								  message new-chunk)
 						     :external-format :iso-8859-1))
 		     (if (< index (1- num-read))
-			 ;; there is stuff after the end of the previous message
-			 (record "WARNING: we have two messages in a receive~%")
+			 (progn
+			   ;; there is stuff after the end of the previous message
+			   (record "WARNING: we have two messages in a receive")
+			   (record "index: ~a" index)
+			   (record "current-length: ~a" current-length)
+			   (record "new-chunk: ~a" (octets-to-string new-chunk))
+			   (record "num-read: ~a" num-read)
+			   (record "buffer: ~a" buffer)
+			   (record "message: ~a" message))
 			 ;; we are done with this message
 			 (setf (incoming-message connection) nil))))
 	       (progn

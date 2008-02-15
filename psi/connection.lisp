@@ -92,7 +92,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	    (record "ebadf on connection close"))))))
 
 (defmethod read-message ((connection connection) message)
-  (record "PSI READ: ~A" message))
+  (record "PSI READ: ~S" message))
 
 (defmethod read-event ((connection connection))
   (multiple-value-bind (buffer length) (socket-receive (socket connection)
@@ -105,11 +105,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       ((plusp length)
        ;; append new buffer onto existing
        (let ((message (incoming-message connection)))
-	 (setf message (concatenate 'string message (octets-to-string buffer :external-format :iso-8859-1)))
+	 (setf message (concatenate 'string message (octets-to-string buffer :external-format :iso-8859-1 :end length)))
 	 (labels 
 	     ((process-message (message &optional (start 0))
 		(handler-case
-		    (multiple-value-bind (object end) (read-from-string message t nil :start start)
+		    (multiple-value-bind (object end) (read-from-string message t nil :preserve-whitespace t :start start)
 		       (read-message connection object)
 		       ;; is there any message left?
 		       (if (< end (length message))
@@ -140,7 +140,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (handler-case
     (progn
       (with-mutex ((message-lock connection))
-	(enqueue (string-to-octets message :external-format :iso-8859-1 :null-terminate t)
+	(enqueue (string-to-octets message :external-format :iso-8859-1)
 		 (outgoing-messages connection)))
       (modify-write-flag connection t))
     (unix-error:ebadf (e)

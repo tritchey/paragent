@@ -38,9 +38,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	     :accessor poll-id
 	     :initform nil)
      (incoming-message :accessor incoming-message
-		       :initform (make-array 0 
-					     :element-type '(unsigned-byte 8) 
-					     :adjustable t))
+		       :initform "")
      (outgoing-message :accessor outgoing-message
 		       :initform nil)
      (message-lock :accessor message-lock
@@ -94,7 +92,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	    (record "ebadf on connection close"))))))
 
 (defmethod read-message ((connection connection) message)
-  (record "PSI READ: ~A ~S" (length message) message))
+  (record "PSI READ: ~A" message))
 
 (defmethod read-event ((connection connection))
   (multiple-value-bind (buffer length) (socket-receive (socket connection)
@@ -105,46 +103,31 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       ((zerop length) 
        (disconnect-event connection))
       ((plusp length)
-       (labels ((process-message (buffer length)
-		  (let ((message (incoming-message connection))
-			(index (position 0 buffer)))
-		    (cond 
-		      (index
-		       ;; we have the end of a message in this buffer
-		       (if (zerop (length message))
-			     ;; this buffer contains the entire message
-			     (read-message connection 
-					   (octets-to-string (subseq buffer 0 index)
-							     :external-format :iso-8859-1))
-			   ;; we are holding earlier parts of the message
-			   (progn
-			     (let ((old-length (length message))
-				   (new-length (+ (length message) index)))
-			       (setf message (adjust-array message new-length))
-			       (replace message 
-					buffer 
-					:start1 old-length
-					:end2 index)
-			       (read-message connection 
-					     (octets-to-string message
-							       :external-format :iso-8859-1))
-			       (setf (incoming-message connection)
-				     (adjust-array message 0)))))
-		       (when (< index (- length 1))
-			 ;; there is another message in this buffer
-			 (process-message (subseq buffer (+ index 1)) 
-					  (- length (+ index 1)))))
-		      ((plusp length)
-		       (let ((old-length (length message))
-			     (new-length (+ (length message) length)))
-			 ;; we haven't seen the end of the message yet,
-			 ;; so just store this buffer away
-			 (setf message (adjust-array message new-length))
-			 (replace message 
-				  buffer 
-				  :start1 old-length)
-			 (setf (incoming-message connection) message)))))))
-	 (process-message buffer length)))
+       ;; append new buffer onto existing
+       (let ((message (incoming-message connection)))
+	 (setf message (concatenate 'string message (octets-to-string buffer :external-format :iso-8859-1)))
+	 (labels 
+	     ((process-message (message &optional (start 0))
+		(handler-case
+		    (multiple-value-bind (object end) (read-from-string message t nil :start start)
+		       (read-message connection object)
+		       ;; is there any message left?
+		       (if (< end (length message))
+			    ;; there is more left - keep processing
+			    (process-message message end)
+			    ;; otherwise, we have grabbed the only object, 
+			    ;; so just clear out and prep for next
+			    (setf (incoming-message connection) nil)))
+		  (end-of-file ()
+		    ;; we don't have any complete objects in this string
+		    (setf (incoming-message connection) (subseq message start)))
+		  (t (e)
+		    ;; this means something else happened, and we are f'd
+		    ;; just drop the current message, and hope we re-sync
+		    ;; at some point in the future
+		    (record "PSI: read-event ERROR ~a" e)
+		    (setf (incoming-message connection) nil)))))
+	 (process-message message))))
       ((minusp length)
        (record "READ-EVENT (PSI): neg return on socket-receive")
        (unless (equal (get-errno) sb-posix::eagain)

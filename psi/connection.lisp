@@ -104,7 +104,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
        (disconnect-event connection))
       ((plusp length)
        ;; append new buffer onto existing
-       (let ((message (incoming-message connection)))
+       (let ((message (incoming-message connection))
+	     (*read-eval* nil))
 	 (setf message (concatenate 'string message (octets-to-string buffer :external-format :iso-8859-1 :end length)))
 	 (labels 
 	     ((process-message (message &optional (start 0))

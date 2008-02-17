@@ -55,8 +55,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (handler-case
       (when (archon-connection connection)
 	(write-message (archon-connection connection)
-		       (create-message (guid connection)
-				       (remove #\Newline message :from-end t))))
+		       (create-message (guid connection) message)))
     (end-of-file ()
       (format t "ARBITER: end-of-file on message ~A~%" message))
     (undefined-function ()

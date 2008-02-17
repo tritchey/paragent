@@ -46,10 +46,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defmethod read-message ((connection arbiter-connection) message)
   (handler-case
-      (let* ((*read-eval* nil)
-	     (msg (read-from-string message :external-format :utf-8))
-	     (guid (car msg))
-	     (body (cadr msg))
+      (let* ((guid (car message))
+	     (body (cadr message))
 	     (result (if (atom body) (list body) body)))
 	(cond
 	  ((zerop guid)

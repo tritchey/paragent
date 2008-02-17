@@ -40,15 +40,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defun parse-message (message)
   (handler-case 
-      (let* ((*read-eval* nil)
-	     (message (read-from-string message))
-	     (id (car message)))
+      (let (id (car message))
 	(handler-case
 	    (let ((client (gethash id *connections-by-guid*))
 		  (command (cadr message)))
 	      (values id client command))
-	  (t ()
-	    (record "PARSE-MESSAGE: ERROR")
+	  (t (e)
+	    (record "PARSE-MESSAGE: ERROR ~A" e)
 	    (values id nil nil))))
     (type-error ()
       (record "PARSE-MESSAGE: TYPE-ERROR in message: ~A" message)
@@ -61,7 +59,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   ;; do a read-message from string here, pull the guid
   ;; do a search for the relavent client, and send it along
   (when (plusp *debug-level*)
-    (record "READ-MESSAGE (MESSAGE-BUS-CONNECTION): ~A" message))
+    (record "READ-MESSAGE (MESSAGE-BUS-CONNECTION): ~S" message))
   (handler-case 
       (multiple-value-bind (id client command) (parse-message message)
 	(if client

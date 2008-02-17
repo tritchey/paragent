@@ -94,41 +94,38 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	      (new-chunk (make-array num-read :element-type '(unsigned-byte 8))))
 	 (sb-kernel:copy-ub8-from-system-area (sb-alien:alien-sap buffer) 
 					      0 new-chunk 0 num-read)
-	 (let ((index (position 10 new-chunk)))
-	   (if index
-	       (if (zerop current-length)
-		   (read-message connection (octets-to-string new-chunk
-						      :external-format :iso-8859-1))
-		   (progn
-		     ;; copy to end of message and pass to read-message
-		     (read-message connection 
-				   (octets-to-string (concatenate '(vector (unsigned-byte 8)) 
-								  message new-chunk)
-						     :external-format :iso-8859-1))
-		     (if (< index (1- num-read))
-			 (progn
-			   ;; there is stuff after the end of the previous message
-			   (record "WARNING: we have two messages in a receive")
-			   (record "index: ~a" index)
-			   (record "current-length: ~a" current-length)
-			   (record "new-chunk: ~a" (octets-to-string new-chunk))
-			   (record "num-read: ~a" num-read)
-			   (record "buffer: ~a" buffer)
-			   (record "message: ~a" message))
-			 ;; we are done with this message
-			 (setf (incoming-message connection) nil))))
-	       (progn
-		 ;; copy to end of message
-		 (setf (incoming-message connection) (concatenate 'vector message new-chunk)) 
-		 ;; call read event again since there is more of the message to read
-		 (read-event connection))))))
-       ((minusp num-read)
-	(let ((err (ssl-get-error (ssl connection) num-read)))
-	  (when (not (or (equal err +ssl-error-want-read+)
-			 (equal err +ssl-error-want-write+)))
-	    (disconnect-event connection))))
-       ((zerop num-read)
-	(disconnect-event connection)))))
+	 (setf message (concatenate 'string message (octets-to-string new-chunk :external-format :iso-8859-1)))
+	 (labels 
+	     ((process-message (message &optional (start 0))
+		(handler-case
+		    (multiple-value-bind (object end) (read-from-string message t nil :preserve-whitespace t :start start)
+		      (read-message connection object)
+		      ;; is there any message left?
+		      (if (< end (length message))
+			  ;; there is more left - keep processing
+			  (process-message message end)
+			  ;; otherwise, we have grabbed the only object, 
+			  ;; so just clear out and prep for next
+			  (setf (incoming-message connection) nil)))
+		  (end-of-file ()
+		    ;; we don't have any complete objects in this string
+		    (setf (incoming-message connection) (subseq message start))
+		    ;; call into read-event again to see if there is more data
+		    (read-event connection))
+		  (t (e)
+		    ;; this means something else happened, and we are f'd
+		    ;; just drop the current message, and hope we re-sync
+		    ;; at some point in the future
+		    (record "PSI: read-event ERROR ~a" e)
+		    (setf (incoming-message connection) nil)))))
+	   (process-message message))))
+      ((minusp num-read)
+       (let ((err (ssl-get-error (ssl connection) num-read)))
+	 (when (not (or (equal err +ssl-error-want-read+)
+			(equal err +ssl-error-want-write+)))
+	   (disconnect-event connection))))
+      ((zerop num-read)
+       (disconnect-event connection)))))
 
 (defmethod write-event ((connection ssl-connection))
   ;; first, check to see if we have a message to send

@@ -54,8 +54,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     (record "READ-MESSAGE (TEMPLAR-CONNECTION): ~A" message))
   (handler-case
       (when (archon-connection connection)
-	(write-message (archon-connection connection)
-		       (create-message (guid connection) message)))
+	(let ((message (create-message (guid connection) message)))
+	  (write-message (archon-connection connection) message)))
     (end-of-file ()
       (format t "ARBITER: end-of-file on message ~A~%" message))
     (undefined-function ()

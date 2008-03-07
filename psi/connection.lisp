@@ -76,7 +76,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (setf (gethash (poll-id connection) *connection-graveyard*) connection))
 
 (defmethod reap ((connection connection))
-  (record "REAP connection")
   (let ((sock (socket connection))
 	(fd (poll-id connection)))
     (remhash fd *connections*)
@@ -110,7 +109,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	 (labels 
 	     ((process-message (message &optional (start 0))
 		(handler-case
-		    (multiple-value-bind (object end) (read-from-string message t nil :preserve-whitespace t :start start)
+		    (multiple-value-bind (object end) (read-from-string message t nil :start start)
 		       (read-message connection object)
 		       ;; is there any message left?
 		       (if (< end (length message))
@@ -126,7 +125,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 		    ;; this means something else happened, and we are f'd
 		    ;; just drop the current message, and hope we re-sync
 		    ;; at some point in the future
-		    (record "PSI: read-event ERROR ~a" e)
+		    (record "PSI: read-event ERROR ~a~% -> ~a" e message)
 		    (setf (incoming-message connection) nil)))))
 	 (process-message message))))
       ((minusp length)
@@ -141,7 +140,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (handler-case
     (progn
       (with-mutex ((message-lock connection))
-	(enqueue (string-to-octets message :external-format :iso-8859-1)
+	(enqueue (string-to-octets message :external-format :iso-8859-1 :null-terminate t)
 		 (outgoing-messages connection)))
       (modify-write-flag connection t))
     (unix-error:ebadf (e)

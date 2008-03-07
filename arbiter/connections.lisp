@@ -40,7 +40,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defun parse-message (message)
   (handler-case 
-      (let (id (car message))
+      (let ((id (car message)))
 	(handler-case
 	    (let ((client (gethash id *connections-by-guid*))
 		  (command (cadr message)))
@@ -61,13 +61,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (when (plusp *debug-level*)
     (record "READ-MESSAGE (MESSAGE-BUS-CONNECTION): ~S" message))
   (handler-case 
-      (multiple-value-bind (id client command) (parse-message message)
-	(if client
-	    (write-message client (format nil "~S~%" command))
-	    (if (and id (zerop id))
-		(apply (car command) connection (cdr command))
-		(when (plusp *debug-level*)
-		  (record "READ-MESSAGE (MESSAGE-BUS-CONNECTION): no applicable client for message ~A" message)))))
+      (when (listp message)
+	(multiple-value-bind (id client command) (parse-message message)
+	  (if client
+	      (write-message client (format nil "~S~%" command))
+	      (if (and id (zerop id))
+		  (apply (car command) connection (cdr command))
+		  (when (plusp *debug-level*)
+		    (record "READ-MESSAGE (MESSAGE-BUS-CONNECTION): no applicable client for message ~A" message))))))
     (unix-error:ebadf ()
       (record "READ-MESSAGE: EBADF on WRITE-MESSAGE to client: ~A" message))))
 

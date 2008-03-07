@@ -46,26 +46,27 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defmethod read-message ((connection arbiter-connection) message)
   (handler-case
-      (let* ((guid (car message))
-	     (body (cadr message))
-	     (result (if (atom body) (list body) body)))
-	(cond
-	  ((zerop guid)
-	   ;; a message from arbiter
-	   (when (member (car result) *arbiter-command-whitelist*)
-	     (apply (car result) connection (cdr result))))
+      (when (listp message)
+	(let* ((guid (car message))
+	       (body (cadr message))
+	       (result (if (atom body) (list body) body)))
+	  (cond
+	    ((zerop guid)
+	     ;; a message from arbiter
+	     (when (member (car result) *arbiter-command-whitelist*)
+	       (apply (car result) connection (cdr result))))
 	    ;; message is for one of the client instances
-	  ((= guid 1)
-	   ;; a message from nexus
-	   (when (member (car result) *nexus-command-whitelist*)
-	     (apply (car result) (cdr result))))
-	  ((plusp guid)
-	   (let ((client (gethash guid *clients-by-guid*)))
-	     (if client
-		 ;; we know about this client
-		 (recv client body)
-		 ;; we have no idea who this guy is
-		 (make-instance 'client :guid guid :arbiter-connection connection))))))
+	    ((= guid 1)
+	     ;; a message from nexus
+	     (when (member (car result) *nexus-command-whitelist*)
+	       (apply (car result) (cdr result))))
+	    ((plusp guid)
+	     (let ((client (gethash guid *clients-by-guid*)))
+	       (if client
+		   ;; we know about this client
+		   (recv client body)
+		   ;; we have no idea who this guy is
+		   (make-instance 'client :guid guid :arbiter-connection connection)))))))
     (end-of-file ()
       (record "end-of-file on message: ~A" message))
     (t (e)
@@ -83,7 +84,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	
 (defmethod send-message ((client arbiter-connection) command &optional fn)
   (declare (ignore fn))
-  (let ((*print-pretty* nil))
+  (let ((*print-pretty* nil)
+	(*package* (find-package 'archon)))
     (labels ((format-message (command)
 	       (if (stringp command)
 		   (format nil "(0 (~A))~%" command)

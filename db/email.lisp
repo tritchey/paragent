@@ -18,42 +18,44 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 
 (defmethod send-email ((to string) subject message)
-  (handler-case 
-      (let ((to-list (split-sequence:split-sequence #\, to :remove-empty-subseqs t)))
-	(when to-list
-	  (cl-smtp:send-email *email-server*
-			      *email-from-address*
-			      to-list
-			      subject
-			      message
-			      :port *email-smtp-port*
-			      :authentication (if *email-smtp-authentication*
-						  (list :login *email-account-name* *email-account-password*)
-						  nil)
-			      :buffer-size 1)
-	  t))
-    (t (e)
-      (record "SEND-EMAIL: error on sending email~%TO: ~a~%SUBJECT: ~a~%MESSAGE:~%~a~%ERROR: ~a" to subject message e)
-      nil)))
+  (when *email-server*
+    (handler-case 
+	(let ((to-list (split-sequence:split-sequence #\, to :remove-empty-subseqs t)))
+	  (when to-list
+	    (cl-smtp:send-email *email-server*
+				*email-from-address*
+				to-list
+				subject
+				message
+				:port *email-smtp-port*
+				:authentication (if *email-smtp-authentication*
+						    (list :login *email-account-name* *email-account-password*)
+						    nil)
+				:buffer-size 1)
+	    t))
+      (t (e)
+	(record "SEND-EMAIL: error on sending email~%TO: ~a~%SUBJECT: ~a~%MESSAGE:~%~a~%ERROR: ~a" to subject message e)
+	nil))))
 
 (defmethod send-email ((to list) subject message)
-  (handler-case 
-      (let ((to-list to))
-	(when to-list
-	  (cl-smtp:send-email *email-server*
-			      *email-from-address*
-			      to-list
-			      subject
-			      message
-			      :port *email-smtp-port*
-			      :authentication (if *email-smtp-authentication*
-						  (list :login *email-account-name* *email-account-password*)
-						  nil)
-			      :buffer-size 1)
-	  t))
-    (t (e)
-      (record "SEND-EMAIL: error on sending email~%TO: ~a~%SUBJECT: ~a~%MESSAGE:~%~a~%ERROR: ~a" to subject message e)
-      nil)))
+  (when *email-server*
+    (handler-case 
+	(let ((to-list to))
+	  (when to-list
+	    (cl-smtp:send-email *email-server*
+				*email-from-address*
+				to-list
+				subject
+				message
+				:port *email-smtp-port*
+				:authentication (if *email-smtp-authentication*
+						    (list :login *email-account-name* *email-account-password*)
+						    nil)
+				:buffer-size 1)
+	    t))
+      (t (e)
+	(record "SEND-EMAIL: error on sending email~%TO: ~a~%SUBJECT: ~a~%MESSAGE:~%~a~%ERROR: ~a" to subject message e)
+	nil))))
 
 (defmethod send-ticketing-email ((user user) to subject body)
   "If the company has an email account set up, send email from there. Otherwise, use the default email."

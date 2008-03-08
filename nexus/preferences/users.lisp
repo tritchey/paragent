@@ -197,7 +197,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defaction save-new-user ((page new-user-page) user password password-confirm)
   (when (%save-new-user page user password password-confirm)
-    (call 'dialog-confirm :user (user page) :message "User created" :redirect-to *url-prefs*)))
+    (call-component nil (make-instance 'dialog-confirm :user (user page) :message "User created" :redirect-to *url-prefs*))))
 
 (defun %save-new-user (page user password password-confirm)
   (with-db
@@ -236,7 +236,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     (clsql:update-records-from-instance record)))
 
 (defaction new-user ((page paragent-window-component))
-  (call 'new-user-page :user (user page)))
+  (call-component nil (make-instance 'new-user-page :user (user page))))
 
 (defaction delete-user ((page paragent-component) user)
   (%delete-user page user)

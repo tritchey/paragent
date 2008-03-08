@@ -64,6 +64,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    :event-handler
    :connectedp
    :disconnect-event
+   :reap
    :read-message
    :read-event
    :modify-write-flag

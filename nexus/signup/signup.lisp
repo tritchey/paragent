@@ -350,8 +350,8 @@ function updatePrices() {
                 (<:li (<:p "Monthly plans may be cancelled at any time; cancellation either must be made 1) online, 2) in writing, by email with company response, or 3) by US mail sent to:")
                       (<:p :class "contact"
                            "Paragent, LLC" (<:br)
-                           "2701 Enterprise Drive. Suite 109" (<:br)
-                           "Anderson, IN 46013"(<:br)))
+                           "P.O. Box 1707" (<:br)
+                           "Muncie, IN 47308-1707"(<:br)))
                 (<:li (<:p "No Returns/Refunds"))))))
     (<:div :id "foot"
 	   (<:p :class "legalese"
@@ -650,7 +650,7 @@ function updatePrices() {
 (defun sanitize-company-name (company-name)
   (remove-if (lambda (char) 
                (case char
-                     ((#\" #\' #\\ #\& #\+ #\# #\* #\@ #\! #\` #\~ #\Newline #\.
+                     ((#\" #\' #\\ #\& #\+ #\# #\* #\@ #\! #\` #\~ #\Newline #\. #\/
                            #\? #\> #\< #\, #\: #\|)
                       t)
                      (otherwise nil)))

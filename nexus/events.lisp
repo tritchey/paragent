@@ -227,7 +227,7 @@ tab when navigating through it"
 		(setf (current-tab (tabbed-view page)) ,number))
      (defaction navigate-to :after ((page ,name) index)
 		(setf (current-tab (tabbed-view page)) ,number))
-     (defaction navigate-to-page :after ((comp ,name) page-number)
+     (defaction navigate-to-page :after ((page ,name) page-number)
 		(setf (current-tab (tabbed-view page)) ,number))
      (defaction do-filter :after ((page ,name) filter)
 		(setf (current-tab (tabbed-view page)) ,number))

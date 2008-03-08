@@ -13,7 +13,7 @@ import javax.net.ssl.*;
 
 public class ParagentSocket extends Socket
 {
-	public ParagentSocket(String sHost, int nPort, String computer, String company, String password) throws DisconnectException
+	public ParagentSocket(String sHost, int nPort, String computer, String company, String password, String session) throws DisconnectException
 	{
 		this.sHost = sHost;
 		this.nPort = nPort;
@@ -21,6 +21,7 @@ public class ParagentSocket extends Socket
 		this.computer = computer;
 		this.company = company;
 		this.password = password;
+		this.session = session;
 		
 		System.out.println("connecting...");
 		
@@ -51,6 +52,7 @@ public class ParagentSocket extends Socket
 	private String company;
 	private String certificate;
 	private String password;
+	private String session;
 
 	private int			nPort;
 	private String		sHost;
@@ -324,7 +326,7 @@ public class ParagentSocket extends Socket
 	
 	protected boolean doParagentHandshake() throws DisconnectException {
 		try {
-			writeLine("(\"OBSERVER\" \"" + computer + "\" \"" + company + "\")");
+			writeLine("(\"OBSERVER\" \"" + computer + "\" \"" + company + "\" \"" + session + "\")");
 			
 			String response = readLine();
 			System.out.println("<--" + response);

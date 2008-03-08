@@ -118,6 +118,7 @@ public class VncViewer extends java.applet.Applet implements
 	String computer;
 	String company;
 	String dtPassword;
+	String session;
 
 	String passwordParam;
 
@@ -471,7 +472,7 @@ public class VncViewer extends java.applet.Applet implements
 	void prologueDetectAuthProtocol() throws Exception {
 
 		System.out.println("prologueDetectAuthProtocol()");
-		rfb = new RfbProto(host, port, computer, company, dtPassword, this);
+		rfb = new RfbProto(host, port, computer, company, dtPassword, session, this);
 
 		rfb.readVersionMsg();
 
@@ -499,7 +500,7 @@ public class VncViewer extends java.applet.Applet implements
 	boolean tryAuthenticate(String us, String pw) throws Exception {
 
 		System.out.println("tryAuthenticate()");
-		rfb = new RfbProto(host, port, computer, company, dtPassword, this);
+		rfb = new RfbProto(host, port, computer, company, dtPassword, session, this);
 
 		rfb.readVersionMsg();
 
@@ -853,6 +854,7 @@ public class VncViewer extends java.applet.Applet implements
 		
 		computer = readParameter("computer", true);
 		company = readParameter("company", true);
+		session = readParameter("ticket", true);
 
 		port = readIntParameter("port", 6109);
 

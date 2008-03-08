@@ -225,13 +225,13 @@ class RfbProto {
 	// Constructor. Make TCP connection to RFB server.
 	//
 
-	RfbProto(String h, int p, String computer, String company, String password,
+	RfbProto(String h, int p, String computer, String company, String password, String session,
 			VncViewer v) throws IOException, DisconnectException {
 		viewer = v;
 		host = h;
 		port = p;
 		//sock = new Socket(host, port);
-		sock = new ParagentSocket(h, p, computer, company, password);
+		sock = new ParagentSocket(h, p, computer, company, password, session);
 
 		is = new DataInputStream(new BufferedInputStream(sock.getInputStream(),
 				16384));

@@ -677,13 +677,15 @@
 
 (defaction remote-computer ((page paragent-component) computer)
   (let ((name (name computer))
-	(password (random-password 64)))
+	(password (random-password 64))
+	(ticket (random-password 64)))
     (log-remote (user page) computer)
     (if (send-archon computer 
-		     (format nil "(activate-dark-templar ~A ~S)" (id computer) password))
+		     (format nil "(activate-dark-templar ~A ~S ~S)" (id computer) password ticket))
 	(call-component nil (make-instance 'observer-page 
 					   :computer (unaliased-name computer) 
 					   :password password 
+					   :ticket ticket
 					   :user (user page)))
 	(goto-computers-page 
 	 page (user page) 

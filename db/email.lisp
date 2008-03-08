@@ -17,7 +17,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (in-package :db)
 
 
-(defmethod send-email ((to string) subject message)
+(defmethod send-email ((to string) subject message &key html-message)
   (when *email-server*
     (handler-case 
 	(let ((to-list (split-sequence:split-sequence #\, to :remove-empty-subseqs t)))
@@ -27,17 +27,19 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 				to-list
 				subject
 				message
+				:html-message html-message
 				:port *email-smtp-port*
 				:authentication (if *email-smtp-authentication*
 						    (list :login *email-account-name* *email-account-password*)
 						    nil)
-				:buffer-size 1)
+				:buffer-size 1
+				:ssl *email-smtp-ssl*)
 	    t))
       (t (e)
 	(record "SEND-EMAIL: error on sending email~%TO: ~a~%SUBJECT: ~a~%MESSAGE:~%~a~%ERROR: ~a" to subject message e)
 	nil))))
 
-(defmethod send-email ((to list) subject message)
+(defmethod send-email ((to list) subject message &key html-message)
   (when *email-server*
     (handler-case 
 	(let ((to-list to))
@@ -47,11 +49,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 				to-list
 				subject
 				message
+				:html-message html-message
 				:port *email-smtp-port*
 				:authentication (if *email-smtp-authentication*
 						    (list :login *email-account-name* *email-account-password*)
 						    nil)
-				:buffer-size 1)
+				:buffer-size 1
+				:ssl *email-smtp-ssl*)
 	    t))
       (t (e)
 	(record "SEND-EMAIL: error on sending email~%TO: ~a~%SUBJECT: ~a~%MESSAGE:~%~a~%ERROR: ~a" to subject message e)

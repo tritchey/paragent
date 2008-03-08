@@ -23,11 +23,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    (password :accessor password
              :initarg :password
              :type string)
+   (ticket :accessor ticket
+	   :initarg :ticket
+	   :type string)
    (server :accessor server
            :initarg :server
            :type string
            :initform *default-dark-archon-server*))
   (:documentation "Displays our vnc page, allowing you to remote into a computer."))
+
 
 (defmethod render ((page observer-page))
   (let ((user (user page)))
@@ -40,6 +44,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			 (<:param :name "computer" :value (computer page))
 			 (<:param :name "company" :value (name (company user)))
 			 (<:param :name "password" :value (password page))
+			 (<:param :name "ticket" :value (ticket page))
 			 (<:param :name "host" :value (server page)))))
     (<:script
      :type "text/javascript"

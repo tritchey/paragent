@@ -161,7 +161,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 
 (defaction goto-preferences-page ((page simple-window-component) user)
-  (call 'preferences-page :user user))
+  (call-component nil (make-instance 'preferences-page :user user)))
 
 (defcomponent preferences-page (paragent-window-component)
   ((tab-view :accessor tab-view

@@ -29,7 +29,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    (key :accessor key
 	:initform nil)
    (target :accessor target
-	   :initform nil)))
+	   :initform nil)
+   (type :accessor type
+	 :initform "")))
 
 (defgeneric identify (connection message))
 
@@ -53,6 +55,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       (setf (gethash key *dark-templars*) connection)
 	       (setf (table connection) *dark-templars*)
 	       (setf (key connection) key)
+	       (setf (type connection) "DARK-TEMPLAR")
 	       ;; link up this connection if the observer is already connected
 	       (let ((target (gethash key *observers*)))
 		 (when target
@@ -74,6 +77,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       (setf (gethash key *observers*) connection)
 	       (setf (table connection) *observers*)
 	       (setf (key connection) key)
+	       (setf (type connection) "OBSERVER")
 	       ;; link up this connection if dark-templar is already connected
 	       (let ((target (gethash key *dark-templars*)))
 		 (when target
@@ -129,8 +133,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       ((zerop num-read)
        (disconnect-event connection)))))
 
-(defmethod disconnect-event :after ((connection probe-connection))
-  (record "disconnecting client ~a" (key connection))
+(defmethod reap :after ((connection probe-connection))
+  (record "disconnecting ~a ~a" (type connection) (key connection))
   (let ((target (target connection)))
     (when (table connection)
       (remhash (key connection) (table connection)))

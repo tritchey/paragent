@@ -129,7 +129,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ;; Dialog
 
 (defaction goto-ticket-email-dialog ((page paragent-component))
-  (call 'ticket-email-dialog :user (user page)))
+  (call-component nil (make-instance 'ticket-email-dialog :user (user page))))
 
 (defcomponent ticket-email-dialog (paragent-dialog-component)
   ())
@@ -161,7 +161,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defun save-ticket-email% (ticket-email)
   (setf (port ticket-email) (or (parse-integer (port ticket-email) :junk-allowed t) 110))
   (with-db
-    (update-records-from-instance ticket-email)))
+    (insert-and-update ticket-email)))
 
 (defaction save-email-smtp ((page ticket-email-smtp) email-smtp)
   (setf (authp email-smtp) (value (authp page)))

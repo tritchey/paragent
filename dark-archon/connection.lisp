@@ -42,8 +42,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	(record "identifying connection: ~S~%" possible-ident)
 	(cond 
 	  ((equal (first possible-ident) "DARK-TEMPLAR")
-	   (let ((key (list (second possible-ident) 
-			    (third possible-ident))))
+	   (let ((key (string-trim " " (fifth possible-ident))))
 	     (record "dark-templar: ~A~%" key)
 	     
 	     ;; check to make sure we don't have a duplicate
@@ -59,14 +58,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       ;; link up this connection if the observer is already connected
 	       (let ((target (gethash key *observers*)))
 		 (when target
+		   (record "we have a match")
 		   (setf (target connection) target)
 		   (setf (target target) connection)
 		   (sleep 2)
 		   (write-message connection (format nil "(GOOD)~%"))
 		   (write-message target (format nil "(GOOD)~%")))))))
 	  ((equal (first possible-ident) "OBSERVER")
-	   (let ((key (list (second possible-ident) 
-			    (third possible-ident))))
+	   (let ((key (fourth possible-ident)))
 	     (record "Observer: ~A~%" key)
 	     ;; check that it isn't a dupe
 	     (let ((existing-connection (gethash key *observers*)))
@@ -81,6 +80,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       ;; link up this connection if dark-templar is already connected
 	       (let ((target (gethash key *dark-templars*)))
 		 (when target
+		   (record "we have a match")
 		   (setf (target target) connection)
 		   (setf (target connection) target)
 		   (write-message target (format nil "(GOOD)~%"))

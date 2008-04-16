@@ -26,6 +26,17 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defvar *company-id-mutex* 
   (make-mutex)
   "Used to handle ticket ids")
+(defvar +ascii-alphabet+
+  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+
+(defun random-password (&optional (length 8) (alphabet +ascii-alphabet+))
+  (let ((rs (make-random-state t)))
+    (loop with id = (make-string length)
+          with alphabet-length = (length alphabet)
+          for i below length
+          do (setf (cl:aref id i)
+                   (cl:aref alphabet (random alphabet-length rs)))
+          finally (return id))))
 
 (defun db-connect ()
   "Connects us to the database"

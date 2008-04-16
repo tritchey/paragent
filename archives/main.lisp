@@ -38,7 +38,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 		   (handler-case 
 		       (mel:map-messages
 			(lambda (m)
-			  (process-email m company))
+			  (handler-case
+			      (process-email m company)
+			    (t (e)
+			      (format t "error processing email ~a~%" e))))
 			server)
 		     (t (e)
 		       (format t "~a~%" e)))
@@ -55,9 +58,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 
 (defun process-email (message company)
-  (let ((subject (mel.mime::subject message))
-        (from (mel:address-spec (mel:from message)))
-        (body (body message)))
+  (let* ((subject (mel.mime::subject message))
+	 (mel-from (mel:from message))
+	 (from (if mel-from (mel:address-spec mel-from) "unknown"))
+	 (body (body message)))
     (let ((case-num (extract-case-number subject)))
       (if case-num
           (process-reply case-num message company)

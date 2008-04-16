@@ -474,19 +474,29 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			     (format nil "var ret = confirm('Shutdown the computer \"~a\"?');
                                       if (ret) flashMessage('Shutting down...');
                                       return ret;" (name comp))
-			     "shutdown")))
+			     "shutdown"))
+		      (<:li (<ucw:a
+			     :action (restart-agent page comp)
+			     :onclick
+			     (format nil "var ret = confirm('Restart the Paragent agent on \"~a\"?');
+                                      if (ret) flashMessage('Restarting...');
+                                      return ret;" (name comp))
+			     "restart agent")))
+		    
 		    (progn
 		      (<:li :class "disabled" (<:ah "restart"))
-		      (<:li :class "disabled"  (<:ah "shutdown"))))
+		      (<:li :class "disabled"  (<:ah "shutdown"))
+		      (<:li :class "disabled" (<:ah "restart agent"))))
 		(if (or (online comp) (not (has-note-permission user comp)))
 		    (<:li :class "disabled" (<:ah "delete"))
-		    (<:li (<ucw:a
-			   :action (remove-computer page comp)
-			   :onclick
-			   (format nil "var ret = confirm('Remove the computer \"~a\"?');
+		    (progn
+		      (<:li (<ucw:a
+			     :action (remove-computer page comp)
+			     :onclick
+			     (format nil "var ret = confirm('Remove the computer \"~a\"?');
                               if (ret) flashMessage('Removing computer...');
                               return ret;" (name comp))
-			   (<:ah "delete"))))))))))))
+			     (<:ah "delete")))))))))))))
 
 (defgeneric render-computer-events (page)
   (:documentation "Shows summary info on the computer"))

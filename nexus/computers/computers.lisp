@@ -675,6 +675,14 @@
        :computer computer
        :error-message (connection-error-message (name computer)))))
 
+(defaction restart-agent ((page paragent-component) computer)
+  (if (send-archon computer (format nil "(restart-templar ~A)" (id computer)))
+      (goto-computers-page page (user page) :computer computer)
+      (goto-computers-page 
+       page (user page) 
+       :computer computer
+       :error-message (connection-error-message (name computer)))))
+
 (defaction remote-computer ((page paragent-component) computer)
   (let ((name (name computer))
 	(password (random-password 64))

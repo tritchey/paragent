@@ -20,6 +20,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #.(clsql:locally-enable-sql-reader-syntax)
 
+(defconstant +unix-to-lisp-time-offset+ (encode-universal-time 0 0 0 1 1 1970 0))
+
 (defmethod remove-all-alerts ((client client))
   (send-message client '(remove-all-alerts)))
 
@@ -87,8 +89,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defmacro alert-event-creator (alert-type summary description props)
   `(defmethod create-alert-event ((alert ,alert-type) data computer)
      (let ((data (caar data))
-	   (timestamp (clsql:time+ (clsql:utime->time (cadr data))
-				   (clsql:make-duration :year 70 :hour 1))))
+	   (timestamp (clsql:utime->time (+ (cadr data) +unix-to-lisp-time-offset+))))
        ,(when (and (equal (length props) 1)
 		   (eql (car props) :name))
 	      `(declare (ignore data)))
@@ -111,8 +112,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                                                props))))))
 
 (defmethod create-alert-event ((alert alert-memory) data computer)
-  (let ((timestamp (clsql:time+ (clsql:utime->time (cadr data))
-				(clsql:make-duration :year 70 :hour 1))))
+  (let ((timestamp (clsql:utime->time (+ (cadr data) +unix-to-lisp-time-offset+))))
     (make-instance 'alert-event
 		   :severity (severity (db-obj alert))
 		   :email-to (email-to (db-obj alert))
@@ -123,8 +123,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 					(name computer)))))
 
 (defmethod create-alert-event ((alert alert-software) data computer)
-  (let ((timestamp (clsql:time+ (clsql:utime->time (cadr data))
-				(clsql:make-duration :year 70 :hour 1)))
+  (let ((timestamp (clsql:utime->time (+ +unix-to-lisp-time-offset+ (cadr data))))
 	(description 
 	 (format nil 
 		 "The following software was installed on ~a: ~{~A~#[~:;, ~]~}"
@@ -142,8 +141,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 		   :description description)))
 
 (defmethod create-alert-event ((alert alert-user-logon) data computer)
-  (let ((timestamp (clsql:time+ (clsql:utime->time (cadr data))
-                                (clsql:make-duration :year 70 :hour 1)))
+  (let ((timestamp (clsql:utime->time (+ +unix-to-lisp-time-offset+ (cadr data))))
         (description
           (format nil
                   "The user '~{~A~#[~:;, ~]~}' logged on to ~a."
@@ -158,8 +156,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                    :description description)))
 
 (defmethod create-alert-event ((alert alert-user-logoff) data computer)
-  (let ((timestamp (clsql:time+ (clsql:utime->time (cadr data))
-                                (clsql:make-duration :year 70 :hour 1)))
+  (let ((timestamp (clsql:utime->time (+ +unix-to-lisp-time-offset+ (cadr data))))
         (description
           (format nil
                   "The user '~{~A~#[~:;, ~]~}' logged off of ~a."

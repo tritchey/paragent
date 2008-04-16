@@ -24,6 +24,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (:nicknames :db)
   (:use :cl :sb-thread :clsql :psi)
   (:export 
+   :+ascii-alphabet+ :random-password
     :with-db :db-connect :equiv :strict-equiv :table-for-object :severity-name
     :with-restarting-transaction :sql-equal
     :fill-with-test-data :type-alerts :hash-password
@@ -84,7 +85,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    :+ticket-priority-note+ :+ticket-priority-low+ :+ticket-priority-medium+
    :+ticket-priority-high+ :+ticket-priority-critical+
    :ticket :tickets :open-tickets :open-tickets-count
-   :email-smtp :authp
+   :email-smtp :authp :sslp :reply-to
    :state :priority :subject :response-email :rating :assigned-user :assigned-user-id
    :body :time-spent :priority-name :ticket-id :company-ticket-id :next-ticket-id
     :ticket-comment :ticket-computer :ticket-response :ticket-tag :recent-ticket :recent-tickets
@@ -111,5 +112,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     :=account-paid
     :timezone-preference
     :adjusted-timestamp
+    :generate-code
+    :discount-code :amount :duration :code :discount-type
 ))
 

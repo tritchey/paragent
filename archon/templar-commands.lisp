@@ -39,16 +39,31 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	    nil))
       nil))
 
+(defun restart-templar (&rest args)
+  (if (= (length args) 1)
+      (let* ((id (first args))
+	     (client (gethash id *clients-by-computer-id*)))
+	(if client
+	    (progn
+	      (record "restarting agent ~a" (name client))
+	      (send-message client '(update (() ("restart.tmp" "http://archon.paragent.com/updates/restart.tmp"))))
+	      t)
+	    nil))
+      nil))
+	   
+
 (defun activate-dark-templar (&rest args)
-  (if (= (length args) 2)
+  (if (= (length args) 3)
       (let* ((id (first args))
 	     (key (second args))
+	     (ticket (third args))
 	     (client (gethash id *clients-by-computer-id*))
 	     (avail (availablep client)))
-	(if (and client key avail)
+	(if (and client key ticket avail)
 	    (progn
+	      (record "activate dark templar: ~A ~A" key ticket)
 	      (send-message client 
-			    `(activate-dark-templar ,key *default-dark-archon-server*))
+			    `(activate-dark-templar ,key ,ticket ,*default-dark-archon-server*))
 	      t)
 	    (progn
 	      (record "no client (~A), key (~A) availablep (~A)" client key avail)

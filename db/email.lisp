@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (in-package :db)
 
+(defgeneric send-email (to subject message &key html-message))
 
 (defmethod send-email ((to string) subject message &key html-message)
   (when *email-server*
@@ -61,12 +62,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	(record "SEND-EMAIL: error on sending email~%TO: ~a~%SUBJECT: ~a~%MESSAGE:~%~a~%ERROR: ~a" to subject message e)
 	nil))))
 
+(defgeneric send-ticketing-email (from to subject body))
+
 (defmethod send-ticketing-email ((user user) to subject body)
   "If the company has an email account set up, send email from there. Otherwise, use the default email."
   (declare (list to))
   (declare (string subject body))
   (with-db
-   (let ((email-account (car (ticket-emails (company-id user)))))
+   (let ((email-account (email-smtp (company-id user))))
      (if email-account
          (handler-case
           (progn
@@ -75,15 +78,20 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                                 to
                                 subject
                                 body
-                                :authentication (list :login (username email-account) (password email-account))
+				:port (port email-account)
+				:ssl (sslp email-account)
+                                :authentication (if (authp email-account)
+						    (list :login (username email-account) (password email-account))
+						    nil)
                                 :buffer-size 1)
             t)
-          (t ()
+          (t (e)
             (update-records-from-instance
              (make-instance 'logged-error :company-id (company-id user)
-					  :body (format nil "There was an error while attempting to send an email from the ticketing system using the configured email account (user '~a' on the server '~a'). Please check your ticket email account on the setup page. If you are still having difficulty, please contact support@paragent.com.~% TO: ~a~% SUBJECT: ~a~% BODY:~%~a~%" (username email-account)
+					  :body (format nil "There was an error while attempting to send an email from the ticketing system using the configured email account (user '~a' on the server '~a'). Please check your ticket email account on the setup page. If you are still having difficulty, please contact support@paragent.com.~% TO: ~a~% SUBJECT: ~a~% BODY:~%~a~%~a~%" 
+							(username email-account)
 							(host email-account)
-							to subject body)))
+							to subject body e)))
             nil))
 	 (send-email to subject body)))))
 
@@ -93,7 +101,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (declare (list to))
   (declare (string subject body))
   (with-db
-   (let ((email-account (car (ticket-emails (id company)))))
+   (let ((email-account (email-smtp (id company))))
      (if email-account
          (handler-case
           (progn
@@ -102,13 +110,20 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                                 to
                                 subject
                                 body
-                                :authentication (list :login (username email-account) (password email-account))
+				:port (port email-account)
+				:ssl (sslp email-account)
+                                :authentication (if (authp email-account)
+						    (list :login (username email-account) (password email-account))
+						    nil)
                                 :buffer-size 1)
             t)
-          (t ()
+          (t (e)
             (update-records-from-instance
              (make-instance 'logged-error :company-id (id company)
-                            :body (format nil "Unable to send email from '~a'" (host email-account))))
+			    :body (format nil "There was an error while attempting to send an email from the ticketing system using the configured email account (user '~a' on the server '~a'). Please check your ticket email account on the setup page. If you are still having difficulty, please contact support@paragent.com.~% TO: ~a~% SUBJECT: ~a~% BODY:~%~a~%~a~%" 
+					  (username email-account)
+					  (host email-account)
+					  to subject body e)))
             nil))
          (send-email to subject body)))))
 

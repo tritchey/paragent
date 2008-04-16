@@ -21,7 +21,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defcomponent ticket-email-smtp (paragent-component)
   ((email-smtp :accessor email-smtp
 	       :initarg :email-smtp
-	       :type db::email-smtp)
+	       :type email-smtp)
+   (sslp :accessor sslp
+	  :initarg sslp
+	  :initform (make-instance 'checkbox-field)
+	  :type checkbox-field)
    (authp :accessor authp
 	  :initarg authp
 	  :initform (make-instance 'checkbox-field)
@@ -30,8 +34,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defmethod initialize-instance :after ((page ticket-email-smtp) &key)
   (with-db
    (let* ((user (user page))
-          (email-smtp (db::email-smtp (company-id user))))
-     (setf (email-smtp page) email-smtp))))
+          (email-smtp (email-smtp (company-id user))))
+     (setf (email-smtp page) email-smtp)
+     (setf (value (authp page)) (authp email-smtp))
+     (setf (value (sslp page)) (sslp email-smtp)))))
 
 (defmethod render ((page ticket-email-smtp))
   (let ((email-smtp (email-smtp page)))
@@ -42,9 +48,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       (setf (password email-smtp) "")
       (tableify
        ((<:label "Reply-to: ")
-	(<ucw:text :accessor (db::reply-to email-smtp)))
+	(<ucw:text :accessor (reply-to email-smtp)))
        ((<:label "Host: ")
 	(<ucw:text :accessor (host email-smtp)))
+       ((<:label "Port: ")
+	(<ucw:text :accessor (port email-smtp)))
+       ((render (sslp page))
+	(<:label "SSL"))
        ((render (authp page))
 	(<:label "My Server Requires Authentication"))
        ((<:label "Username: ")
@@ -165,11 +175,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defaction save-email-smtp ((page ticket-email-smtp) email-smtp)
   (setf (authp email-smtp) (value (authp page)))
+  (setf (sslp email-smtp) (value (sslp page)))
   (save-email-smtp%  email-smtp))
 
 (defun save-email-smtp% (email-smtp)
+  (setf (port email-smtp) (or (parse-integer (port email-smtp) :junk-allowed t) 25))
   (with-db
-      (update-records-from-instance email-smtp)))
+      (insert-and-update email-smtp)))
 
 
 #.(clsql:restore-sql-reader-syntax-state)

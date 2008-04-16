@@ -1452,8 +1452,12 @@ So we implement our own autoincrement here.")
          :type string)
    (port :accessor port
          :initarg :port
-         :initform 110
+         :initform 25
          :type integer)
+   (sslp :accessor sslp
+	 :initarg :sslp
+	 :initform nil
+	 :type boolean)
    (reply-to :accessor reply-to
 	 :initarg :reply-to
 	 :initform ""
@@ -1503,7 +1507,47 @@ So we implement our own autoincrement here.")
 (defmethod ticket-emails ((company-id integer))
   (select 'ticket-email :flatp t :where [= [company-id] company-id]))
 
+(defconstant +discount-code-percent+ 0)
+(defconstant +discount-code-fixed+ 1)
 
+(def-view-class discount-code (db-obj)
+  ((code :accessor code
+	 :initarg :code
+	 :type string)
+   (amount :accessor amount
+	   :initarg :amount
+	   :type integer)
+   (expiration :accessor expiration
+	       :initarg :expiration
+	       :type date)
+   (discount-type :accessor discount-type
+		  :initarg :discount-type
+		  :initform 0
+	          :type integer)
+   (duration :accessor duration
+	     :initarg :duration
+	     :initform 12
+	     :type integer))
+  (:base-table discount-codes))
+
+(defun find-random-code ()
+  (let* ((code (random-password))
+	 (match (with-db (select 'discount-code :flatp t
+						:where [= [code] code]))))
+    (if match
+	(find-random-code)
+	code)))
+
+(defun generate-code (amount expiration &key (discount-type 0) (duration 12))
+  (let* ((code (find-random-code))
+	 (entry (make-instance 'discount-code :code code 
+					      :amount amount
+					      :expiration expiration
+					      :discount-type discount-type
+					      :duration duration)))
+    (with-db (insert-and-update entry))
+    code))
+  
 
 (def-view-class subscription (company-property)
   ((subscription-id :accessor subscription-id

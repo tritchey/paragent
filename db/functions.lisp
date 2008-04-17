@@ -26,17 +26,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defvar *company-id-mutex* 
   (make-mutex)
   "Used to handle ticket ids")
+
 (defvar +ascii-alphabet+
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
 
-(defun random-password (&optional (length 8) (alphabet +ascii-alphabet+))
-  (let ((rs (make-random-state t)))
-    (loop with id = (make-string length)
-          with alphabet-length = (length alphabet)
-          for i below length
-          do (setf (cl:aref id i)
-                   (cl:aref alphabet (random alphabet-length rs)))
-          finally (return id))))
 
 (defun db-connect ()
   "Connects us to the database"
@@ -55,7 +48,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	(unless ,connected-p
 	  (clsql:disconnect :database clsql:*default-database*))))))
 
-
+(let ((rs (make-random-state t)))
+  (defun random-password (&optional (length 8) (alphabet +ascii-alphabet+))
+    (loop with id = (make-string length)
+          with alphabet-length = (length alphabet)
+          for i below length
+          do (setf (cl:aref id i)
+                   (cl:aref alphabet (random alphabet-length rs)))
+          finally (return id))))
 
 (defmacro with-restarting-transaction (&body body)
   "Automatically retries the transaction until it succeeds.
@@ -176,6 +176,26 @@ Generally, you want insert-and-update, not this."
           do (setf (cl:aref id i)
                    (cl:aref alphabet (random alphabet-length rs)))
           finally (return id))))
+
+;; functions for generating random discount codes
+
+(defun find-random-code ()
+  (let* ((code (random-password))
+	 (match (with-db (select 'discount-code :flatp t
+						:where [= [code] code]))))
+    (if match
+	(find-random-code)
+	code)))
+
+(defun generate-code (amount expiration &key (discount-type 0) (duration 12))
+  (let* ((code (find-random-code))
+	 (entry (make-instance 'discount-code :code code 
+					      :amount amount
+					      :expiration expiration
+					      :discount-type discount-type
+					      :duration duration)))
+    (with-db (insert-and-update entry))
+    code))
 
 (defgeneric delete-company (company)
   (:documentation "Deletes the company from the database, along with the company's properties."))

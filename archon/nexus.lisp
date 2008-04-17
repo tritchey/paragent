@@ -19,6 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (in-package :archon)
 
 (defvar *nexus-command-whitelist* '(update-alerts 
+				    restart-templar
 				    activate-dark-templar 
 				    shutdown 
 				    restart 

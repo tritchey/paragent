@@ -28,7 +28,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       (:file "properties" :depends-on ("client"))
 	       (:file "events" :depends-on ("properties"))
 	       (:file "templar-commands" :depends-on ("client"))
-	       (:file "alerts" :depends-on ("client"))
+	       (:file "alerts" :depends-on ("events"))
 	       (:file "monitor" :depends-on ("alerts"))
 	       (:file "nexus" :depends-on ("client"))
 	       (:file "arbiter" :depends-on ("client"))

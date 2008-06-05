@@ -18,6 +18,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #.(clsql:locally-enable-sql-reader-syntax)
 
+(defconstant +unix-to-lisp-time-offset+ (encode-universal-time 0 0 0 1 1 1970 0))
+
 (defgeneric record-event (computer &key summary description severity timestamp))
 
 (defgeneric record-online-event (computer))
@@ -67,8 +69,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	      (frees (wmi-query client "Win32_LogicalDisk WHERE DriveType=3" "FreeSpace")))
       client
     (let* ((threshold (car (args alert)))
-	   (timestamp (clsql:time+ (clsql:utime->time (cadr data))
-				   (clsql:make-duration :year 70))))
+	   (timestamp (clsql:utime->time (+ (cadr data) +unix-to-lisp-time-offset+))))
       (handler-case 
 	  (mapcar 
 	 #'(lambda (drive size free)

@@ -1,0 +1,2 @@
+(adjutant::create-installers)
+(quit)

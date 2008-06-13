@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/usr/local/bin/detachtty --dribble-file /var/log/adjutant-dribble --log-file \
+  /var/log/detachtty.log --pid-file /var/run/adjutant.pid \
+  /var/run/adjutant-socket \
+  /usr/local/bin/sbcl --load "/lisp/repos/adjutant/scripts/start.lisp"
+

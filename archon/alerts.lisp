@@ -20,6 +20,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #.(clsql:locally-enable-sql-reader-syntax)
 
+(defconstant +unix-to-lisp-time-offset+ (encode-universal-time 0 0 0 1 1 1970 0))
 
 (defmethod remove-all-alerts ((client client))
   (send-message client '(remove-all-alerts)))

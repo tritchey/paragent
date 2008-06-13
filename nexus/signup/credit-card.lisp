@@ -16,13 +16,22 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (in-package :nexus)
 #.(clsql:locally-enable-sql-reader-syntax)
 
-(defun do-credit-card-subscription (&key (interval 1) (months 12) (price 20)
+(defun do-credit-card-subscription (&key (interval 1) 
+				         (months 12) 
+				         (price 20)
                                          (card-number "4007000000027")
-                                         (exp-month "05") (exp-year "2009")
-                                         (first-name "John") (last-name "Smith")
-                                         (address "") (city "")
-                                         (state "") (zip ""))
-  (let* ((url "https://apitest.authorize.net/xml/v1/request.api")
+                                         (exp-month "05") 
+                                         (exp-year "2009")
+                                         (first-name "John") 
+                                         (last-name "Smith")
+				         (company "Foo Bar")
+				         (email "foo@bar.com")
+				         (phone-number "1234567890")
+                                         (address "") 
+				         (city "")
+                                         (state "") 
+				         (zip ""))
+  (let* ((url "https://api.authorize.net/xml/v1/request.api")
          (content-type "text/xml")
          (login *credit-card-login*)
          (password *credit-card-password*)
@@ -53,7 +62,12 @@ xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">
         <expirationDate>" exp-year "-" exp-month "</expirationDate> 
       </creditCard> 
     </payment> 
+    <customer>
+      <email>" email "</email>
+      <phoneNumber>" phone-number "</phoneNumber>
+    </customer>
     <billTo> 
+      <company>" company "</company> 
       <firstName>" first-name "</firstName> 
       <lastName>" last-name "</lastName>
       <address>" address "</address>
@@ -69,8 +83,9 @@ xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">
 					:content data)))
     (let ((response-string (sb-ext:octets-to-string response :external-format :latin-1)))
       (record "~a" response-string)
-      (when (search "<resultCode>Ok</resultCode>" response-string)
-	(string-between response-string "<subscriptionId>" "</subscriptionId>")))))
+      (if (search "<resultCode>Ok</resultCode>" response-string)
+	  (values t (string-between response-string "<subscriptionId>" "</subscriptionId>"))
+	  (values nil (string-between response-string "<resultCode>" "</resultCode>"))))))
 
 (defun string-between (string start-seq end-seq)
   (declare (string string start-seq end-seq))
@@ -164,6 +179,11 @@ xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">
 	       'string-field
 	       :validators (list (make-instance 'not-empty-validator)
 	                         (make-instance 'length-validator :max-length 20))))
+   (email 
+    :accessor email
+    :initform (make-instance 
+	       'string-field
+	       :validators (list (make-instance 'not-empty-validator))))
    (phone-number 
     :accessor phone-number
     :initform (make-instance 
@@ -203,6 +223,9 @@ xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">
            (<:p :class "zip" 
                 (<:label "Zip Code:")
                 (render (zip-code page)))
+           (<:p :class "email" 
+                (<:label "Email:")
+                (render (email page)))
            (<:p :class "phone" 
                 (<:label "Phone Number:")
                 (render (phone-number page)))))
@@ -230,11 +253,10 @@ xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">
                (<:p (<:label "City, State:")
                     (<:ah (value (city page)) ", " (value (state page))))
                (<:p (<:label "Zip Code:")
-                    (<:ah (value (zip-code page))))))))
-
-
-
-
-
+                    (<:ah (value (zip-code page))))
+	       (<:p (<:label "Email:")
+                    (<:ah (value (email page))))
+	       (<:p (<:label "Phone Number:")
+		    (<:ah (value (phone-number page))))))))
 
 #.(clsql:restore-sql-reader-syntax-state)

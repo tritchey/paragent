@@ -322,8 +322,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
    (client-for-name name) 
    '(update (() 
 	     ("Templar.exe" 
-	      "http://archon.paragent.com/updates/2.8.1788/Templar.exe") 
+	      "http://archon.paragent.com/updates/2.8.1853/Templar.exe") 
+	     ("DarkTemplar.exe" 
+	      "http://archon.paragent.com/updates/2.8.1853/DarkTemplar.exe") 
 	     ("version.dat" 
-	      "http://archon.paragent.com/updates/2.8.1788/version.dat")))))
+	      "http://archon.paragent.com/updates/2.8.1853/version.dat")))))
 
 #.(clsql:restore-sql-reader-syntax-state)

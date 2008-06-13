@@ -209,6 +209,61 @@ Call this page to login, and then use the returned user to go on to the page you
 		  :height "32px;"
 		  :src "/images/ajax-spinner.gif")))))
 
+(defcomponent first-time-login-redirector (simple-window-component)
+  ((username :initarg :username
+             :type string
+             :initform ""
+             :accessor username)
+   (password :initarg :password
+             :type string
+             :initform ""
+             :accessor password)
+   (remember-me :accessor remember-me
+                :initarg :remember-me
+                :initform nil
+                :type boolean))
+  (:documentation "Called by the login page to set cookies and redirect to the main page.")
+  (:default-initargs
+    :stylesheet "css/login.css"))
+
+(defmethod render ((page first-time-login-redirector))
+  (let* ((username (username page))
+         (password (password page))
+         (valid-user (check-login username password)))
+    (when valid-user
+      (make-user-session valid-user (remember-me page)))
+    (<:meta :http-equiv "refresh"
+            :content (format nil "0;url=~a" *url-main*))
+    (<:div :id "login"
+    (<:div :class "box-title" 
+	   (<:h2  "Logging you in..."))
+    (<:div :class "box"
+	   (<:img :style "margin: 0 109px 0 89px"
+		  :width "32px"
+		  :height "32px;"
+		  :src "/images/ajax-spinner.gif"))
+    ;; the following is the conversion code we need to know that someone has signed up
+    (<:as-is
+"<script language=\"JavaScript\" type=\"text/javascript\">
+<!--
+var google_conversion_id = 1058747815;
+var google_conversion_language = \"en_US\";
+var google_conversion_format = \"1\";
+var google_conversion_color = \"666666\";
+if (1) {
+ var google_conversion_value = 1;
+}
+var google_conversion_label = \"lead\";
+//-->
+</script>
+<script language=\"JavaScript\"
+src=\"http://www.googleadservices.com/pagead/conversion.js\">
+</script>
+<noscript>
+<img height=1 width=1 border=0 
+     src=\"http://www.googleadservices.com/pagead/conversion/1058747815/imp.gif?value=1&label=lead&script=0\">
+</noscript>"))))
+
 
 (defcomponent logout-redirector (simple-window-component)
   ()

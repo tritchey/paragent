@@ -29,14 +29,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
      ((>= num-computers 250) (* 0.9 adjustment))
      (t adjustment))))
  
-(defun price (account-type commitment num-computers)
-  (* (cdr (assoc account-type *prices*)) (adjust-node-price num-computers commitment)))
+(defun price (account-type commitment num-computers discount)
+  (* (cdr (assoc account-type *prices*)) (adjust-node-price num-computers commitment) (/ (- 100 discount) 100)))
 
-(defun bulk-discount (num-computers account-type commitment)
-  (float (* (- 1 (adjust-node-price num-computers commitment)) (price account-type commitment num-computers) num-computers)))
+(defun bulk-discount (num-computers account-type commitment discount)
+  (float (* (- 1 (adjust-node-price num-computers commitment)) (price account-type commitment num-computers discount) num-computers)))
 
-(defun price-for-computers (num-computers account-type commitment)
-  (float (* (price account-type commitment num-computers) num-computers)))
+(defun price-for-computers (num-computers account-type commitment discount)
+  (float (* (price account-type commitment num-computers discount) num-computers)))
 
 (defun account-type-name (account-type)
   (case account-type
@@ -60,6 +60,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                                            :dom-id "computer-count"
                                            :events '(("onchange" (update-prices))
                                                      ("onkeyup" (update-prices)))))
+   (discount-code :accessor discount-code
+		  :initform (make-instance 'string-field :value ""))
    (signup-fields :accessor signup-fields
                   :initarg :signup-fields)
    (commitment :accessor commitment
@@ -159,6 +161,9 @@ function updatePrices() {
 	 (<:tr (<:th :class "feature"
 		     (<:ah "Number of computers:"))
 	       (<:th :class "computer-count" :colspan 4 (render (num-computers page))))
+	 (<:tr (<:th :class "feature"
+		     (<:ah "Discount Code:"))
+	       (<:th :class "computer-count" :colspan 4 (render (discount-code page))))
 	 (<:tr (<:th )
 	       (<:th :class "best" "Premium")
 	       (<:th "Plus")
@@ -217,16 +222,21 @@ function updatePrices() {
   (when (and (validp (num-computers page)) (plusp (value (num-computers page))))
     (if (equal account-type 0)
         (call 'free-account-page)
-        (call 'credit-card-page :num-computers (value (num-computers page)) :account-type account-type
+        (call 'credit-card-page 
+	      :num-computers (value (num-computers page)) 
+	      :discount (if (string= (value (discount-code page)) "AxDbcj") 25 0)
+	      :account-type account-type
               :signup-fields (signup-fields page)
-              :commitment (commitment page))
-        )))
-
+              :commitment (commitment page)))))
 
 (defcomponent credit-card-page (simple-window-component)
   ((num-computers :accessor num-computers
                   :initarg :num-computers
                   :type integer)
+   (discount :accessor discount
+	     :initarg :discount
+	     :type integer
+	     :initform 0)
    (commitment :accessor commitment
                :initarg :commitment
                :type integer)
@@ -285,6 +295,7 @@ function updatePrices() {
 (defmethod render ((page credit-card-page))
   (with-db
     (let ((num-computers (num-computers page))
+	  (discount (discount page))
           (account-type (account-type page))
           (commitment (commitment page))
           (cc-fields (cc-fields page))
@@ -316,28 +327,28 @@ function updatePrices() {
           (<:table
             (<:tr (<:td "Commitment: ") (<:td (<:ah commitment) (<:ah (if (equal commitment 1) "month" " months"))))
             (<:tr (<:td "Computers: ") (<:td (<:strong (<:ah num-computers))))
-            (<:tr (<:td "Price per computer per month:") (<:td (<:strong (<:ah "$" (format nil "~$" (price account-type commitment num-computers))))))
+	    (if (plusp discount)
+		(<:tr (<:td "Discount: ") (<:td (<:strong (<:ah discount "%")))))
+            (<:tr (<:td "Price per computer per month:") (<:td (<:strong (<:ah "$" (format nil "~$" (price account-type commitment num-computers discount))))))
             (<:tr (<:td "") (<:td (<:hr)))
-            (<:tr (<:td "Total monthly charge") (<:td (<:strong (<:ah "$" (format nil "~$" (price-for-computers  num-computers account-type commitment))))))))
-
+            (<:tr (<:td "Total monthly charge") (<:td (<:strong (<:ah "$" (format nil "~$" (price-for-computers  num-computers account-type commitment discount)))))))
 
         (render signup-fields)
         
-        
-        (<:div
-          (<:fieldset
-            :class "credit-card"
-            (<:legend "Credit Card Information")
-            (<:div :class "error" (<:ah (message page)))
-            (let ()
-              (setf (enabled cc-fields) t)
-              (render cc-fields)
-              (<ucw:input :action (confirm-signup page cc-fields signup-fields)
-                          :class "button"
-                          :type "image"
-                          :src "images/nextbtn.gif")))))
-      (<:div
-        (<:fieldset
+	(<:div
+	 (<:fieldset
+	  :class "credit-card"
+	  (<:legend "Credit Card Information")
+	  (<:div :class "error" (<:ah (message page)))
+	  (let ()
+	    (setf (enabled cc-fields) t)
+	    (render cc-fields)
+	    (<ucw:input :action (confirm-signup page cc-fields signup-fields)
+			:class "button"
+			:type "image"
+			:src "images/nextbtn.gif")))))
+	(<:div
+	 (<:fieldset
           :id "legalese" :class "credit-card"
           (<:legend "Terms")
           (<:ul :class "bullet"
@@ -357,7 +368,7 @@ function updatePrices() {
 	   (<:p :class "legalese"
 		"Copyright 2004-2007 Paragent, LLC. All rights reserved. | "
 		(<:a :href "http://paragent.com/legal.html" "Legal") " | " 
-		(<:a :href "http://paragent.com/contact.html" "Contact Us")))))))
+		(<:a :href "http://paragent.com/contact.html" "Contact Us"))))))))
 
 
 
@@ -421,6 +432,7 @@ function updatePrices() {
 
 (defmethod render ((page credit-card-page2))
   (let ((num-computers (num-computers page))
+	(discount (discount page))
         (account-type (account-type page))
         (commitment (commitment page))
         (cc-fields (cc-fields page))
@@ -457,7 +469,7 @@ function updatePrices() {
         (<:p 
 	 (<:ah "You will be billed ")
 	 (<:strong
-	  (<:ah "$" (format nil "~$" (price-for-computers num-computers account-type commitment))))
+	  (<:ah "$" (format nil "~$" (price-for-computers num-computers account-type commitment discount))))
 	 (<:ah " on a monthly basis. Is this okay?"))
         (<ucw:form
 	 (<ucw:input :action (finalize-signup page) 
@@ -473,71 +485,139 @@ function updatePrices() {
 (defaction confirm-signup ((page credit-card-page) cc-fields signup-fields)
   (when (and (validate-signup-account signup-fields)
              (validate-credit-card cc-fields))
-    (call 'credit-card-page2 :cc-fields cc-fields :signup-fields signup-fields
-          :num-computers (num-computers page) :commitment (commitment page)
-          :account-type (account-type page))
-    ))
+    (call 'credit-card-page2 
+	  :cc-fields cc-fields 
+	  :signup-fields signup-fields
+          :num-computers (num-computers page) 
+	  :discount (discount page)
+	  :commitment (commitment page)
+          :account-type (account-type page))))
 
 (defaction finalize-signup ((page credit-card-page2))
-  (if (finalize-signup% page)
-      (redirect-after-signup (signup-fields page))
-      (answer t)))
+  (let ((subscription (finalize-signup% page)))
+    (if subscription
+	(let ((company-name (company-name-for-id% (db::company-id subscription)))
+	      (first-name (db::first-name subscription))
+	      (last-name (db::last-name subscription))
+	      (company-id (db::company-id subscription))
+	      (subscription-id (db::subscription-id subscription))
+	      (status (db::return-status subscription))
+	      (address (db::address subscription))
+	      (city (db::city subscription))
+	      (state (db::state subscription))
+	      (zip-code (db::zip-code subscription))
+	      (email (db::email subscription))
+	      (discount (db::discount subscription))
+	      (num-computers (db::num-computers subscription))
+	      (commitment (db::commitment subscription))
+	      (phone-number (db::phone-number subscription))
+	      (amount (db::amount subscription)))
+	  (call-component nil 
+			  (make-instance 'receipt 
+					 :company company-name
+					 :first-name first-name
+					 :last-name last-name
+					 :address address
+					 :city city
+					 :state state
+					 :zip-code zip-code
+					 :phone-number phone-number
+					 :email email
+					 :subscription-id subscription-id
+					 :num-computers num-computers
+					 :amount amount)))
+	(answer t))))
 
-(defaction redirect-after-signup ((page signup-fields))
-  (let* ((username (value (username page)))
-         (password (value (password1 page))))
-    (call-component nil (make-instance 'login-redirector :username username :password password))))
-
-(defaction redirect-after-signup ((page finished-signup-fields))
-  (call-component nil (make-instance 'front-page :user (user page))))
+(defmethod company-name-for-id% ((id t))
+  (let ((company (car (with-db (clsql:select 'company :flatp t :where [= [id] id])))))
+    (if company
+	(name company)
+	"Unknown")))
 
 (defmethod finalize-signup% ((page credit-card-page2))
   (let* ((num-computers (num-computers page))
+	 (discount (discount page))
          (account-type (account-type page))
          (commitment (commitment page))
-         
          (cc-fields (cc-fields page))
          (signup-fields (signup-fields page))
-         
          (cc-number (value (cc-number cc-fields)))
          (exp-month (value (exp-month cc-fields)))
          (exp-year (value (exp-year cc-fields)))
          (first-name (value (first-name cc-fields)))
          (last-name (value (last-name cc-fields)))
          (address (value (address cc-fields)))
+	 (company-name (value (company signup-fields)))
          (city (value (city cc-fields)))
          (state (value (state cc-fields)))
          (zip-code (value (zip-code cc-fields)))
+	 (email (value (email cc-fields)))
          (phone-number (value (phone-number cc-fields)))
-         
-         (price (price-for-computers num-computers account-type commitment)))
+         (price (price-for-computers num-computers account-type commitment discount)))
     (with-db
       (with-transaction
         ()
         (when (validate-signup-account signup-fields)
-          (let ((subscription-id (do-credit-card-subscription :months commitment
-                                                              :price price
-                                                              :card-number cc-number
-                                                              :exp-month exp-month :exp-year exp-year
-                                                              :first-name first-name :last-name last-name
-                                                              :address address :city city
-                                                              :state state :zip zip-code)))
-            (if subscription-id
-                (let ((company (make-company signup-fields)))
+          (multiple-value-bind (result subscription-id) 
+	      ;; note: subscription-id will hold the failure code
+	      ;; from authorize.net in the case of failure
+	      (do-credit-card-subscription :months commitment
+					   :price price
+					   :card-number cc-number
+					   :exp-month exp-month :exp-year exp-year
+					   :first-name first-name :last-name last-name
+					   :company company-name
+					   :email email
+					   :phone-number phone-number
+					   :address address :city city
+					   :state state :zip zip-code)
+            (if result
+                (let* ((company (make-company signup-fields))
+		       (subscription (make-instance 'subscription 
+						    :company-id (id company)
+						    :subscription-id subscription-id
+						    :return-status "SUCCESS"
+						    :first-name first-name
+						    :last-name last-name
+						    :address address
+						    :city city
+						    :state state
+						    :zip-code zip-code
+						    :email email
+						    :discount discount
+						    :num-computers num-computers 
+						    :level account-type
+						    :commitment commitment 
+						    :phone-number phone-number
+						    :amount price)))
                   (setf (level company) account-type)
                   (update-records-from-instance company)
-                  (update-records-from-instance
-                    (make-instance 'subscription :company-id (id company)
-                                   :subscription-id subscription-id
-                                   :name (format nil "~a ~a" first-name last-name)
-                                   :num-computers num-computers :level account-type
-                                   :commitment commitment :phone-number phone-number))
-                  t)
+                  (update-records-from-instance subscription)
+		  (email-receipt subscription)
+                  subscription)
                 (progn
                   (setf (message cc-fields) "This credit card information was rejected")
-                  nil))
-  ))))))
-
+		  (let* ((company (company (user page)))
+			 (subscription (make-instance 'subscription 
+						      :company-id (if company (id company) 0)
+						      :subscription-id 0
+						      :return-status (format t "FAILURE: ~a" subscription-id) 
+						      :first-name first-name
+						      :last-name last-name
+						      :address address
+						      :city city
+						      :state state
+						      :zip-code zip-code
+						      :email email
+						      :discount discount
+						      :num-computers num-computers 
+						      :level account-type
+						      :commitment commitment 
+						      :phone-number phone-number
+						      :amount price)))
+		    (update-records-from-instance subscription)
+		    (email-receipt subscription))
+                  nil))))))))
 
 (defmethod make-company ((page signup-fields))
   (let ((company-name (sanitize-company-name (value (company page))))
@@ -614,7 +694,7 @@ function updatePrices() {
   (when (do-signup% page signup-fields)
     (let ((username (value (username signup-fields)))
           (password (value (password1 signup-fields))))
-      (call 'login-redirector :username username :password password))))
+      (call-component nil (make-instance 'first-time-login-redirector :username username :password password)))))
 
 (defmethod do-signup% ((page free-account-page) signup-fields)
   (let ((username (value (username signup-fields)))
@@ -655,6 +735,221 @@ function updatePrices() {
                       t)
                      (otherwise nil)))
              company-name))
+
+(defmethod email-receipt ((subscription subscription))
+  (let ((company (car (with-db (clsql:select 'company :flatp t :where [= [id] (company-id subscription)]))))
+	(first-name (db::first-name subscription))
+	(last-name (db::last-name subscription))
+	(company-id (db::company-id subscription))
+	(subscription-id (db::subscription-id subscription))
+	(status (db::return-status subscription))
+	(address (db::address subscription))
+	(city (db::city subscription))
+	(state (db::state subscription))
+	(zip-code (db::zip-code subscription))
+	(email (db::email subscription))
+	(discount (db::discount subscription))
+	(num-computers (db::num-computers subscription))
+	(commitment (db::commitment subscription))
+	(phone-number (db::phone-number subscription))
+	(amount (db::amount subscription)))
+  (send-email (list "tritchey@paragent.com" "jcheesman@paragent.com")
+	      (format nil "new subscription: [~a] ~a, ~a ~a: ~a"
+		      subscription-id
+		      (if company (name company) "Unknown")
+		      first-name 
+		      last-name 
+		      amount)
+	      (format nil "Subscription ID: ~a~%Status: ~a~%Name: ~a ~a~%Company: ~a~%Address:~%~a~%~a, ~a ~a~%Email: ~a~%Phone Number: ~a~%Number of Nodes:~a~%Commitment: ~a~%Discount: ~a~%Amount: ~a~%"
+		      subscription-id status first-name last-name (name company) 
+		      address city state zip-code email phone-number num-computers commitment discount amount))
+  (when (string= status "SUCCESS")
+    (send-email email
+		"Your Paragent.com Subscription"
+		(format nil 
+ "Thank you for signing up for a Paragent.com subscription
+Your Information:
+
+Company: ~a
+Name: ~a ~a
+
+Address:
+~a
+~a, ~a ~a
+Phone: ~a
+Email: ~a
+
+Subscription Information:
+
+Subscription ID: ~a
+Number of Computers: ~a
+Amount: ~a will be charged against your credit card each month
+Contact Information
+If you have any questions regarding your subscription, please contact us at support@paragent.com.
+Sincerely,
+The Paragent.com Team
+www.paragent.com
+125 N. Mulberry Street
+Muncie, IN 47304
+1-800-839-9625
+"
+(if company (name company) "Unknown") first-name last-name address city state zip-code phone-number email
+ subscription-id num-computers amount)
+		:html-message (format nil 
+ "<html>
+<head>
+<title></title>
+<meta content=\"text/html;charset=iso-8859-1\" http-equiv=\"content-type\">
+<style type=\"text/css\">
+body {
+color: #161715;
+font-family: \"Myriad Pro\", \"Lucida Grande\", \"Helvetica Neue\", Calibri, Helvetica, Arial, sans-serif;
+}
+h2, h3 {
+font-weight: normal;
+}
+a {
+color: #5572BC;
+font-weight: bold;
+text-decoration: underline;
+}
+</style>
+</head>
+<body>
+<table width=\"700\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">
+<tr>
+<td colspan=\"5\"><img src=\"http://paragent.com/images/email_top.png\" alt=\"Paragent.com: Powerful + Easy to use + Affordable\"></td>
+</tr>
+<tr valign=\"top\">
+<td width=\"30\" bgcolor=\"#ffffff\">&nbsp;</td>
+<td width=\"30\" bgcolor=\"#f4f4f4\">&nbsp;</td>
+<td width=\"580\" bgcolor=\"#f4f4f4\" height=\"300\" style=\"line-height: 20px; font-size: 14px;\">
+<h2>Thank you for signing up for a Paragent.com subscription.</h2>
+<h3>Your Information:</h3>
+<p>
+Company: <strong>~a</strong><br/>
+Name: <strong>~a ~a</strong><br/>
+
+Address:<br/>
+<strong>~a</strong><br/>
+<strong>~a, ~a ~a</strong><br/>
+Phone: <strong>~a</strong><br/>
+Email: <strong>~a</strong></p>
+<h3>Subscription Information:</h3>
+<p>
+Subscription ID: <strong>~a</strong><br/>
+Number of Computers: <strong>~a</strong><br/>
+Amount: $<strong>~$</strong> will be charged against your credit card each month.</p>
+<h3>Contact Information</h3>
+<p>If you have any questions regarding your subscription, please contact us at <a href=\"mailto:support@paragent.com\">support@paragent.com</a>.</p>
+<p>Sincerely,<br />
+The Paragent.com Team<br /></p>
+</td>
+<td width=\"30\" bgcolor=\"#f4f4f4\">&nbsp;</td>
+<td width=\"30\" bgcolor=\"#ffffff\">&nbsp;</td>
+</tr>
+<tr>
+<td colspan=\"5\"><img src=\"http://paragent.com/images/email_bottom.png\" alt=\"paragent.com\"></td>
+</tr>
+</table>
+</body>
+</html>"
+ (if company (name company) "Unknown") first-name last-name address city state zip-code phone-number email
+ subscription-id num-computers amount)))))
+
+(defcomponent receipt (simple-window-component)
+  ((company :accessor company
+	       :initarg :company
+	       :initform "")
+   (first-name :accessor first-name
+	       :initarg :first-name
+	       :initform "")
+   (last-name :accessor last-name
+	      :initarg :last-name
+	      :initform "")
+   (address :accessor address
+	    :initarg :address
+	    :initform "")
+   (city :accessor city
+	 :initarg :city
+	 :initform "")
+   (state :accessor state
+	  :initarg :state
+	  :initform "")
+   (zip-code :accessor zip-code
+	     :initarg :zip-code
+	     :initform "")
+   (phone-number :accessor phone-number
+		 :initarg :phone-number
+		 :initform "")
+   (email :accessor email
+	  :initarg :email
+	  :initform "")
+   (subscription-id :accessor subscription-id
+		    :initarg :subscription-id
+		    :initform "")
+   (num-computers :accessor num-computers
+		  :initarg :num-computers
+	          :initform "")
+   (amount :accessor amount
+	   :initarg :amount
+           :initform ""))
+  (:default-initargs
+      :title "Paragent.com Receipt"
+      :stylesheet "css/receipt.css"))
+
+(defmethod render ((page receipt))
+  (<:as-is (format nil
+"<table width=\"700\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">
+<tr>
+<td colspan=\"5\"><img src=\"http://paragent.com/images/email_top.png\" alt=\"Paragent.com: Powerful + Easy to use + Affordable\"></td>
+</tr>
+<tr valign=\"top\">
+<td width=\"30\" bgcolor=\"#ffffff\">&nbsp;</td>
+<td width=\"30\" bgcolor=\"#f4f4f4\">&nbsp;</td>
+<td width=\"580\" bgcolor=\"#f4f4f4\" height=\"300\" style=\"line-height: 20px; font-size: 14px;\">
+<h2>Thank you for signing up for a Paragent.com subscription.</h2>
+<h3>Your Information:</h3>
+<p>
+Company: <strong>~a</strong><br/>
+Name: <strong>~a ~a</strong><br/>
+Address:<br/>
+<strong>~a</strong><br/>
+<strong>~a, ~a ~a</strong><br/>
+Phone: <strong>~a</strong><br/>
+Email: <strong>~a</strong></p>
+<h3>Subscription Information:</h3>
+<p>
+Subscription ID: <strong>~a</strong><br/>
+Number of Computers: <strong>~a</strong><br/>
+Amount: $<strong>~$</strong> will be charged against your credit card each month.</p>
+<h3>Contact Information</h3>
+<p>If you have any questions regarding your subscription, please contact us at <a href=\"mailto:support@paragent.com\">support@paragent.com</a>.</p>
+<p>Sincerely,<br />
+The Paragent.com Team<br /></p>
+<h3><a href=\"main.ucw\">Return to Your Account</a></h3>
+</td>
+<td width=\"30\" bgcolor=\"#f4f4f4\">&nbsp;</td>
+<td width=\"30\" bgcolor=\"#ffffff\">&nbsp;</td>
+</tr>
+<tr>
+<td colspan=\"5\"><img src=\"http://paragent.com/images/email_bottom.png\" alt=\"paragent.com\"></td>
+</tr>
+</table>
+"
+(company page)
+(first-name page)
+(last-name page)
+(address page)
+(city page)
+(state page)
+(zip-code page)
+(phone-number page)
+(email page)
+(subscription-id page)
+(num-computers page)
+(amount page))))
+
 
 #.(clsql:restore-sql-reader-syntax-state)
                             

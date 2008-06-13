@@ -1528,34 +1528,46 @@ So we implement our own autoincrement here.")
 	     :initarg :duration
 	     :initform 12
 	     :type integer))
-  (:base-table discount-codes))
-
-(defun find-random-code ()
-  (let* ((code (random-password))
-	 (match (with-db (select 'discount-code :flatp t
-						:where [= [code] code]))))
-    (if match
-	(find-random-code)
-	code)))
-
-(defun generate-code (amount expiration &key (discount-type 0) (duration 12))
-  (let* ((code (find-random-code))
-	 (entry (make-instance 'discount-code :code code 
-					      :amount amount
-					      :expiration expiration
-					      :discount-type discount-type
-					      :duration duration)))
-    (with-db (insert-and-update entry))
-    code))
-  
+  (:base-table discount-codes))  
 
 (def-view-class subscription (company-property)
   ((subscription-id :accessor subscription-id
                     :initarg :subscription-id
                     :type (string 20))
-   (name :accessor name
-         :initarg :name
-         :type string)
+   (status :accessor return-status
+	   :initarg :return-status
+	   :type string)
+   (timestamp :accessor timestamp
+	      :initarg :timestamp
+	      :type wall-time
+	      :initform (get-time))
+   (first-name :accessor first-name
+	       :initarg :first-name
+	       :type string)
+   (last-name :accessor last-name
+	      :initarg :last-name
+	      :type string)
+   (address :accessor address
+	    :initarg :address
+	    :type string)
+   (city :accessor city
+	 :initarg :city
+	 :type string)
+   (state :accessor state
+	  :initarg :state
+	  :type string)
+   (zip-code :accessor zip-code
+	     :initarg :zip-code
+	     :type string)
+   (phone-number :accessor phone-number
+                 :initarg :phone-number
+		 :type (string 20))
+   (email :accessor email
+	  :initarg :email
+	  :type string)
+   (discount :accessor discount
+	     :initarg :discount
+	     :type integer)
    (num-computers :accessor num-computers
                   :initarg :num-computers
                   :type integer)
@@ -1565,14 +1577,13 @@ So we implement our own autoincrement here.")
    (commitment :accessor commitment
                :initarg :commitment
                :type integer)
-   (phone-number :accessor phone-number
-                 :initarg :phone-number
-                 :type (string 20)))
+   (amount :accessor amount
+	   :initarg :amount
+	   :type float))
   (:base-table subscriptions))
 
 (defun =account-paid (company)
   (select 'subscription :flatp t :where [= [company-id] (id company)]))
-
 
 (defparameter *db-classes*
   '(bios

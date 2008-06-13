@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/usr/local/bin/detachtty --dribble-file /var/log/archives-dribble --log-file \
+  /var/log/detachtty.log --pid-file /var/run/archives.pid \
+  /var/run/archives-socket \
+  /usr/local/bin/sbcl --load "/lisp/repos/archives/scripts/start.lisp"
+

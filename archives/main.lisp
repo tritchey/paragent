@@ -56,11 +56,18 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   (make-instance 'mel:pop3-folder :host (host ticket-email) :port (port ticket-email)
                  :username (username ticket-email) :password (password ticket-email)))
 
+(defun extract-from (from)
+  (if from
+      (handler-case 
+	  (mel:address-spec from)
+	(t ()
+	  "unknown"))
+      "unknown"))
 
 (defun process-email (message company)
   (let* ((subject (mel.mime::subject message))
 	 (mel-from (mel:from message))
-	 (from (if mel-from (mel:address-spec mel-from) "unknown"))
+	 (from (extract-from mel-from))
 	 (body (body message)))
     (let ((case-num (extract-case-number subject)))
       (if case-num

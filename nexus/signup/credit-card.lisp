@@ -67,9 +67,9 @@ xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">
       <phoneNumber>" phone-number "</phoneNumber>
     </customer>
     <billTo> 
-      <company>" company "</company> 
       <firstName>" first-name "</firstName> 
       <lastName>" last-name "</lastName>
+      <company>" company "</company> 
       <address>" address "</address>
       <city>" city "</city>
       <state>" state "</state>

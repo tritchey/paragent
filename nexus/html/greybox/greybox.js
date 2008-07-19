@@ -322,7 +322,7 @@ GreyBox.prototype.init = function() {
   AJS.ACN(tbody, AJS.TR(td_middle_m));
 
   //Append caption and close
-  var header = AJS.TABLE({'class': 'GB_header'});
+  var header = AJS.TABLE({'class': 'GB_header', 'cellpadding': 0, 'cellspacing': 0});
   this.header = header;
 
   var img_close = AJS.IMG({'src': this.img_dir + 'close.gif'});
@@ -486,7 +486,7 @@ GreyBox.prototype.setWidthNHeight = function() {
     this.setIframeWidthNHeight();
 
   //Set size on components
-  AJS.setWidth(this.td_middle_m, this.width+10);
+  AJS.setWidth(this.td_middle_m, this.width);
 }
 
 GreyBox.prototype.setTopNLeft = function() {

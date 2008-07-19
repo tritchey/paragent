@@ -534,6 +534,12 @@ function updatePrices() {
 	(name company)
 	"Unknown")))
 
+(defmethod company-name-for-signup-fields ((fields signup-fields))
+  (value (company fields)))
+
+(defmethod company-name-for-signup-fields ((fields finished-signup-fields))
+  (name (company (user fields))))
+
 (defmethod finalize-signup% ((page credit-card-page2))
   (let* ((num-computers (num-computers page))
 	 (discount (discount page))
@@ -547,7 +553,7 @@ function updatePrices() {
          (first-name (value (first-name cc-fields)))
          (last-name (value (last-name cc-fields)))
          (address (value (address cc-fields)))
-	 (company-name (value (company signup-fields)))
+	 (company-name (company-name-for-signup-fields signup-fields))
          (city (value (city cc-fields)))
          (state (value (state cc-fields)))
          (zip-code (value (zip-code cc-fields)))
@@ -597,10 +603,10 @@ function updatePrices() {
                   subscription)
                 (progn
                   (setf (message cc-fields) "This credit card information was rejected")
-		  (let* ((company (company (user page)))
+		  (let* ((company (company (user signup-fields)))
 			 (subscription (make-instance 'subscription 
 						      :company-id (if company (id company) 0)
-						      :subscription-id 0
+						      :subscription-id "0"
 						      :return-status (format t "FAILURE: ~a" subscription-id) 
 						      :first-name first-name
 						      :last-name last-name
@@ -618,6 +624,7 @@ function updatePrices() {
 		    (update-records-from-instance subscription)
 		    (email-receipt subscription))
                   nil))))))))
+
 
 (defmethod make-company ((page signup-fields))
   (let ((company-name (sanitize-company-name (value (company page))))

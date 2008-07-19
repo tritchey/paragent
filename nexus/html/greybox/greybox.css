@@ -104,15 +104,17 @@
 
 .GB_header 
 {
-  margin: 0 0 0 9px;
-  padding: 10px 10px 10px 10px;
-  background: #fff;
+  background: #fff url(../images/box-corner-grey.png) no-repeat top left;
+  margin: 0 0 0 0;
+  padding: 10px 10px 0 20px;
   border-right: 1px solid #ccc;
   width: 100%;
 }
 
 .GB_header td
 { 
+  margin: 0;
+  padding: 0;
   border-bottom: 1px solid #ccc;
 }
 

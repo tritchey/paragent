@@ -1703,7 +1703,7 @@ ul.new-alerts li img
 }
 
 table#alerts {
-	width: 100%;
+  width: 100%;
 }
 
 table#alerts td.badge span.events
@@ -1961,14 +1961,23 @@ table#alerts td.badge span.events
 }
 
 table#comppick td.name,
-table#tickets td.name,
 table#alerts td.name
 { 
-  width: 600px;
+  width: 100%;
   font-weight: bold;
   font-size: 14px;
   padding-right: 5px;
   color: rgb(1, 44, 95);
+}
+
+table#tickets td.name
+{
+  width: 650px;
+  font-weight: bold;
+  font-size: 14px;
+  padding-right: 5px;
+  color: rgb(1, 44, 95);
+
 }
 
 table#comppick td.name a,

@@ -353,7 +353,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     (<:ul :class "filter-list"
 	  (<:li :class "select-all first-item"
 		(grey-box "Add/Remove Computers" "Add/Remove"
-			  (open-computer-alert-dialog page alert) 320 500)))
+			  (open-computer-alert-dialog page alert) 330 510)))
     (if computers
 	(<:ul
 	 (dolist (computer computers)
@@ -367,7 +367,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	      (<:a :href (computer-link computer)
 		   (<:ah (name computer)))))))
 	(<:p "This alert has not been applied to any computers. "
-           (grey-box "Edit Alert" "Click here" (edit-alert page (alert page)) 515 500)
+           (grey-box "Edit Alert" "Click here" (edit-alert page (alert page)) 515 510)
            (<:ah " to do so.")))))
 
 (defmethod render-alert-info ((page alert-tabbed-view))

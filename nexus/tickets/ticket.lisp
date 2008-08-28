@@ -307,7 +307,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 (defun render-history-item-row (badge title timestamp content &key (newline nil) (comment nil))
   (<:tr
    (<:td :rowspan 2 :align "center" :class "badge"
-	 (<:img :src (format nil "/images/cond-~a.gif" badge)
+	 (<:img :src (format nil "images/cond-~a.gif" badge)
 		:width "24px" :height "24px"))
    (<:td :class "name"
 	 (<:p (<:as-html title) (<:span (<:as-is " at ") (<:as-html timestamp)))))

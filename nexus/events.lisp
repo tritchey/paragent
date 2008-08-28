@@ -169,7 +169,7 @@ turns it into a link to that computer."
 	    (<:tr
 	     :class odd-row
 	     (<:td :rowspan 2 :align "center" :class "badge"
-		   (<:img :src (format nil "/images/cond-~a.gif" (severity-name event))
+		   (<:img :src (format nil "images/cond-~a.gif" (severity-name event))
 			  :width "24px" :height "24px"))
 	     (<:td :class "summary"
 		   (<:as-html (summary event) " at ")

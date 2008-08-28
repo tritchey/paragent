@@ -165,6 +165,12 @@ Compares all slots. Exists to determine if we need to update the object in the d
 				    :home-key id
 				    :foreign-key company-id
 				    :set t))
+   (clients :accessor clients
+	      :db-kind :join
+	      :db-info (:join-class client
+				    :home-key id
+				    :foreign-key client-id
+				    :set t))
    (software :accessor software
              :db-kind :join
              :db-info (:join-class software
@@ -324,11 +330,29 @@ This allows us to save 'remember me' info on the browser without putting
   (:documentation "If we have an error we want to display to the user, this is a good place to keep it.")
   (:base-table logged-errors))
 
+(def-view-class client (company-property)
+  ((name :accessor name
+	 :db-contraints :not-null
+	 :type string
+	 :initarg :name
+	 :initform ""))
+  (:base-table clients))
+
 (def-view-class computer (company-property)
   ((archon-connection :accessor archon-connection
 	       :type integer
 	       :initarg :archon-connection
-	       :initform 0) 
+	       :initform 0)
+   (client-id :accessor client-id
+	      :type integer
+	      :initarg :client-id)
+   (client  :accessor client
+	    :initarg :client
+		     :db-kind :join
+		     :db-info (:join-class client
+			       :home-key client-id
+			       :foreign-key id
+			       :set nil))
    (name :accessor name
          :db-constraints :not-null
          :type (string 75)

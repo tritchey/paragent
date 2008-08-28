@@ -19,8 +19,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defvar *my-app*
   (make-instance 'cookie-session-application
-                 :www-roots (list #p"/lisp/repos/nexus/html/")
-                 :url-prefix "/"
+                 :www-roots (list #p"/Users/tritchey/Projects/Paragent/git/nexus/html/")
+                 :url-prefix "/paragent/"
                  ;:debug-on-error t
                  :tal-generator
                  (make-instance 'yaclml:file-system-generator

@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: khala
 -- ------------------------------------------------------
--- Server version	5.0.19-max
+-- Server version	5.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -191,6 +191,7 @@ CREATE TABLE `email_smtp` (
   `AUTHP` tinyint(1) default NULL,
   `COMPANY_ID` int(11) NOT NULL,
   `ID` int(11) NOT NULL auto_increment,
+  `SSLP` tinyint(1) default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -224,7 +225,7 @@ CREATE TABLE `events` (
   KEY `COMPUTER_ID` (`COMPUTER_ID`),
   KEY `SEVERITY_ID` (`SEVERITY_ID`),
   KEY `TIMESTAMP` (`TIMESTAMP`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Table structure for table `firewall`
@@ -534,7 +535,7 @@ CREATE TABLE `recent_tickets` (
 DROP TABLE IF EXISTS `scarab_messages`;
 CREATE TABLE `scarab_messages` (
   `ID` int(11) NOT NULL auto_increment,
-  `BODY` varchar(255) default NULL,
+  `BODY` varchar(4096) default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -644,6 +645,17 @@ CREATE TABLE `subscriptions` (
   `PHONE_NUMBER` varchar(20) default NULL,
   `COMPANY_ID` int(11) NOT NULL default '0',
   `ID` int(11) NOT NULL auto_increment,
+  `TIMESTAMP` datetime default NULL,
+  `STATUS` text,
+  `FIRST_NAME` text,
+  `LAST_NAME` text,
+  `ADDRESS` text,
+  `CITY` text,
+  `STATE` text,
+  `ZIP_CODE` text,
+  `EMAIL` text,
+  `DISCOUNT` int(11) default NULL,
+  `AMOUNT` float default NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -827,7 +839,8 @@ CREATE TABLE `users` (
   `PASSWORD` varchar(100) NOT NULL default '',
   `LAST_LOGIN` datetime default NULL,
   `WEEKLY_SOFTWARE_REPORT` tinyint(1) NOT NULL default '1',
-  `RECENT_COMPUTERS` varchar(255) default NULL,
+  `RECENT_COMPUTERS` text,
+  `TIMEZONE_PREFERENCE` int(11) default NULL,
   PRIMARY KEY  (`ID`),
   KEY `COMPANY_ID` (`COMPANY_ID`),
   KEY `USERNAME` (`USERNAME`)

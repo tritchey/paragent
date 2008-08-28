@@ -136,7 +136,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         (<:td :class "desc"
               (<:a :href "#"
 		   :onclick "javascript:$('own-info-form').submit(); return false;"
-		   (<:img :src "/images/savebtn.gif")))))))))
+		   (<:img :src "images/savebtn.gif")))))))))
 
 (defmethod render-users-tab ((page preferences-tabbed-view))
   (render (users-list page)))

@@ -497,7 +497,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	  (<:tr
 	   :class odd-row
 	   (<:td :rowspan 2 :align "center" :class "badge"
-		 (<:img :src (format nil "/images/cond-~a.gif" class)
+		 (<:img :src (format nil "images/cond-~a.gif" class)
 			:width "24px" :height "24px"))
 	   (<:td :class "name" 
 		 (<:span (<:as-html (ticket-id ticket)) 

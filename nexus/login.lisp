@@ -207,7 +207,7 @@ Call this page to login, and then use the returned user to go on to the page you
 	   (<:img :style "margin: 0 109px 0 89px"
 		  :width "32px"
 		  :height "32px;"
-		  :src "/images/ajax-spinner.gif")))))
+		  :src "images/ajax-spinner.gif")))))
 
 (defcomponent first-time-login-redirector (simple-window-component)
   ((username :initarg :username
@@ -241,7 +241,7 @@ Call this page to login, and then use the returned user to go on to the page you
 	   (<:img :style "margin: 0 109px 0 89px"
 		  :width "32px"
 		  :height "32px;"
-		  :src "/images/ajax-spinner.gif"))
+		  :src "images/ajax-spinner.gif"))
     ;; the following is the conversion code we need to know that someone has signed up
     (<:as-is
 "<script language=\"JavaScript\" type=\"text/javascript\">
@@ -287,7 +287,7 @@ src=\"http://www.googleadservices.com/pagead/conversion.js\">
 	   (<:img :style "margin: 0 109px;"
 		  :width "32px"
 		  :height "32px;"
-		  :src "/images/ajax-spinner.gif"))))
+		  :src "images/ajax-spinner.gif"))))
 
 
 (defaction do-login-redirect ((page login-redirector))

@@ -332,7 +332,7 @@ This allows us to save 'remember me' info on the browser without putting
 
 (def-view-class client (company-property)
   ((name :accessor name
-	 :db-contraints :not-null
+	 :db-constraints :not-null
 	 :type string
 	 :initarg :name
 	 :initform ""))

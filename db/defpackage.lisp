@@ -29,7 +29,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     :with-restarting-transaction :sql-equal
     :fill-with-test-data :type-alerts :hash-password
     :software-event :installed :created :trial-enabled-p
-   :user :company :computer :event :event-type :severity-id :severity :level
+   :user :company :client :clients :computer :event :event-type :severity-id :severity :level
    :operating-system :processor :memory :bios :cd-rom :hard-drive 
    :logical-drive :logical-drives :free-space :video-controller
    :sound-device :network-card :system :printer :software :software-computer-link

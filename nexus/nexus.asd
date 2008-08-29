@@ -35,6 +35,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       (:file "png")
 	       (:file "cl-vector-chart" :depends-on ("png"))
 	       (:file "charts" :depends-on ("cl-vector-chart"))
+	       (:file "worm-charts" :depends-on ("charts"))
                (:file "events")
                (:file "utils")
                (:file "queue")
@@ -78,6 +79,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	       :cl-paths-ttf 
 	       :salza 
 	       :zpb-ttf
+	       :wormtrails
                :drakma
 	       :psi))
 

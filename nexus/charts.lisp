@@ -60,7 +60,7 @@
 
 (defmethod render-image ((img img-pie-chart))
   (let (( chart::*default-font* (zpb-ttf:open-font-loader 
-				 "/lisp/repos/nexus/verdanab.ttf")))
+				 "/Users/tritchey/Projects/Paragent/git/nexus/verdanab.ttf")))
     (let ((ret nil))
       (dolist (slice (slices img))
         (unless ret
@@ -102,7 +102,7 @@
 
 (defmethod render-image ((img img-line-graph))
   (let (( chart::*default-font* (zpb-ttf:open-font-loader 
-				 "/lisp/repos/nexus/verdanab.ttf")))
+				 "/Users/tritchey/Projects/Paragent/git/nexus/verdanab.ttf")))
     (when (not (data img))
       (setf (data img) (cons (chart::get-color :note) 
 			     (make-list (length (x-labels img)) :initial-element 1))))

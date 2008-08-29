@@ -75,97 +75,19 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
          (<:ah "Errors have occurred. " (<ucw:a :action (goto-logged-error-page page) "Click here")
                " to view them."))))
     (<:div :class "box-title"
-	   (<:h2 "Summary"))
+	   (<:h2 "Events"))
     (<:div
      :class "box"
     (<:table
      :class "dashboard"
+     (<:tr (<:td (<wormtrail-chart page)))
      (<:tr
       (<:td :class "both" :colspan "2"
-            (<:p
-              (<:ah (<:strong (<:ah event-count)) " Events today"))
-	    (<:p
-	      (<:ah (<:strong (<:ah computer-count)) " Computers"))
-	    (<:p
-	      (<:ah (<:strong (<:ah software-count)) " Installed Software Packages"))))
-     (<:tr
-      (<:td
-       :class "left chart"
-       (<:h2 "Events")
-       (<event-timeline-graph page user :height 100 :width 250))
-      (<:td
-	:class "right chart"
-       (<:h2 "Online status")
-       (let ((offline-count (db-count 'computers :where [and [= [company-id] (company-id user)]
-                                      [not [= [online] 1]]])))
-         (<pie-chart page `((,(chart::get-color :medium-circle)
-                              "Offline"
-                              ,(if (> computer-count 0)
-                                   (/ offline-count computer-count)
-                                   1))
-                              (,(chart::get-color :note-circle)
-                                "Online"
-                                ,(if (> computer-count 0)
-                                     (/ (- computer-count offline-count) computer-count)
-                                     0)))
-                       :radius 50))))
-     (<:tr
-      (<:td :class "both" :colspan "2"
-	    (render (event-list page))))
-     (let ((active-comps (select [slot-value 'computer 'name] [count [slot-value 'event 'id]]
-				 :from (list [computers] [events])
-				 :where [and
-                                 [= [slot-value 'computer 'company-id] (company-id user)]
-                                 [= [slot-value 'computer 'id] [slot-value 'event 'computer-id]]]
-				 :group-by [slot-value 'computer 'name]
-				 :order-by (list (list [count [slot-value 'event 'id]] :desc))
-				 :limit 5))
-	   (active-alerts (select [slot-value 'alert 'id] [slot-value 'alert 'type-id] [slot-value 'alert 'args]
-				  [count [slot-value 'event 'id]]
-				  :from (list [alerts] [alert-event-link] [events])
-				  :where [and
-	                          [= [slot-value 'alert 'company-id] (company-id user)]
-	                          [= [slot-value 'alert 'id] [slot-value 'alert-event-link 'alert-id]]
-	                          [= [slot-value 'alert-event-link 'event-id] [slot-value 'event 'id]]]
-				 :group-by [slot-value 'alert 'id]
-				 :order-by (list (list [count [slot-value 'event 'id]] :desc))
-				 :limit 5)))
-       (<:tr
-        (<:td
-         :class "left last"
-         (<:h2 "Most active computers")
-         (<:table
-          :width "100%" :border 0 :class "aligner top-ten"
-          (dolist (computer+events active-comps)
-            (<:tr
-             (<:td :align "left" :class "aligner"
-                   (<:img :width "24px" 
-                          :height "24px"
-                          :src "images/computer.gif")
-                   " "
-                   (<:a :href (computer-link (first computer+events))
-                        (<:ah (first computer+events))))
-             (<:td :align "right" :class "aligner"
-                   (<:ah (second computer+events)))))))
-        (<:td
-         :class "right last"
-         (<:h2 "Most active alerts")
-         (<:table
-          :width "100%" :border 0 :class "aligner top-ten"
-          (dolist (info active-alerts)
-            (let ((alert (make-instance 'alert :id (first info) :type-id (second info)
-                                        :args (clsql-sys:read-sql-value 
-                                               (third info)
-                                               t 
-                                               *default-database* 
-                                               (database-type *default-database*)))))
-              (<:tr
-               (<:td :align "left" :class "aligner"
-                     (render-icon alert) " "
-                     (<:a :href (alert-link alert)
-                          (<:ah (description alert))))
-               (<:td :align "right" :class "aligner"
-                     (<:ah (fourth info))))))))))))))
+	    (<:h2 "Clients" (<:a ))
+      (let ((clients (with-db (select 'client :where [= [company-id] (company-id user)]))))
+	(dolist (client clients)
+	  (<:h3 (<:as-html (name (car client)))))))
+)))))
 
 
 

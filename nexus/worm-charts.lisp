@@ -21,21 +21,26 @@
   (make-instance 'client-sample :thing worm :bucket day-bucket))
 
 (defmethod chart-label ((day-bucket day-bucket))
-  (let ((day-bucket (index day-bucket)))
-    (cond ((= day-bucket 0)
+  (multiple-value-bind
+	(second minute hour date month year day-of-week dst-p tz)
+      (get-decoded-time)
+    (declare (ignore second minute hour date month year dst-p tz))
+    (let* ((index (index day-bucket))
+	   (dow (mod (+ day-of-week index 2) 7)))
+      (cond ((= dow 0)
            "SUNDAY")
-	  ((= day-bucket 1)
+	  ((= dow 1)
 	   "MONDAY")
-	  ((= day-bucket 2)
+	  ((= dow 2)
 	   "TUESDAY")
-	  ((= day-bucket 3)
+	  ((= dow 3)
 	   "WEDNESDAY")
-	  ((= day-bucket 4)
+	  ((= dow 4)
 	   "THURSDAY")
-	  ((= day-bucket 5)
+	  ((= dow 5)
 	   "FRIDAY")
-	  ((= day-bucket 6)
-	   "SATURDAY"))))
+	  ((= dow 6)
+	   "SATURDAY")))))
 
 
 (defun shade (start string end)
@@ -64,7 +69,7 @@
             (setf max elt
                   maxkey test-key)))))))
 
-(defmethod highest-activity ((client-worm thing))
+(defun highest-activity (client-worm)
   (maximum (samples client-worm) :key 'value))
 
 (defun total-activity (client-worm)
@@ -94,66 +99,44 @@
         (scale 5.0)
 	(wormtrails::*font-file* "/Users/tritchey/Projects/Paragent/git/nexus/font.ttf"))
     (wormtrails::add-data chart 0 "Bohannon" 1)
-    (wormtrails::add-data chart 0 "McGill" 3)
-    (wormtrails::add-data chart 0 "Paragent" 5)
-    (wormtrails::add-data chart 0 "Bitfauna" 5)
-    (wormtrails::add-data chart 0 "Musal DDS" 7)
-    (wormtrails::add-data chart 0 "Hiott Engineering" 3)
-    (wormtrails::add-data chart 1 "Bohannon" 2)
-    (wormtrails::add-data chart 1 "McGill" 2)
-    (wormtrails::add-data chart 1 "Paragent" 4)
-    (wormtrails::add-data chart 1 "Bitfauna" 6)
-    (wormtrails::add-data chart 1 "Musal DDS" 7)
-    (wormtrails::add-data chart 1 "Hiott Engineering" 1)
-    (wormtrails::add-data chart 2 "Bohannon" 4)
-    (wormtrails::add-data chart 2 "McGill" 6)
-    (wormtrails::add-data chart 2 "Paragent" 5)
-    (wormtrails::add-data chart 2 "Bitfauna" 7)
-    (wormtrails::add-data chart 2 "Musal DDS" 7)
-    (wormtrails::add-data chart 2 "Hiott Engineering" 2)
-    (wormtrails::add-data chart 3 "Bohannon" 2)
-    (wormtrails::add-data chart 3 "McGill" 6)
-    (wormtrails::add-data chart 3 "Paragent" 5)
-    (wormtrails::add-data chart 3 "Bitfauna" 10)
-    (wormtrails::add-data chart 3 "Musal DDS" 7)
-    (wormtrails::add-data chart 3 "Hiott Engineering" 4)
-    (wormtrails::add-data chart 4 "Bohannon" 1)
-    (wormtrails::add-data chart 4 "McGill" 2)
-    (wormtrails::add-data chart 4 "Paragent" 5)
-    (wormtrails::add-data chart 4 "Bitfauna" 20)
-    (wormtrails::add-data chart 4 "Musal DDS" 10)
-    (wormtrails::add-data chart 4 "Hiott Engineering" 9)
-    (wormtrails::add-data chart 5 "Bohannon" 1)
-    (wormtrails::add-data chart 5 "McGill" 1)
-    (wormtrails::add-data chart 5 "Paragent" 1)
-    (wormtrails::add-data chart 5 "Bitfauna" 22)
-    (wormtrails::add-data chart 5 "Musal DDS" 14)
-    (wormtrails::add-data chart 5 "Hiott Engineering" 5)
-    (wormtrails::add-data chart 6 "Bohannon" 1)
-    (wormtrails::add-data chart 6 "McGill" 1)
-    (wormtrails::add-data chart 6 "Paragent" 2)
-    (wormtrails::add-data chart 6 "Bitfauna" 19)
-    (wormtrails::add-data chart 6 "Musal DDS" 7)
-    (wormtrails::add-data chart 6 "Hiott Engineering" 2)
     (wormtrails::output-png-stream chart stream
                  :scaler (wormtrails::linear-scaler scale)
                  :metric-height 20 :metric-label "10 EVENTS")))
 
 (in-package :nexus)
 
-(defmacro <wormtrail-chart (page)
-  `(<:img :src (make-link (show-wormtrail-chart ,page))))
+#.(clsql:locally-enable-sql-reader-syntax)
 
-(defaction show-wormtrail-chart ((page paragent-component))
-  (call 'img-wormtrail-chart))
+(defmacro <wormtrail-chart (page clients)
+  `(<:img :src (make-link (show-wormtrail-chart ,page ,clients))))
 
-(defcomponent img-wormtrail-chart (png-component) ())
+(defaction show-wormtrail-chart ((page paragent-component) clients)
+  (call 'img-wormtrail-chart :clients clients))
+
+(defcomponent img-wormtrail-chart (png-component) 
+  ((clients :accessor clients
+           :initarg :clients
+           :initform nil)))
 
 (defmethod render ((img img-wormtrail-chart))
   (let* ((response (ucw:context.response *context*))
-         (stream (ucw::network-stream response)))
-      (wormtrails::client-chart stream)))
-  
+         (stream (ucw::network-stream response))
+	 (clients (clients img))
+	 (chart (make-instance 'wormtrails::client-chart))
+	 (scale 1.0)
+	 (wormtrails::*font-file* "/Users/tritchey/Projects/Paragent/git/nexus/font.ttf")
+         (duration 6))
+    (dolist (client clients)
+	(let* ((name (name client)))
+	  (loop for i from duration downto 0 do
+	       (let ((count
+		      (caar
+		       (with-db (query (format nil "select count(events.id) from events join computers on events.computer_id = computers.id where DATE(timestamp)=DATE_SUB(DATE(NOW()), INTERVAL ~a DAY) and computers.client_id=~a" i (id client)))))))
+		 (wormtrails::add-data chart (- 6 i) name count)))))
+    (wormtrails::output-png-stream chart stream
+				   :scaler (wormtrails::linear-scaler scale)
+				   :metric-height 100 :metric-label "100 EVENTS")))
+
 
 (defmethod imagemap-mouseover ((sample wormtrails::client-sample))
   (format nil "updateBanner(~S, ~S)"
@@ -167,6 +150,7 @@
                                          (list :channel "#lisp")
                                          :stream stream))
 
+#.(clsql:restore-sql-reader-syntax-state)
 
 
 

@@ -1197,6 +1197,9 @@ So we implement our own autoincrement here.")
 	      :type integer
 	      :initarg :ticket-id
               :initform nil)
+   (client-id :accessor client-id
+                     :type integer
+                     :initarg :client-id)
    (assigned-user-id :accessor assigned-user-id
                      :type integer
                      :initarg :assigned-user-id)

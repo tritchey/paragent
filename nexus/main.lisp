@@ -74,20 +74,38 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         (render-tip-box
          (<:ah "Errors have occurred. " (<ucw:a :action (goto-logged-error-page page) "Click here")
                " to view them."))))
-    (<:div :class "box-title"
-	   (<:h2 "Events"))
-    (<:div
-     :class "box"
-    (<:table
-     :class "dashboard"
-     (<:tr (<:td (<wormtrail-chart page)))
-     (<:tr
-      (<:td :class "both" :colspan "2"
-	    (<:h2 "Clients" (<:a ))
-      (let ((clients (with-db (select 'client :where [= [company-id] (company-id user)]))))
-	(dolist (client clients)
-	  (<:h3 (<:as-html (name (car client)))))))
-)))))
+    (let ((clients (mapcar #'car (with-db (select 'client :where [= [company-id] (company-id user)])))))
+      (<:div :class "box-title"
+	     (<:h2 "Events"))
+      (<:div
+       :class "box"
+       (<:table
+	:class "dashboard"
+	(<:tr (<:td (<wormtrail-chart page clients)))
+	(<:tr
+	 (<:td :class "both" :colspan "2"
+	       (<:h2 "Clients" (<:a ))
+	       (dolist (client clients)
+		 (let* ((name (name client))
+			(online-count 
+			  (with-db (db-count 'computers :where [and [= [client-id] (id client)] [= [online] 1]])))
+			(offline-count 
+			  (with-db (db-count 'computers :where [and [= [client-id] (id client)] [= [online] 0]])))
+			(ticket-count 
+			  (with-db (db-count 'tickets :where [= [client-id] (id client)])))
+			(event-count 
+			 (caar
+			  (with-db (query (format nil "select count(events.id) from events join computers on events.computer_id = computers.id where computers.client_id=~a" (id client))))))
+			(display-name (if (> (length name) 17)
+					  (format nil "~a&#0133;" (subseq name 0 15))
+					  name)))
+		 (<:div :class "client-box"
+			(<:h3 (<:as-is display-name))
+			(<:ul 
+			 (<:li :id "online-count" (<:as-html online-count))
+			 (<:li :id "offline-count" (<:as-html offline-count))
+			 (<:li :id "event-count" :class (if (>= event-count 10) "warning" "") (<:as-html event-count))
+			 (<:li :id "ticket-count" :class (if (>= ticket-count 10) "warning" "") (<:as-html ticket-count)))))))))))))
 
 
 

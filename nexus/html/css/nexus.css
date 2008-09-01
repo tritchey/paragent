@@ -2421,6 +2421,79 @@ td.badge
   vertical-align: top;
 }
 
+div.client-box
+{ 
+  margin: 10px 15px;
+  float: left;
+  width: 197px;
+  height: 98px;
+  background: transparent url(../images/dashboard-client.png) no-repeat left top;
+}
+
+div.client-box h3
+{ 
+  color: white;
+  padding: 3px 0 2px 6px;
+  font-family: "Futura Condensed";
+  font-weight: normal;
+  font-size: 13px;
+}
+
+div.client-box ul
+{ 
+  padding: 38px 5px 0 5px;
+  position: relative;
+}
+
+div.client-box ul li
+{ 
+  position: absolute;
+  top: 38px;
+  font-family: "Futura Condensed";
+  letter-spacing: -3px;
+  font-weight: normal;
+  font-size: 50px;
+  text-align: center;
+  color: #236208;
+}
+
+div.client-box ul li.warning
+{ 
+  color: #e0490e;
+}
+
+div.client-box ul li#online-count
+{ 
+  top: 30px;
+  left: 5px;
+  width: 59px;
+  font-size: 30px;
+}
+
+div.client-box ul li#offline-count
+{ 
+  border-top: 2px solid #ccc;
+  top: 55px;
+  left: 15px;
+  width: 39px;
+  font-size: 12px;
+  color: #666;
+}
+
+div.client-box ul li#event-count
+{ 
+  left: 96px;
+  width: 100px;
+  margin-left: -50px;
+}
+
+div.client-box ul li#ticket-count
+{ 
+  left: 160px;
+  width: 100px;
+  margin-left: -50px;
+
+}
 
 .box h1 
 {
@@ -2947,3 +3020,4 @@ body#signup-page {
 {
 	text-align: left;
 }
+

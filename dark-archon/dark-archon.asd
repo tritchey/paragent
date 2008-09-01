@@ -1,3 +1,5 @@
+;;; -*- Mode: LISP; Syntax: COMMON-LISP; Package: DARK-ARCHON; Base: 10 -*-
+
 #|
 Copyright (c) 2006 - 2007, Paragent, LLC
 
@@ -23,6 +25,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   :version "0.1"
   :components ((:file "defpackage")
 	       (:file "connection" :depends-on ("defpackage"))
+	       (:file "server" :depends-on ("defpackage"))
 	       (:file "kernel" 
-		      :depends-on ("defpackage" "connection")))
-  :depends-on (:asdf-binary-locations :sb-posix :sb-bsd-sockets :psi))
+		      :depends-on ("defpackage" "connection" "server")))
+  :depends-on (:asdf-binary-locations :sb-posix :sb-bsd-sockets :psi :cl-who :hunchentoot))

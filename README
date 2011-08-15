@@ -1,232 +1,225 @@
-#summary Instructions for Setting up a Paragent Server
-#labels Phase-Deploy
-
-=Paragent Installation Guide=
+# Paragent Installation Guide
 
 *NOTE* these instructions are for installing from source code. If you download the easy installer, this whole process is automated.
 
-===OS===
+## OS
 
 We are using Fedora Core 6 for the appliance installs. After getting the initial system up and running, be sure to get the latest updates by running:
 
-{{{
-# yum -y install emacs
-# yum -y upgrade
-}}}
+
+    # yum -y install emacs
+    # yum -y upgrade
+
 This will download and install any updates since the ISO images were created.
 
 make sure that the firewall is set up correctly
 
-{{{
-# system-config-securitylevel-tui
-}}}
+    # system-config-securitylevel-tui
+
 
 choose ssh, http, https, and add port 6103
 
-make sure that SELinux is disabled. You can do this by going to /etc/selinux/config and setting
+make sure that SELinux is disabled. You can do this by going to `/etc/selinux/config` and setting
 
-SELINUX=disabled
-
-
-===Dependencies===
-
-Create a /lisp directory and unzip deps.tar.gz to it
+    SELINUX=disabled
 
 
-===SBCL===
+## Dependencies
+
+Create a `/lisp` directory and unzip deps.tar.gz to it
+
+
+## SBCL
 
 Next, you need to get sbcl installed. we typically use the latest version of sbcl from cvs. However, in order to build sbcl, you will need an initial copy that we can use to bootstrap the build process.
-{{{
-# yum -y install sbcl
 
-# mkdir /lisp
-# cd /lisp
-# cvs -d:pserver:anonymous@sbcl.cvs.sourceforge.net:/cvsroot/sbcl login
-CVS password: [return]
-# cvs -z3 -d:pserver:anonymous@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -P sbcl
-# cd sbcl
-# emacs -nw customize-target-features.lisp
-}}}
+    # yum -y install sbcl
+
+    # mkdir /lisp
+    # cd /lisp
+    # cvs -d:pserver:anonymous@sbcl.cvs.sourceforge.net:/cvsroot/sbcl login
+    CVS password: [return]
+    # cvs -z3 -d:pserver:anonymous@sbcl.cvs.sourceforge.net:/cvsroot/sbcl co -P sbcl
+    # cd sbcl
+    # emacs -nw customize-target-features.lisp
 
 
-create a file called customize-target-features.lisp with the following code:
-{{{
-;; add threading support
-(lambda (list) (cons :sb-thread list))
-}}}
+
+create a file called `customize-target-features.lisp` with the following code:
+
+    ;; add threading support
+    (lambda (list) (cons :sb-thread list))
+
 
 Now, build sbcl:
-{{{
-# sh make.sh
-}}}
-and install it:
-{{{
-# sh install.sh
-}}}
-now that we have a local version, get rid of our bootstrap one
-{{{
-# yum remove sbcl
-# hash -r
-}}}
 
-===ASDF-BINARY-LOCATIONS===
+    # sh make.sh
+
+and install it:
+
+    # sh install.sh
+
+now that we have a local version, get rid of our bootstrap one
+
+    # yum remove sbcl
+    # hash -r
+
+
+## ASDF-BINARY-LOCATIONS
 
 You need to make sure that sbcl stuff doesn't get recompiled, so create a ~/.sbclrc file and put the following into it:
 
-{{{
-;;; -*- Lisp -*-
-(require :asdf)
-(require :asdf-binary-locations)
-(defvar asdf::*source-to-target-mappings*
-        '(("/usr/local/lib/sbcl/" nil)))
-}}}
 
-===SLIME===
+    ;;; -*- Lisp -*-
+    (require :asdf)
+    (require :asdf-binary-locations)
+    (defvar asdf::*source-to-target-mappings*
+            '(("/usr/local/lib/sbcl/" nil)))
+
+
+## SLIME
 
 setup emacs to use slime:
-{{{
-; .emacs setup for slime
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
-(add-to-list 'load-path "/lisp/slime")
-(require 'slime)
-(slime-setup)
-}}}
 
-===MySQL===
-{{{
-# yum install mysql
-# yum install mysql-server
-# yum install mysql-devel
-# /etc/init.d/mysqld start
-}}}
+    ; .emacs setup for slime
+    (setq inferior-lisp-program "/usr/local/bin/sbcl")
+    (add-to-list 'load-path "/lisp/slime")
+    (require 'slime)
+    (slime-setup)
+
+
+## MySQL
+
+    # yum install mysql
+    # yum install mysql-server
+    # yum install mysql-devel
+    # /etc/init.d/mysqld start
+
 to get mysqld to restart on reboot properly, issue a 
-{{{
-# chkconfig mysqld on
-}}}
 
-===Repository===
-{{{
-# cd /lisp
-# git clone git://archon.paragent.com/paragent.git repos
-}}}
-
-Alternately, download the latest code from the "Downloads" section and unzip it into the repos directory.
+    # chkconfig mysqld on
 
 
-===Link asd files===
-{{{
-# cd /usr/local/lib/sbcl/site-systems
-# ln -s `find -P /lisp -name "*.asd" -maxdepth 2` .
-# ln -s `find -P /lisp/repos -name "*.asd"` .
-}}}
+## Repository
 
-===Create MySQL Database===
+    # cd /lisp
+    # git clone git@github.com:tritchey/paragent.git repos
 
-edit /etc/my.cnf. Add the following two lines to [mysqld] config
-{{{
-lower_case_table_names=1
-set-variable=max_connections=500
-}}}
-{{{
-# sudo mysql
-mysql> create database khala;
-mysql> grant select,update,delete,insert on khala.* to username@localhost identified by "password";
-# mysql khala </lisp/repos/db/schema.sql
-}}}
 
-===Ready cl-sql===
-{{{
-# cd /lisp/clsql-3.8.3/db-mysql/
-# make clean
-# make
-}}}
 
-===mod_lisp===
-{{{
-# cd /lisp/mod_lisp
+## Link asd files
 
-# yum install httpd-devel
-# /usr/sbin/apxs -ica mod_lisp2.c
-}}}
+    # cd /usr/local/lib/sbcl/site-systems
+    # ln -s `find -P /lisp -name "*.asd" -maxdepth 2` .
+    # ln -s `find -P /lisp/repos -name "*.asd"` .
 
-Add the following in /etc/httpd/conf/httpd.conf
-{{{
-#
-# mod_lisp2 configuration
-#
 
-<LocationMatch "/.*\.ucw">
-    LispServer 127.0.0.1 3001 ucw
-    SetHandler lisp-handler
-</LocationMatch>
+## Create MySQL Database
 
-<LocationMatch "/.*\.csv">
-    LispServer 127.0.0.1 3001 ucw
-    SetHandler lisp-handler
-</LocationMatch>
-}}}
+edit `/etc/my.cnf`. Add the following two lines to `[mysqld]` config
+
+    lower_case_table_names=1
+    set-variable=max_connections=500
+
+
+    # sudo mysql
+    mysql> create database khala;
+    mysql> grant select,update,delete,insert on khala.* to username@localhost identified by "password";
+    # mysql khala </lisp/repos/db/schema.sql
+
+
+## Ready cl-sql
+
+    # cd /lisp/clsql-3.8.3/db-mysql/
+    # make clean
+    # make
+
+
+## mod_lisp
+
+    # cd /lisp/mod_lisp
+
+    # yum install httpd-devel
+    # /usr/sbin/apxs -ica mod_lisp2.c
+
+
+Add the following in `/etc/httpd/conf/httpd.conf`
+
+    #
+    # mod_lisp2 configuration
+    #
+
+    <LocationMatch "/.*\.ucw">
+        LispServer 127.0.0.1 3001 ucw
+        SetHandler lisp-handler
+    </LocationMatch>
+
+    <LocationMatch "/.*\.csv">
+        LispServer 127.0.0.1 3001 ucw
+        SetHandler lisp-handler
+    </LocationMatch>
+
 Now, restart the apache server
-{{{
-# /usr/sbin/apachectl restart
-# /sbin/chkconfig httpd on
 
-# cd /var/www
-# rm -rf html
-# ln -s /lisp/repos/nexus/html html
+    # /usr/sbin/apachectl restart
+    # /sbin/chkconfig httpd on
 
-# cd /lisp/ucw-boxset/dependencies/detachtty
-# make
-# make install
-}}}
+    # cd /var/www
+    # rm -rf html
+    # ln -s /lisp/repos/nexus/html html
 
-
-===Configure Archon===
-{{{
-# cd /lisp/repos/db/
-# cp config-sample.lisp config.lisp
-# emacs config.lisp
-}}}
-Edit config.lisp appropriately.
+    # cd /lisp/ucw-boxset/dependencies/detachtty
+    # make
+    # make install
 
 
-===Scarab===
-{{{
-# cd /lisp/repos/scarab
-# sbcl
-* (load "/lisp/repos/scarab/scarab.asd")
-* (asdf:operate 'asdf:load-op 'scarab)
-* (save-lisp-and-die "scarab.core")
-# crontab -e 00 4 * * 0 /usr/local/bin/sbcl --core /lisp/repos/scarab/scarab.core --load /lisp/repos/scarab/run.lisp
-}}}
+
+## Configure Archon
+
+    # cd /lisp/repos/db/
+    # cp config-sample.lisp config.lisp
+    # emacs config.lisp
+
+Edit `config.lisp` appropriately.
 
 
-===Startup===
+## Scarab
 
-edit /etc/rc.d/rc.local to include the following lines:
-{{{
-/lisp/repos/arbiter/scripts/start-arbiter
-/lisp/repos/archon/scripts/start-archon
-/lisp/repos/nexus/scripts/start-nexus
-}}}
+    # cd /lisp/repos/scarab
+    # sbcl
+    * (load "/lisp/repos/scarab/scarab.asd")
+    * (asdf:operate 'asdf:load-op 'scarab)
+    * (save-lisp-and-die "scarab.core")
+    # crontab -e 00 4 * * 0 /usr/local/bin/sbcl --core /lisp/repos/scarab/scarab.core --load /lisp/repos/scarab/run.lisp
 
 
-===Company Creation===
+
+## Startup
+
+edit `/etc/rc.d/rc.local` to include the following lines:
+
+    /lisp/repos/arbiter/scripts/start-arbiter
+    /lisp/repos/archon/scripts/start-archon
+    /lisp/repos/nexus/scripts/start-nexus
+
+
+
+## Company Creation
 
 Load Slime (Run emacs, and then enter M-x slime)
-{{{
-CL-USER> (asdf:oos 'asdf:load-op 'db)
-CL-USER> (in-package :db)
-DB> (with-db (add-company "company name" "Adminstrator email" "administrator password" "Administrator email"))
-}}}
+
+    CL-USER> (asdf:oos 'asdf:load-op 'db)
+    CL-USER> (in-package :db)
+    DB> (with-db (add-company "company name" "Adminstrator email" "administrator password" "Administrator email"))
 
 
-===Log Rotation===
-create /etc/logrotate.d/archon and edit
-{{{
-/var/log/*-dribble {
-  daily
-  ifempty
-  copytruncate
-  compress
-}
-}}}
+
+## Log Rotation
+create `/etc/logrotate.d/archon` and edit
+
+    /var/log/*-dribble {
+      daily
+      ifempty
+      copytruncate
+      compress
+    }

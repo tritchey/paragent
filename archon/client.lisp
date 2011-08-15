@@ -119,6 +119,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defmethod initialize-instance :after ((client client) &rest args)
   (declare (ignore args))
+  (record "new client connected")
   (setf (gethash (guid client) *clients-by-guid*) client)
   (negotiate-connection client))
 
@@ -317,15 +318,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 				       :refresh t :flatp t :limit 1))
 		    nil))))))
 
-(defun update-client (name)
-  (send-message 
-   (client-for-name name) 
-   '(update (() 
-	     ("Templar.exe" 
-	      "http://archon.paragent.com/updates/2.8.1853/Templar.exe") 
-	     ("DarkTemplar.exe" 
-	      "http://archon.paragent.com/updates/2.8.1853/DarkTemplar.exe") 
-	     ("version.dat" 
-	      "http://archon.paragent.com/updates/2.8.1853/version.dat")))))
+
+;;(defun update-client (name)
+;;  (send-message 
+;;   (client-for-name name) 
+;;   '(update (() 
+;;	     ("Templar.exe" 
+;;	      "http://archon.paragent.com/updates/2.8.1853/Templar.exe") 
+;;	     ("DarkTemplar.exe" 
+;;	      "http://archon.paragent.com/updates/2.8.1853/DarkTemplar.exe") 
+;;	     ("version.dat" 
+;;	      "http://archon.paragent.com/updates/2.8.1853/version.dat")))))
 
 #.(clsql:restore-sql-reader-syntax-state)

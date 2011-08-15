@@ -661,6 +661,7 @@ fieldset.search input.button
 
 fieldset.adv-search
 { 
+  border: none;
   width: 90%;
   margin: 10px 0 0 10px;
   clear: both;
@@ -2421,6 +2422,11 @@ td.badge
   vertical-align: top;
 }
 
+a.client-box-anchor:hover
+{
+	text-decoration: none;
+}
+
 div.client-box
 { 
   margin: 10px 15px;
@@ -2464,20 +2470,16 @@ div.client-box ul li.warning
 
 div.client-box ul li#online-count
 { 
-  top: 30px;
   left: 5px;
   width: 59px;
-  font-size: 30px;
 }
 
-div.client-box ul li#offline-count
+div.client-box h3 span#offline-count
 { 
-  border-top: 2px solid #ccc;
-  top: 55px;
-  left: 15px;
-  width: 39px;
-  font-size: 12px;
-  color: #666;
+	float: right;
+	padding-right: 10px;
+        font-size: 12px;
+        color: #666;
 }
 
 div.client-box ul li#event-count

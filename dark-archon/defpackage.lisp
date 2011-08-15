@@ -23,11 +23,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	:sb-unix 
 	:sb-ext
 	:sb-bsd-sockets
-	:psi
-	:hunchentoot
-	:cl-who
-	:salza2
-	:zpng)
+	:psi)
   (:export :run 
 	   :stop)
   (:shadow :restart))

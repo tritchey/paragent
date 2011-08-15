@@ -31,5 +31,5 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 	   :run 
 	   :stop
 	   :while)
-  (:shadow :restart))
+  (:shadow :restart :client))
 

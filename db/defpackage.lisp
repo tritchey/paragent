@@ -15,7 +15,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (in-package :common-lisp-user)
 
-(clsql:push-library-path "/usr/lib/mysql/")
+(clsql:push-library-path "/usr/lib64/mysql/")
 ;(clsql:push-library-path *db-library-path*)
 (asdf:oos 'asdf:load-op 'clsql-mysql)
                          

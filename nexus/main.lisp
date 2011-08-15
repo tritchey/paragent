@@ -99,13 +99,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 			(display-name (if (> (length name) 17)
 					  (format nil "~a&#0133;" (subseq name 0 15))
 					  name)))
-		 (<:div :class "client-box"
-			(<:h3 (<:as-is display-name))
-			(<:ul 
-			 (<:li :id "online-count" (<:as-html online-count))
-			 (<:li :id "offline-count" (<:as-html offline-count))
-			 (<:li :id "event-count" :class (if (>= event-count 10) "warning" "") (<:as-html event-count))
-			 (<:li :id "ticket-count" :class (if (>= ticket-count 10) "warning" "") (<:as-html ticket-count)))))))))))))
+		 (<ucw:a :class "client-box-anchor" :action (goto-client page (id client) name)
+			 (<:div :class "client-box"
+				(<:h3 (<:as-is display-name) (<:span :id "offline-count" (<:as-html online-count) "/" (<:as-html offline-count)))
+				(<:ul 
+				 (<:li :id "online-count" (<:as-html online-count))
+				 (<:li :id "event-count" :class (if (>= event-count 10) "warning" "") (<:as-html event-count))
+				 (<:li :id "ticket-count" :class (if (>= ticket-count 10) "warning" "") (<:as-html ticket-count))))))))))))))
 
 
 

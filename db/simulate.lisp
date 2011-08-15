@@ -20,22 +20,42 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #.(clsql:locally-enable-sql-reader-syntax)
 
+(defparameter *random-event-text* '(("Software Installed" "The software Microsoft Office 2003 was installed on ~a")
+				    ("Service added" "The service Norton Antivirus  was installed on ~a")
+				    ("Hotfix installed" "The hotfix KB936929 was installed on ~a")
+				    ("Low Space on Hard Drive" "Hard Drive C: is below 10% on ~a")
+				    ("Plug and Play device added" "The Plug and Play device USB Flash Drive was added on ~a")
+				    ("Plug and Play device removed" "The Plug and Play device USB Flash Drive was removed from ~a")
+				    ("Processor usage high" "Processor usage above 90% on ~a")
+				    ("Computer offline" "The computer ~a went offline")))
 
 (defun generate-random-events-for-day (days-in-past num)
   (let ((computers (mapcar #'car (with-db (select 'computer :where [= [company-id] 1])))))
     (dolist (computer computers)
-      (dotimes (num (random num))
-	(let* ((id (id computer))
-	       (company-id (company-id computer))
-	       (timestamp (clsql:time- (clsql:get-time) (clsql:make-duration :day days-in-past)))
-	       (severity-id 0)
-	       (event (make-instance 'event :summary "simulated event"
-                                  :description "simulated event"
-                                  :severity-id severity-id
-                                  :timestamp timestamp
-                                  :computer-id id
-				  :company-id company-id)))
-	  (with-db (insert-and-update event)))))))
+      (generate-random-events-for-computer days-in-past num computer))))
+
+(defun generate-random-events-for-computer (days-in-past num computer)
+  (dotimes (num (random num))
+    (let* ((id (id computer))
+	   (item (random 8))
+	   (summary (car (nth item *random-event-text*)))
+	   (description (format nil (second (nth item *random-event-text*)) (name computer)))
+	   (company-id (company-id computer))
+	   (timestamp (clsql:time- (clsql:get-time) (clsql:make-duration :day days-in-past)))
+	   (severity-id 0)
+	   (event (make-instance 'event :summary summary
+				 :description description
+				 :severity-id severity-id
+				 :timestamp timestamp
+				 :computer-id id
+				 :company-id company-id)))
+      (with-db (insert-and-update event)))))
+
+(defun generate-random-events-for-client (client days-in-past num)
+  (let ((computers (mapcar #'car (with-db (select 'computer :where [= [client-id] client])))))
+    (dolist (computer computers)
+      (generate-random-events-for-computer days-in-past num computer))))
+
 
 (defun generate-random-events ()
   (dotimes (i 7)

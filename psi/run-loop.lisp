@@ -50,8 +50,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 				 (connection (gethash fd *connections*)))
 			    (when connection
 			      (funcall (event-handler connection) connection event)))
-			(t (e)
-			  (record "run-loop error in event loop: ~a" e)))))
+			)))
+;			(t (e)
+;			  (record "run-loop error in event loop: ~a" e)))))
 	       ;; now, once we are outside the loop with all the events,
 	       ;; it is safe to remove any disconnected connections
 	       (loop for connection being the hash-values of *connection-graveyard* do
@@ -60,8 +61,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 		      (t (e)
 			(record "ERROR REAPING CONNECTIONS: ~A" e))))
 	       (clrhash *connection-graveyard*))
-	   (t (e)
-	      (record "run-loop error in pending-events: ~a" e))))
+))
+;	   (t (e)
+;	      (record "run-loop error in pending-events: ~a" e))))
     (close-connections)))
 
 (defun start-psi-run-loop ()

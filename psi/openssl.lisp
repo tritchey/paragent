@@ -1,6 +1,6 @@
 (in-package :psi)
 
-#+linux (load-shared-object "libssl.so")
+#+linux (load-shared-object "libssl3.so")
 #+darwin (load-shared-object "libssl.dylib")
 
 (defconstant +ssl-filetype-pem+ 1)

@@ -97,7 +97,7 @@
 (defun client-chart (stream)
   (let ((chart (make-instance 'client-chart))
         (scale 5.0)
-	(wormtrails::*font-file* "/Users/tritchey/Projects/Paragent/git/nexus/font.ttf"))
+	(wormtrails::*font-file* "/home/tritchey/lisp/paragent/nexus/font.ttf"))
     (wormtrails::add-data chart 0 "Bohannon" 1)
     (wormtrails::output-png-stream chart stream
                  :scaler (wormtrails::linear-scaler scale)
@@ -124,7 +124,7 @@
 	 (clients (clients img))
 	 (chart (make-instance 'wormtrails::client-chart))
 	 (scale 1.0)
-	 (wormtrails::*font-file* "/Users/tritchey/Projects/Paragent/git/nexus/font.ttf")
+	 (wormtrails::*font-file* "/home/tritchey/lisp/paragent/nexus/font.ttf")
          (duration 6))
     (dolist (client clients)
 	(let* ((name (name client)))

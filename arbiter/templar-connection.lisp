@@ -43,6 +43,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 (defmethod add-connection :after ((connection templar-connection) &key read write)
   (declare (ignore read write))
+  (record "new connection")
+
   (setf (gethash (guid connection) *connections-by-guid*) connection)
   (let ((next-archon (get-next-archon-connection)))
     (if next-archon
